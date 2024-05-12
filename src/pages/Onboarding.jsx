@@ -19,7 +19,7 @@ const HeadContainer = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 580px;
+  height: 720px;
   background-image: linear-gradient(
       rgba(255, 255, 255, 0) 10%,
       rgba(0, 0, 0, 1) 100%
@@ -103,8 +103,8 @@ const InfoDesc = styled.p`
 const InfoPic = styled.div`
   box-sizing: border-box;
   background-color: gray;
-  width: 500px;
-  height: 500px;
+  width: 450px;
+  height: 450px;
   @media (max-width: 850px) {
     width: 300px;
     height: 300px;
@@ -114,6 +114,7 @@ const InfoPic = styled.div`
 const Offer = styled.h1`
   font-size: 42px;
   margin-bottom: 16px;
+  margin-top: 40px;
   background: linear-gradient(to right top, #7885f5, #db591d);
   color: transparent;
   -webkit-background-clip: text;

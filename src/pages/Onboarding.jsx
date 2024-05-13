@@ -20,11 +20,7 @@ const HeadContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 720px;
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0) 10%,
-      rgba(0, 0, 0, 1) 100%
-    ),
-    url(${bridge});
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 10%, rgba(0, 0, 0, 1) 100%), url(${bridge});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -54,7 +50,7 @@ const Button = styled.button`
   color: white;
   font-size: 24px;
   margin-top: 50px;
-  background-color: #d13737;
+  background-color: #b83131;
 
   transition: all 0.3s ease-in-out;
 
@@ -133,12 +129,8 @@ const Onboarding = () => {
     <Wrap>
       <HeadContainer>
         <Title>부동산 정보를 한눈에</Title>
-        <HeaderDesc>
-          청약에서 실거래 내역까지, 서울시 부동산의 모든 것을 편하게 확인하세요.
-        </HeaderDesc>
-        <HeaderDesc>
-          당신의 부동산 투자, 우리의 데이터로 한층 더 명확하게
-        </HeaderDesc>
+        <HeaderDesc>청약에서 실거래 내역까지, 서울시 부동산의 모든 것을 편하게 확인하세요.</HeaderDesc>
+        <HeaderDesc>당신의 부동산 투자, 우리의 데이터로 한층 더 명확하게</HeaderDesc>
 
         <Link to={"/home"}>
           <Button>서비스 사용하기</Button>
@@ -148,10 +140,7 @@ const Onboarding = () => {
       <InfoWrap>
         <TextContiaer>
           <InfoTitle>어쩌구 저쩌구</InfoTitle>
-          <InfoDesc>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
-            perferendis saepe unde eum e
-          </InfoDesc>
+          <InfoDesc>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure perferendis saepe unde eum e</InfoDesc>
         </TextContiaer>
         <InfoPic>사진</InfoPic>
       </InfoWrap>
@@ -160,20 +149,14 @@ const Onboarding = () => {
         <InfoPic>사진</InfoPic>
         <TextContiaer>
           <InfoTitle>어쩌구 저쩌구</InfoTitle>
-          <InfoDesc>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
-            perferendis saepe unde eum e
-          </InfoDesc>
+          <InfoDesc>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure perferendis saepe unde eum e</InfoDesc>
         </TextContiaer>
       </InfoWrap>
       <Break />
       <InfoWrap>
         <TextContiaer>
           <InfoTitle>어쩌구 저쩌구</InfoTitle>
-          <InfoDesc>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
-            perferendis saepe unde eum e
-          </InfoDesc>
+          <InfoDesc>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure perferendis saepe unde eum e</InfoDesc>
         </TextContiaer>
         <InfoPic>사진</InfoPic>
       </InfoWrap>

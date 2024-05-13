@@ -1,1 +1,3 @@
-const api = 0;
+export function fetchData() {
+  return fetch("").then((response) => response.json());
+}

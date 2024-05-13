@@ -52,6 +52,7 @@ const Sidebar = styled.div`
   box-shadow: 0 8px 32px 0 rgba(241, 48, 0, 0.37);
   padding: 30px 20px;
   box-sizing: border-box;
+  border: 3px solid lightgray;
 `;
 
 const Tabs = styled.div`
@@ -59,6 +60,10 @@ const Tabs = styled.div`
   grid-template-columns: repeat(2, 1fr);
   margin: 25px 0px;
   gap: 10px;
+`;
+
+const HomeItems = styled.div`
+  color: black;
 `;
 
 const Tab = styled.span`
@@ -85,6 +90,9 @@ const Tab = styled.span`
 
 const Home = () => {
   const navigate = useNavigate();
+  const homeMatch = useMatch("/home/*");
+  const exactHomeMatch = useMatch("/home");
+  console.log(homeMatch);
   const transactionsMatch = useMatch("/home/transactions");
   const subscriptionMatch = useMatch("/home/subscription");
   console.log(transactionsMatch);
@@ -113,7 +121,7 @@ const Home = () => {
             <Link to="subscription">청약</Link>
           </Tab>
         </Tabs>
-
+        {exactHomeMatch !== null ? <HomeItems>홈</HomeItems> : null}
         <Outlet></Outlet>
       </Sidebar>
       <KakaoMap />

@@ -57,7 +57,7 @@ const Input = styled.input`
   transition: border-color 0.3s ease-in-out;
 
   &:hover {
-    border-color: #ff3838;
+    border-color: #d62f2f;
   }
 
   &[type="submit"] {

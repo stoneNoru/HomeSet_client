@@ -10,6 +10,7 @@ const Wrap = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  color: white;
 `;
 
 const HeadContainer = styled.div`
@@ -26,12 +27,14 @@ const HeadContainer = styled.div`
   background-position: center;
   position: relative;
   padding: 0px 50px 0px 50px;
+  color: whitesmoke;
 `;
 
 const Title = styled.h1`
   font-size: 48px;
   font-weight: 800;
   padding: 24px;
+  color: whitesmoke;
   /* background: linear-gradient(to right top, #7885f5, #7d0b94);
   color: transparent;
   -webkit-background-clip: text; */
@@ -41,13 +44,14 @@ const Title = styled.h1`
 const HeaderDesc = styled.p`
   font-size: 22px;
   margin-top: 16px;
+  color: whitesmoke;
 `;
 
 const Button = styled.button`
   padding: 16px 24px 16px 24px;
   border-radius: 10px;
   border: none;
-  color: white;
+  color: whitesmoke;
   font-size: 24px;
   margin-top: 50px;
   background-color: #b83131;
@@ -56,6 +60,7 @@ const Button = styled.button`
 
   &:hover {
     background-color: #ff3838;
+    box-shadow: -5px -5px 30px 5px red, 5px 5px 30px 5px blue;
   }
 `;
 
@@ -87,11 +92,13 @@ const TextContiaer = styled.div`
 `;
 
 const InfoTitle = styled.h1`
+  color: whitesmoke;
   font-size: 50px;
   margin-bottom: 16px;
 `;
 
 const InfoDesc = styled.p`
+  color: whitesmoke;
   font-size: 30px;
   line-height: 36px;
 `;
@@ -119,6 +126,8 @@ const Offer = styled.h1`
 `;
 
 const Footer = styled.div`
+  color: whitesmoke;
+
   width: 100%;
   height: 300px;
   background-color: #242424;

@@ -1,33 +1,17 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
-import {
-  Link,
-  Outlet,
-  Route,
-  Routes,
-  useMatch,
-  useNavigate,
-} from "react-router-dom";
+import { Link, Outlet, Route, Routes, useMatch, useNavigate } from "react-router-dom";
 import LoginModal from "../components/LoginModal";
 import Transactions from "./Transactions";
 import Subscription from "./Subscription";
+import { fontAwesome } from "fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 
 const Page = styled.div`
   position: relative;
   height: 100vh;
   overflow: hidden;
-`;
-
-const Header = styled.div`
-  position: absolute;
-  color: black;
-  font-size: 30px;
-  width: 100%;
-  height: 80px;
-  z-index: 2;
-  background-color: white;
-  box-shadow: 0 8px 32px 0 rgba(241, 48, 0, 0.37);
 `;
 
 const BlackBg = styled.div`
@@ -47,18 +31,19 @@ const Sidebar = styled.div`
   left: 20px;
   width: 320px;
   border-radius: 14px;
-  background-color: whitesmoke;
+  background-color: white;
   z-index: 2;
-  box-shadow: 0 8px 32px 0 rgba(241, 48, 0, 0.37);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   padding: 30px 20px;
   box-sizing: border-box;
   border: 3px solid lightgray;
+  overflow: auto;
 `;
 
 const Tabs = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  margin: 25px 0px;
+  margin: 25px 0px 10px 0px;
   gap: 10px;
 `;
 
@@ -88,6 +73,14 @@ const Tab = styled.span`
   } */
 `;
 
+const Lists = styled.ul``;
+
+const List = styled.li`
+  width: 100%;
+`;
+
+const LiName = styled.h1``;
+
 const Home = () => {
   const navigate = useNavigate();
   const homeMatch = useMatch("/home/*");
@@ -115,10 +108,14 @@ const Home = () => {
         </h1>
         <Tabs>
           <Tab active={!!transactionsMatch}>
-            <Link to="transactions">실거래</Link>
+            <Link to="transactions" style={{ color: "white" }}>
+              실거래
+            </Link>
           </Tab>
           <Tab active={!!subscriptionMatch}>
-            <Link to="subscription">청약</Link>
+            <Link to="subscription" style={{ color: "white" }}>
+              청약
+            </Link>
           </Tab>
         </Tabs>
         {exactHomeMatch !== null ? <HomeItems>홈</HomeItems> : null}

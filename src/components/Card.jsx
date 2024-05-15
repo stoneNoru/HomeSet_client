@@ -8,7 +8,7 @@ const CardContainer = styled.div`
   isolation: isolate;
   position: relative;
   width: 100%;
-  height: 130px;
+  height: 120px;
   background: #18181b;
   border-radius: 1rem;
   margin-bottom: 10px;
@@ -23,7 +23,7 @@ const CardContainer = styled.div`
     content: "";
     inset: 0.0625rem;
     border-radius: 0.9375rem;
-    background: #242430;
+    background: #18181b;
     z-index: 2;
   }
 
@@ -106,9 +106,9 @@ const Body = styled.div`
   z-index: 5;
 `;
 
-const Card = () => {
+const Card = ({ id }) => {
   return (
-    <Link>
+    <Link to={`${id}`}>
       <CardContainer>
         <Glow className="glow"></Glow>
         <BorderGlow className="borderGlow"></BorderGlow>

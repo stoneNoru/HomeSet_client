@@ -63,6 +63,7 @@ const SubscriptionContainer = styled.div`
 
 const Subscription = () => {
   const [selectedOption, setSelectedOption] = useState("ongoing");
+  const id = 4;
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -114,20 +115,20 @@ const Subscription = () => {
       <div>
         {selectedOption === "finished" && (
           <div>
-            <Card />
+            <Card id={id} />
           </div>
         )}
         {selectedOption === "ongoing" && (
           <div>
-            <Card />
-            <Card />
+            <Card id={id} />
+            <Card id={id} />
           </div>
         )}
         {selectedOption === "upcoming" && (
           <div>
-            <Card />
-            <Card />
-            <Card />
+            <Card id={id} />
+            <Card id={id} />
+            <Card id={id} />
           </div>
         )}
       </div>

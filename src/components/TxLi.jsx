@@ -17,6 +17,7 @@ const Tab = styled.li`
   color: black;
   margin-bottom: 12px;
   transition: all 0.3s;
+  cursor: pointer;
 
   &:hover {
     background-color: #857b7b;
@@ -52,25 +53,23 @@ const GrayText = styled.p`
 
 const TxLi = () => {
   return (
-    <Link>
-      <Tab>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Name>무슨무슨 아파트</Name>
-          <Date>24.01.01</Date>
-        </div>
+    <Tab>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Name>무슨무슨 아파트</Name>
+        <Date>24.01.01</Date>
+      </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            textAlign: "center",
-          }}
-        >
-          <Price>10억</Price>
-          <GrayText>7층 32평</GrayText>
-        </div>
-      </Tab>
-    </Link>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          textAlign: "center",
+        }}
+      >
+        <Price>10억</Price>
+        <GrayText>7층 32평</GrayText>
+      </div>
+    </Tab>
   );
 };
 

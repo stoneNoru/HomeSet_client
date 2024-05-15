@@ -1,6 +1,7 @@
 @font-face {
   font-family: "Pretendard-Regular";
-  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format("woff");
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
   font-weight: 400;
   font-style: normal;
 }
@@ -11,7 +12,8 @@ body {
 * {
   font-family: "Pretendard-Regular";
 
-  color: black;
+  /* color: black; */
+  color: white;
 }
 
 html,
@@ -148,11 +150,11 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #eee; /* 스크롤바 막대 색상 */
-  border: 2px solid #eee; /* 스크롤바 막대 테두리 설정  */
+  background: #707070; /* 스크롤바 막대 색상 */
+  border: 2px solid #707070; /* 스크롤바 막대 테두리 설정  */
   border-radius: 12px 12px 12px 12px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: whitesmoke;
+  background-color: #707070;
 }

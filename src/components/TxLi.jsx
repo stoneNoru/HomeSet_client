@@ -4,12 +4,13 @@ import styled from "styled-components";
 
 const Tab = styled.li`
   /* cursor: pointer; */
-  border-bottom: 2px solid lightcoral;
-  border-right: 3px solid lightcoral;
+  /* border-bottom: 2px solid #e50914;
+  border-right: 3px solid #e50914; */
   position: relative;
   width: 100%;
   padding: 12px 16px;
-  background-color: white;
+  background-color: #333344;
+  background-color: #1c1c26;
   box-sizing: border-box;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -18,32 +19,34 @@ const Tab = styled.li`
   transition: all 0.3s;
 
   &:hover {
-    background-color: #eee;
+    background-color: #857b7b;
   }
 `;
 
 const Name = styled.h1`
   font-size: 18px;
   margin-bottom: 20px;
+  color: #dfdff1;
 `;
 
 const Price = styled.h1`
   font-size: 22px;
+  color: #dfdff1;
 `;
 
-const Trade = styled.span`
+const Date = styled.span`
   position: absolute;
   top: 12px;
   right: 16px;
   font-size: 12px;
   padding: 2px 4px;
   color: white;
-  background-color: #ff7373;
+  background-color: #cf2d2d;
   border-radius: 5px;
 `;
 
 const GrayText = styled.p`
-  color: #5a5a76;
+  color: #91919c;
   font-size: 16px;
 `;
 
@@ -53,10 +56,16 @@ const TxLi = () => {
       <Tab>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Name>무슨무슨 아파트</Name>
-          <Trade>24.01.01</Trade>
+          <Date>24.01.01</Date>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between", textAlign: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            textAlign: "center",
+          }}
+        >
           <Price>10억</Price>
           <GrayText>7층 32평</GrayText>
         </div>

@@ -6,6 +6,8 @@ import MyPage from "./pages/MyPage";
 import Error from "./pages/Error";
 import Transactions from "./pages/Transactions";
 import Subscription from "./pages/Subscription";
+import TxDetail from "./components/TxDetail";
+import SubsDetail from "./components/SubsDetail";
 
 function App() {
   return (
@@ -14,7 +16,9 @@ function App() {
         <Route path="/" element={<Onboarding />} />
         <Route path="/home" element={<Home />}>
           <Route path="transactions" element={<Transactions />} />
+          <Route path="transactions/:id" element={<TxDetail />} />
           <Route path="subscription" element={<Subscription />} />
+          <Route path="transactions/:id" element={<SubsDetail />} />
         </Route>
         <Route path="/mypage" element={<MyPage />} />
         <Route path="*" element={<Error />} />

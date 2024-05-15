@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
-import { Link, Outlet, Route, Routes, useMatch, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  Route,
+  Routes,
+  useMatch,
+  useNavigate,
+} from "react-router-dom";
 import LoginModal from "../components/LoginModal";
 import Transactions from "./Transactions";
 import Subscription from "./Subscription";
@@ -15,6 +22,7 @@ const Page = styled.div`
 `;
 
 const BlackBg = styled.div`
+  z-index: 10;
   position: fixed;
   top: 0;
   width: 100%;
@@ -29,14 +37,17 @@ const Sidebar = styled.div`
   height: 90%;
   top: 5%;
   left: 20px;
-  width: 320px;
-  border-radius: 14px;
+  height: 100%;
+  top: 0%;
+  left: 0px;
+  width: 360px;
+  /* border-radius: 14px; */
   background-color: white;
+  background-color: black; //다크모드
   z-index: 2;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   padding: 30px 20px;
   box-sizing: border-box;
-  border: 3px solid lightgray;
   overflow: auto;
 `;
 
@@ -56,7 +67,9 @@ const Tab = styled.span`
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 400;
-  background-color: ${(props) => (props.active ? "#e95656" : "#949494")};
+  /* background-color: ${(props) => (props.active ? "#e50914" : "#949494")}; */
+  background-color: ${(props) =>
+    props.active ? "#e50914" : "#333344"}; //다크모드
   padding: 7px 0px;
   border-radius: 10px;
   transition: all 0.3s;
@@ -73,14 +86,6 @@ const Tab = styled.span`
   } */
 `;
 
-const Lists = styled.ul``;
-
-const List = styled.li`
-  width: 100%;
-`;
-
-const LiName = styled.h1``;
-
 const Home = () => {
   const navigate = useNavigate();
   const homeMatch = useMatch("/home/*");
@@ -96,10 +101,9 @@ const Home = () => {
         <LoginModal />
       </BlackBg> */}
 
-      {/* <Header>헤더</Header> */}
       <Sidebar>
         <h1
-          style={{ color: "black" }}
+          style={{ color: "white" }}
           onClick={() => {
             navigate("/home");
           }}
@@ -108,6 +112,7 @@ const Home = () => {
         </h1>
         <Tabs>
           <Tab active={!!transactionsMatch}>
+            {/* <Link to="transactions" style={{ color: "black" }}> */}
             <Link to="transactions" style={{ color: "white" }}>
               실거래
             </Link>

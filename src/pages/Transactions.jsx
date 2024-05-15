@@ -20,16 +20,17 @@ const Input = styled.input`
   height: 36px;
   box-sizing: border-box;
   background-color: whitesmoke;
+  background-color: #333344; //다크모드
 
   transition: all 0.3s;
   &:hover {
-    border-color: #e95656;
+    border-color: #e50914;
   }
 `;
 
 const Submit = styled.button`
   padding: 0.5em 1em;
-  background-color: #e95656;
+  background-color: #e50914;
   border: none;
   border-radius: 0 4px 4px 0;
   color: white;
@@ -59,7 +60,8 @@ const Transactions = () => {
       </Form>
 
       <div style={{ color: "black" }}>
-        <Text>🚩 실거래 정보</Text>
+        {/* <Text>🚩 실거래 정보</Text> */}
+        <Text style={{ color: "#F6F8FA" }}>🚩 실거래 정보</Text>
         <ul>
           <TxLi />
           <TxLi />

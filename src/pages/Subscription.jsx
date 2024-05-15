@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { CurrentSubscription, NewSubscription } from "../services/api";
+import Card from "../components/Card";
 
 const RadioGroup = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  margin: 10px 0;
+  margin-top: 20px;
+  margin-bottom: 30px;
 `;
 
 const RadioLabel = styled.label`
@@ -20,7 +23,7 @@ const RadioLabel = styled.label`
   &:hover .custom-radio {
     transform: translateY(-50%) scale(1.1);
     border-color: #f5524c;
-    box-shadow: 0 0 10px #4c8bf580;
+    box-shadow: 0 0 10px #fffb0080;
   }
 `;
 
@@ -67,7 +70,6 @@ const Subscription = () => {
 
   return (
     <SubscriptionContainer>
-      <h2 style={{ color: "#e50914" }}>Subscription</h2>
       <RadioGroup>
         <div>
           <RadioInput
@@ -110,9 +112,24 @@ const Subscription = () => {
         </div>
       </RadioGroup>
       <div>
-        {selectedOption === "finished" && <div>종료</div>}
-        {selectedOption === "ongoing" && <div>진행중</div>}
-        {selectedOption === "upcoming" && <div>진행예정</div>}
+        {selectedOption === "finished" && (
+          <div>
+            <Card />
+          </div>
+        )}
+        {selectedOption === "ongoing" && (
+          <div>
+            <Card />
+            <Card />
+          </div>
+        )}
+        {selectedOption === "upcoming" && (
+          <div>
+            <Card />
+            <Card />
+            <Card />
+          </div>
+        )}
       </div>
     </SubscriptionContainer>
   );

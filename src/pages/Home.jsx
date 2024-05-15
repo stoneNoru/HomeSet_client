@@ -13,7 +13,8 @@ import LoginModal from "../components/LoginModal";
 import Transactions from "./Transactions";
 import Subscription from "./Subscription";
 import { fontAwesome } from "fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faNewspaper } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Page = styled.div`
   position: relative;
@@ -55,11 +56,25 @@ const Tabs = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin: 25px 0px 10px 0px;
-  gap: 10px;
+  gap: 20px;
 `;
 
 const HomeItems = styled.div`
-  color: black;
+  /* color: black; */
+`;
+
+const Notice = styled.div`
+  margin-bottom: 20px;
+  margin-top: 30px;
+`;
+
+const NoticeList = styled.div`
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #333344;
+  box-sizing: border-box;
 `;
 
 const Tab = styled.span`
@@ -70,7 +85,7 @@ const Tab = styled.span`
   /* background-color: ${(props) => (props.active ? "#e50914" : "#949494")}; */
   background-color: ${(props) =>
     props.active ? "#e50914" : "#333344"}; //다크모드
-  padding: 7px 0px;
+  padding: 10px 0px;
   border-radius: 10px;
   transition: all 0.3s;
   cursor: pointer;
@@ -84,6 +99,9 @@ const Tab = styled.span`
   /* &:hover {
     background-color: #e95656;
   } */
+`;
+const News = styled.div`
+  margin-bottom: 20px;
 `;
 
 const Home = () => {
@@ -103,7 +121,7 @@ const Home = () => {
 
       <Sidebar>
         <h1
-          style={{ color: "white" }}
+          style={{ color: "white", fontSize: "24px" }}
           onClick={() => {
             navigate("/home");
           }}
@@ -123,7 +141,19 @@ const Home = () => {
             </Link>
           </Tab>
         </Tabs>
-        {exactHomeMatch !== null ? <HomeItems>홈</HomeItems> : null}
+        {exactHomeMatch !== null ? (
+          <HomeItems>
+            <Notice>
+              <h2 style={{ marginBottom: "10px" }}>📌 공지사항</h2>
+
+              <NoticeList>axios 코드 작성 완</NoticeList>
+            </Notice>
+            <News>
+              <h2>✨ 부동산 뉴스</h2>
+              <p>여기에 최신 부동산 뉴스들 표시</p>
+            </News>
+          </HomeItems>
+        ) : null}
         <Outlet></Outlet>
       </Sidebar>
       <KakaoMap />

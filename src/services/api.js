@@ -1,61 +1,66 @@
 const BASE_URL = "http://localhost:8080";
 
-export function fetchData() {
-  return fetch("").then((response) => response.json());
-}
-
-const LoginPost = (id, password) => {
-  axios
-    .post(`${BASE_URL}/users/login`, {
+const LoginPost = async (id, password) => {
+  try {
+    const response = axios.post(`${BASE_URL}/users/login`, {
       id: id,
       password: password,
-    })
-    .then((response) => console.log(response.data))
-    .catch((error) => {
-      console.log(error);
     });
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const CheckDuplicated = () => {
-  axios
-    .get(`${BASE_URL}/users/check?id=ssafy`)
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
+const CheckDuplicated = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users/check?id=ssafy`);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const GetUserData = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users`);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const SignUp = async (id, password, email, nickname) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/users`, {
+      id: id,
+      password: password,
+      email: email,
+      nickname: nickname,
     });
-};
-
-const GetUserData = () => {
-  axios
-    .get(`${BASE_URL}/users`)
-    .then((response) => console.log(response.data))
-    .catch((error) => console.log(error));
-};
-
-const SignUp = (id, password, email, nickname) => {
-  axios.post(`${BASE_URL}/users`, {
-    id: id,
-    password: password,
-    email: email,
-    nickname: nickname,
-  });
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //청약정보
-const CurrentSubscription = () => {
-  axios
-    .get(`${BASE_URL}/applies/current`)
-    .then((response) => console.log(response.data))
-    .catch((error) => console.log(error));
+const CurrentSubscription = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/applies/current`);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const NewSubscription = () => {
-  axios
-    .get(`${BASE_URL}/applies/new`)
-    .then((response) => console.log(response))
-    .catch((error) => console.log(error));
+const NewSubscription = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/applies/new`);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export {

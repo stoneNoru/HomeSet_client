@@ -10,6 +10,7 @@ import { faBell, faNewspaper } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NewsList from "../components/NewsList";
 import axios from "axios";
+import cityLogo from "../assets/icons/cityLogo.png";
 
 const Page = styled.div`
   position: relative;
@@ -57,6 +58,19 @@ const Tabs = styled.div`
 const HomeItems = styled.div`
   /* color: black; */
 `;
+const Logo = styled.div`
+  background-size: cover;
+  width: 75px;
+  height: 75px;
+  background-image: url(${cityLogo});
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const HeadWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const Notice = styled.div`
   margin-bottom: 20px;
@@ -70,6 +84,15 @@ const NoticeList = styled.div`
   border-radius: 10px;
   background-color: #333344;
   box-sizing: border-box;
+`;
+
+const Title = styled.h1`
+  background: linear-gradient(to right top, #7885f5, #db591d);
+  color: transparent;
+  -webkit-background-clip: text;
+  font-size: 30px;
+  margin-left: 15px;
+  font-weight: 600;
 `;
 
 const Tab = styled.span`
@@ -126,16 +149,17 @@ const Home = () => {
       {/* <BlackBg>
         <LoginModal />
       </BlackBg> */}
-
       <Sidebar>
-        <h1
-          style={{ color: "white", fontSize: "24px" }}
-          onClick={() => {
-            navigate("/home");
-          }}
-        >
-          서비스이름 & 로고
-        </h1>
+        <HeadWrap>
+          <Logo />
+          <Title
+            onClick={() => {
+              navigate("/home");
+            }}
+          >
+            서비스이름
+          </Title>
+        </HeadWrap>
         <Tabs>
           <Tab active={!!transactionsMatch}>
             {/* <Link to="transactions" style={{ color: "black" }}> */}

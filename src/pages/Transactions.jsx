@@ -114,6 +114,7 @@ const Transactions = () => {
           {ids.map((id) => {
             return (
               <div
+                key={id}
                 onClick={() => {
                   setSelected(id);
                 }}

@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const BASE_URL = "http://localhost:8080";
+// 192.168.206.66
 
 const LoginPost = async (id, password) => {
   try {
-    const response = axios.post(`${BASE_URL}/users/login`, {
+    const response = await axios.post(`${BASE_URL}/users/login`, {
       id: id,
       password: password,
     });
@@ -65,11 +66,4 @@ const NewSubscription = async () => {
   }
 };
 
-export {
-  LoginPost,
-  CheckDuplicated,
-  GetUserData,
-  SignUp,
-  CurrentSubscription,
-  NewSubscription,
-};
+export { LoginPost, CheckDuplicated, GetUserData, SignUp, CurrentSubscription, NewSubscription };

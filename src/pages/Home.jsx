@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
-import {
-  Link,
-  Outlet,
-  Route,
-  Routes,
-  useMatch,
-  useNavigate,
-} from "react-router-dom";
+import { Link, Outlet, Route, Routes, useMatch, useNavigate } from "react-router-dom";
 import LoginModal from "../components/LoginModal";
 import Transactions from "./Transactions";
 import Subscription from "./Subscription";
 import { fontAwesome } from "fontawesome";
 import { faBell, faNewspaper } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import NewsList from "../components/NewsList";
+import axios from "axios";
 
 const Page = styled.div`
   position: relative;
@@ -83,8 +78,7 @@ const Tab = styled.span`
   font-size: 14px;
   font-weight: 400;
   /* background-color: ${(props) => (props.active ? "#e50914" : "#949494")}; */
-  background-color: ${(props) =>
-    props.active ? "#e50914" : "#333344"}; //다크모드
+  background-color: ${(props) => (props.active ? "#e50914" : "#333344")}; //다크모드
   padding: 10px 0px;
   border-radius: 10px;
   transition: all 0.3s;
@@ -106,12 +100,26 @@ const News = styled.div`
 
 const Home = () => {
   const navigate = useNavigate();
-  const homeMatch = useMatch("/home/*");
   const exactHomeMatch = useMatch("/home");
-  console.log(homeMatch);
   const transactionsMatch = useMatch("/home/transactions");
   const subscriptionMatch = useMatch("/home/subscription");
-  console.log(transactionsMatch);
+  const newsKey = process.env.REACT_APP_NEWS_API_KEY;
+
+  // const [newsData, setNewsData] = useState(null);
+  // const fetchNewsData = async () => {
+  //   try {
+  //     // const response = await axios.get(`https://newsapi.org/v2/everything?q=keyword&apiKey=${newsKey}`);
+  //     const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=kr&apiKey=6c2f792acf4c4744b5e12f68a6d53e37`);
+  //     console.log(response);
+  //     setNewsData(response.data.slice(0, 5));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchNewsData();
+  // }, []);
 
   return (
     <Page>

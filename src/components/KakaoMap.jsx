@@ -91,8 +91,12 @@ const KakaoMap = () => {
           position: markerPosition,
           image: markerImage,
         });
+        marker.setClickable(true);
         marker.setMap(map);
         markers.push(marker);
+        window.kakao.maps.event.addListener(marker, "click", function () {
+          alert("marker click!");
+        });
       });
       return () => {
         // Remove markers when component unmounts or dependencies change

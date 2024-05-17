@@ -25,13 +25,13 @@ const Tab = styled.li`
 `;
 
 const Name = styled.h1`
-  font-size: 18px;
-  margin-bottom: 20px;
-  color: #f1dfdf;
+  font-size: 16px;
+  margin-bottom: 18px;
+  color: #f0e2e2;
 `;
 
 const Price = styled.h1`
-  font-size: 22px;
+  font-size: 20px;
   color: #978a8a;
 `;
 

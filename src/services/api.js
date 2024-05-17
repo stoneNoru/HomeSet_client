@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080";
+// const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://192.168.206.66:8080";
 // 192.168.206.66
 
 const LoginPost = async (id, password) => {
@@ -66,4 +67,31 @@ const NewSubscription = async () => {
   }
 };
 
-export { LoginPost, CheckDuplicated, GetUserData, SignUp, CurrentSubscription, NewSubscription };
+/*실거래정보*/
+const KeywordTxSearch = async (keyword) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/home`, null, {
+      params: {
+        keyword: keyword,
+      },
+    });
+
+    // console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//특정 아파트 거래정보
+const fetchTxDatas = async (aptCode) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/home/${aptCode}`);
+    // console.log(response.data.data);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { LoginPost, CheckDuplicated, GetUserData, SignUp, CurrentSubscription, NewSubscription, KeywordTxSearch, fetchTxDatas };

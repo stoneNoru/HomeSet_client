@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tab from "../components/Tab";
 import styled from "styled-components";
 import city from "../assets/city.jpg";
@@ -9,11 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 const Wrap = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  color: white;
+  color: #ffffff;
 `;
 
 const HeadContainer = styled.div`
@@ -90,7 +91,7 @@ const InfoWrap = styled.div`
   }
 `;
 
-const TextContiaer = styled.div`
+const TextContainer = styled.div`
   width: 50%;
   box-sizing: border-box;
   @media (max-width: 850px) {
@@ -113,8 +114,8 @@ const InfoDesc = styled.p`
 const InfoPic = styled.div`
   box-sizing: border-box;
   background-color: gray;
-  width: 450px;
-  height: 450px;
+  width: 400px;
+  height: 400px;
   @media (max-width: 850px) {
     width: 300px;
     height: 300px;
@@ -134,7 +135,7 @@ const Offer = styled.h1`
 
 const Footer = styled.div`
   color: whitesmoke;
-
+  margin-top: 30px;
   width: 100%;
   height: 300px;
   background-color: #242424;
@@ -150,6 +151,56 @@ const ToTop = styled.i`
   z-index: 10;
   color: white;
   cursor: pointer;
+`;
+
+const StacksContainer = styled.div`
+  display: flex;
+  width: 80%;
+  justify-content: space-evenly;
+  align-items: center;
+
+  @media (max-width: 850px) {
+    flex-direction: column;
+  }
+`;
+
+const Stack = styled.div`
+  /* position: fixed; */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #212121;
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  z-index: 2;
+
+  &:hover div {
+    right: 0px;
+  }
+  &:hover h1 {
+    margin-right: 50px;
+  }
+`;
+
+const HoveredStack = styled.div`
+  position: absolute;
+  right: 290px;
+
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  z-index: 3;
+
+  transition: all 0.3s ease-in-out;
+`;
+
+const StackTitle = styled.h1`
+  font-size: 30px;
+
+  transition: all 0.3s ease-in-out;
 `;
 
 const Onboarding = () => {
@@ -177,37 +228,74 @@ const Onboarding = () => {
       </HeadContainer>
       <Offer>What we offer</Offer>
       <InfoWrap>
-        <TextContiaer>
+        <TextContainer>
           <InfoTitle>어쩌구 저쩌구</InfoTitle>
           <InfoDesc>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
             perferendis saepe unde eum e
           </InfoDesc>
-        </TextContiaer>
+        </TextContainer>
         <InfoPic>사진</InfoPic>
       </InfoWrap>
       <Break />
       <InfoWrap>
         <InfoPic>사진</InfoPic>
-        <TextContiaer>
+        <TextContainer>
           <InfoTitle>어쩌구 저쩌구</InfoTitle>
           <InfoDesc>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
             perferendis saepe unde eum e
           </InfoDesc>
-        </TextContiaer>
+        </TextContainer>
       </InfoWrap>
       <Break />
       <InfoWrap>
-        <TextContiaer>
+        <TextContainer>
           <InfoTitle>어쩌구 저쩌구</InfoTitle>
           <InfoDesc>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
             perferendis saepe unde eum e
           </InfoDesc>
-        </TextContiaer>
+        </TextContainer>
         <InfoPic>사진</InfoPic>
       </InfoWrap>
+      <Break />
+      <Offer style={{ marginBottom: "50px" }}>What we used</Offer>
+      <StacksContainer>
+        <Stack>
+          <StackTitle
+            style={{
+              background: "linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100% )",
+              color: "transparent",
+              WebkitBackgroundClip: "text",
+            }}
+          >
+            Frontend
+          </StackTitle>
+          <HoveredStack
+            style={{
+              background: "linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100% )",
+            }}
+          ></HoveredStack>
+        </Stack>
+        <Stack>
+          <StackTitle
+            style={{
+              background: "linear-gradient(to right top, #35ac8e, #16018f)",
+              color: "transparent",
+              WebkitBackgroundClip: "text",
+            }}
+          >
+            Backend
+          </StackTitle>
+          <HoveredStack
+            style={{
+              background: "linear-gradient(to right top, #35ac8e, #16018f)",
+            }}
+          ></HoveredStack>
+        </Stack>
+      </StacksContainer>
+
       <Footer>Footer</Footer>
     </Wrap>
   );

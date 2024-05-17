@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
-import { Link, Outlet, Route, Routes, useMatch, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  Route,
+  Routes,
+  useMatch,
+  useNavigate,
+} from "react-router-dom";
 import LoginModal from "../components/LoginModal";
 import Transactions from "./Transactions";
 import Subscription from "./Subscription";
@@ -51,7 +58,7 @@ const Sidebar = styled.div`
 const Tabs = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  margin: 25px 0px 10px 0px;
+  margin: 25px 0px 16px 0px;
   gap: 20px;
 `;
 
@@ -87,6 +94,14 @@ const NoticeList = styled.div`
 `;
 
 const Title = styled.h1`
+  @font-face {
+    font-family: "TTLaundryGothicB";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2")
+      format("woff2");
+    font-weight: 700;
+    font-style: normal;
+  }
+  font-family: TTLaundryGothicB;
   background: linear-gradient(to right top, #7885f5, #db591d);
   color: transparent;
   -webkit-background-clip: text;
@@ -101,7 +116,8 @@ const Tab = styled.span`
   font-size: 14px;
   font-weight: 400;
   /* background-color: ${(props) => (props.active ? "#e50914" : "#949494")}; */
-  background-color: ${(props) => (props.active ? "#e50914" : "#333344")}; //다크모드
+  background-color: ${(props) =>
+    props.active ? "#e50914" : "#333344"}; //다크모드
   padding: 10px 0px;
   border-radius: 10px;
   transition: all 0.3s;
@@ -134,7 +150,11 @@ const Home = () => {
       </BlackBg> */}
       <Sidebar>
         <HeadWrap>
-          <Logo />
+          <Logo
+            onClick={() => {
+              navigate("/");
+            }}
+          />
           <Title
             onClick={() => {
               navigate("/home");

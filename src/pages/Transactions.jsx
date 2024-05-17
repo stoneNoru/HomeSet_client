@@ -95,7 +95,9 @@ const Transactions = () => {
       console.log("거래리스트", response.data.data);
       setTxDatas(response.data.data.reverse()); // 응답 데이터에서 실제 데이터를 설정
 
-      const pricesArray = response.data.data.map((houseData) => houseData.dealAmount);
+      const pricesArray = response.data.data.map(
+        (houseData) => houseData.dealAmount
+      );
       setPrices(pricesArray); // dealAmount 값을 한 번에 설정
     } catch (error) {
       console.error("데이터를 가져오는 중 오류 발생:", error);

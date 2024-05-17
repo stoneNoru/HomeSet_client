@@ -126,23 +126,6 @@ const Home = () => {
   const exactHomeMatch = useMatch("/home");
   const transactionsMatch = useMatch("/home/transactions");
   const subscriptionMatch = useMatch("/home/subscription");
-  const newsKey = process.env.REACT_APP_NEWS_API_KEY;
-
-  // const [newsData, setNewsData] = useState(null);
-  // const fetchNewsData = async () => {
-  //   try {
-  //     // const response = await axios.get(`https://newsapi.org/v2/everything?q=keyword&apiKey=${newsKey}`);
-  //     const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=kr&apiKey=6c2f792acf4c4744b5e12f68a6d53e37`);
-  //     console.log(response);
-  //     setNewsData(response.data.slice(0, 5));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchNewsData();
-  // }, []);
 
   return (
     <Page>

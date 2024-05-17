@@ -2,11 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
 import { useMatch } from "react-router-dom";
-import styled from "styled-components";
-import apartIcon from "../assets/icons/apartIcon.png";
-import apart from "../assets/icons/apart.png";
 import pin from "../assets/icons/pin.png";
-import pin2 from "../assets/icons/pin2.png";
+import { useRecoilState } from "recoil";
+import { houseState } from "../state/atoms.js";
 
 const KakaoMap = () => {
   const [map, setMapInstance] = useState(null);
@@ -16,6 +14,7 @@ const KakaoMap = () => {
   const [south, setSouth] = useState(0);
   const [north, setNorth] = useState(0);
   const [houses, setHouses] = useState([]);
+  const [housesAtom, setHousesAtom] = useRecoilState(houseState);
   const transactionsMatch = useMatch("/home/transactions");
   const imageSrc = pin;
   const imageSize = new window.kakao.maps.Size(40, 40);
@@ -27,12 +26,14 @@ const KakaoMap = () => {
   };
 
   //현재 화면 동서남북 좌표로 화면 내 부동산 정보 가져오는 함수
-  const fetchData = async () => {
+  const fetchHouses = async () => {
     try {
       const response = await axios.get(`http://192.168.206.66:8080/home/search?west=${west}&east=${east}&south=${south}&north=${north}`);
       // console.log(response.data.data);
       setHouses(response.data.data);
-      console.log(houses);
+      setHousesAtom(response.data.data);
+      // console.log(housesAtom);
+      // console.log(houses);
     } catch (error) {
       console.log(error);
     }
@@ -74,7 +75,9 @@ const KakaoMap = () => {
       // console.log("West:", west);
       // console.log("South:", south);
       // console.log("North:", north);
-      fetchData();
+      fetchHouses();
+    } else {
+      setHouses([]);
     }
   }, [east, west, south, north]);
 

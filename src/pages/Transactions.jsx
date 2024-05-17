@@ -3,6 +3,8 @@ import styled from "styled-components";
 import TxLi from "../components/TxLi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useRecoilValue } from "recoil";
+import { houseState } from "../state/atoms";
 
 const Form = styled.form`
   width: 100%;
@@ -82,7 +84,8 @@ const BlackBg = styled.div`
 
 const Transactions = () => {
   const [selected, setSelected] = useState(0); //클릭한 아파트의 id
-
+  const houses = useRecoilValue(houseState);
+  console.log("전역상태", houses);
   const ids = [1, 2, 3, 4, 5, 6, 7];
 
   //선택 아파트 변경시 실행, axios

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <form onsubmit="send(event)">
+      <input type="text" id="id" placeholder="아이디" />
+      <input type="password" id="password" placeholder="비밀번호" />
+      <button type="submit">제출</button>
+    </form>
+    <button onclick="logout()">로그아웃</button>
+  </body>
+  <script>
+    function logout() {
+      axios
+        .get("http://localhost:8080/users/logout", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+
+          // 로컬 스토리지에 데이터 저장
+          localStorage.removeItem("accessToken");
+        });
+    }
+
+    function send(event) {
+      event.preventDefault(); // 폼 제출 기본 동작 방지
+
+      // 입력된 값 가져오기
+      const id = document.getElementById("id").value;
+      const password = document.getElementById("password").value;
+      const user = {
+        id: id,
+        password: password,
+      };
+
+      // 여기서 서버로 데이터를 전송하거나 다른 작업을 수행할 수 있습니다.
+      console.log("아이디:", id);
+      console.log("비밀번호:", password);
+
+      axios.post("http://localhost:8080/users/login", user).then((response) => {
+        const data = response.data.data;
+
+        console.log(data);
+
+        const accessToken = data["access-token"];
+        // 로컬 스토리지에 데이터 저장
+        localStorage.setItem("accessToken", accessToken);
+
+        // 저장된 데이터 확인 (선택 사항)
+        const retrievedTokenData = JSON.parse(localStorage.getItem("accessToken"));
+        console.log("로컬 스토리지에서 가져온 데이터:", retrievedTokenData);
+      });
+    }
+
+    // 애플리케이션 시작 시 실행되는 함수
+    function initializeApp() {
+      // 로컬 스토리지에서 accessToken 가져오기
+      const accessToken = localStorage.getItem("accessToken");
+
+      if (accessToken) {
+        // 서버에 accessToken을 사용하여 인증 요청 보내기
+        axios
+          .post("http://localhost:8080/users", { accessToken })
+          .then((response) => {
+            const isAuthenticated = response.data.isAuthenticated;
+
+            if (isAuthenticated) {
+              // 인증 성공 시 자동 로그인 처리
+              console.log("자동 로그인 성공");
+              // 로그인 상태를 유지하고 필요한 초기화 작업 수행
+            } else {
+              // 토큰이 유효하지 않을 경우 로그인 페이지로 이동 또는 인증 실패 처리
+              console.log("토큰이 유효하지 않습니다. 로그인 필요");
+            }
+          })
+          .catch((error) => {
+            console.error("자동 로그인 오류:", error);
+            // 오류 처리 (예: 로그인 페이지로 이동)
+          });
+      } else {
+        // 로그인이 필요한 경우 (accessToken이 없는 경우)
+        console.log("로그인 필요");
+        // 로그인 페이지로 이동 또는 다른 로그인 처리
+      }
+    }
+
+    // 애플리케이션 시작 시 자동 로그인 초기화
+    initializeApp();
+  </script>
+</html>

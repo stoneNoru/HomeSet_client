@@ -4,6 +4,9 @@ import styled from "styled-components";
 import city from "../assets/city.jpg";
 import bridge from "../assets/bridge.jpg";
 import { Link } from "react-router-dom";
+import { fontAwesome } from "fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 const Wrap = styled.div`
   display: flex;
@@ -137,9 +140,28 @@ const Footer = styled.div`
   background-color: #242424;
 `;
 
+const ToTop = styled.i`
+  padding: 10px;
+  border-radius: 50%;
+  background-color: #e8362c;
+  position: fixed;
+  right: 50px;
+  top: 50px;
+  z-index: 10;
+  color: white;
+  cursor: pointer;
+`;
+
 const Onboarding = () => {
   return (
     <Wrap>
+      <ToTop
+        onClick={() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      >
+        <FontAwesomeIcon icon={faChevronUp} />
+      </ToTop>
       <HeadContainer>
         <Title>부동산 정보를 한눈에</Title>
         <HeaderDesc>

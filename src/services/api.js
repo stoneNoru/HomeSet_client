@@ -1,7 +1,10 @@
 import axios from "axios";
 
 // const BASE_URL = "http://localhost:8080";
-const BASE_URL = "http://192.168.206.66:8080";
+// const BASE_URL = "http://192.168.206.66:8080";
+const BASE_URL = "http://183.107.121.150:8080";
+
+// 183.107.121.150
 // 192.168.206.66
 
 const LoginPost = async (id, password) => {
@@ -94,4 +97,13 @@ const fetchTxDatas = async (aptCode) => {
   }
 };
 
-export { LoginPost, CheckDuplicated, GetUserData, SignUp, CurrentSubscription, NewSubscription, KeywordTxSearch, fetchTxDatas };
+export {
+  LoginPost,
+  CheckDuplicated,
+  GetUserData,
+  SignUp,
+  CurrentSubscription,
+  NewSubscription,
+  KeywordTxSearch,
+  fetchTxDatas,
+};

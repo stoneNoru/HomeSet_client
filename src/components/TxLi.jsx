@@ -27,12 +27,12 @@ const Tab = styled.li`
 const Name = styled.h1`
   font-size: 18px;
   margin-bottom: 20px;
-  color: #dfdff1;
+  color: #f1dfdf;
 `;
 
 const Price = styled.h1`
   font-size: 22px;
-  color: #dfdff1;
+  color: #978a8a;
 `;
 
 const Date = styled.span`
@@ -51,12 +51,14 @@ const GrayText = styled.p`
   font-size: 16px;
 `;
 
-const TxLi = () => {
+const TxLi = ({ no, dongCode, dealAmount, dealYear, dealMonth, dealDay, floor, area, apartmentName, aptCode, lng, lat, date }) => {
   return (
     <Tab>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Name>무슨무슨 아파트</Name>
-        <Date>24.01.01</Date>
+        <Name>{apartmentName}</Name>
+        <Date>
+          {dealYear}.{dealMonth}.{dealDay}
+        </Date>
       </div>
 
       <div
@@ -66,11 +68,31 @@ const TxLi = () => {
           textAlign: "center",
         }}
       >
-        <Price>10억</Price>
-        <GrayText>7층 32평</GrayText>
+        <Price>{Number(dealAmount.replace(",", "")) / 10000}억</Price>
+        <GrayText>
+          {floor}층 {parseInt(area / 3.3)}평
+        </GrayText>
       </div>
     </Tab>
   );
 };
 
 export default TxLi;
+
+/* 
+{
+  "no": 115902109000055, //1씩 올라가는 숫자? 실거래 번호
+  "dongCode": "1159010600",
+  "dealAmount": "138,000",
+  "dealYear": 2021,
+  "dealMonth": 9,
+  "dealDay": 16,
+  "floor": "7",
+  "area": "84.98",
+  "apartmentName": "이수교KCC스위첸",
+  "aptCode": 11590000000048, //아파트이름
+  "lng": "126.981316289093",
+  "lat": "37.4975236970888",
+  "date": "2021-9-16"
+}
+*/

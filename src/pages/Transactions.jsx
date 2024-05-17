@@ -114,7 +114,7 @@ const Transactions = () => {
           🚩 실거래 정보
         </Text>
         <ul>
-          {ids.map((id) => {
+          {/* {ids.map((id) => {
             return (
               <div
                 key={id}
@@ -123,6 +123,33 @@ const Transactions = () => {
                 }}
               >
                 <TxLi key={id} id={id} />
+              </div>
+            );
+          })} */}
+
+          {houses.map((house, i) => {
+            return (
+              <div
+                key={i}
+                onClick={() => {
+                  setSelected(house.aptCode);
+                }}
+              >
+                <TxLi
+                  no={house.no}
+                  dongCode={house.dongCode}
+                  dealAmount={house.dealAmount}
+                  dealYear={house.dealYear}
+                  dealMonth={house.dealMonth}
+                  dealDay={house.dealDay}
+                  floor={house.floor}
+                  area={house.area}
+                  apartmentName={house.apartmentName}
+                  aptCode={house.aptCode}
+                  lng={house.lng}
+                  lat={house.lat}
+                  date={house.date}
+                />
               </div>
             );
           })}
@@ -135,3 +162,21 @@ const Transactions = () => {
 };
 
 export default Transactions;
+
+/* 
+{
+  "no": 115902109000055, //1씩 올라가는 숫자? 실거래 번호
+  "dongCode": "1159010600",
+  "dealAmount": "138,000",
+  "dealYear": 2021,
+  "dealMonth": 9,
+  "dealDay": 16,
+  "floor": "7",
+  "area": "84.98",
+  "apartmentName": "이수교KCC스위첸",
+  "aptCode": 11590000000048, //아파트이름
+  "lng": "126.981316289093",
+  "lat": "37.4975236970888",
+  "date": "2021-9-16"
+}
+*/

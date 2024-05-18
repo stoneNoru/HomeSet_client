@@ -115,6 +115,7 @@ const TabWrap = styled.div`
 `;
 
 const ModalTab = styled.div`
+  position: relative;
   width: 50%;
   padding: 15px;
   background-color: #3d3d3d;
@@ -123,7 +124,11 @@ const ModalTab = styled.div`
 `;
 
 const ModalTitle = styled.span`
-  padding: 10px 20px;
+  z-index: 3;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
   border-radius: 10px;
   font-size: 20px;
   background-color: #f76969;
@@ -205,18 +210,17 @@ const Transactions = () => {
               <p>뭐넣지</p>
               <p>뭐넣지</p>
 
-              <DetailContent>{`마지막 거래일 : ${
+              {/* <DetailContent>{`마지막 거래일 : ${
                 txDatas[txDatas.length - 1].dealYear
               }.${txDatas[txDatas.length - 1].dealMonth}.${
                 txDatas[txDatas.length - 1].dealDay
-              }`}</DetailContent>
+              }`}</DetailContent> */}
             </div>
+
             <TabWrap>
-              {/* <ModalTitle>로드뷰</ModalTitle> */}
               <ModalTab>
                 <RoadView lat={selected.lat} lng={selected.lng} />
               </ModalTab>
-              {/* <ModalTitle>최근</ModalTitle> */}
               <ModalTab>
                 <Chart txDatas={txDatas} />
               </ModalTab>

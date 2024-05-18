@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TxLi from "../components/TxLi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { houseState, markerState } from "../state/atoms";
 import { fetchTxDatas } from "../services/api.js";
 import Chart from "../components/Chart.jsx";
+import { Map } from "react-kakao-maps-sdk";
+import RoadView from "../components/RoadView.jsx";
 
 const Form = styled.form`
   width: 100%;
@@ -59,7 +64,8 @@ const DetailModal = styled.div`
   width: 1300px;
   height: 90%;
   top: 5%;
-  left: 500px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3;
   position: fixed;
   background: rgba(0, 0, 0, 0.7);
@@ -69,7 +75,11 @@ const DetailModal = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.18);
 
   font-size: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
+
 const BlackBg = styled.div`
   z-index: 2;
   position: fixed;
@@ -80,6 +90,44 @@ const BlackBg = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const DetailName = styled.h1`
+  font-size: 50px;
+  margin-bottom: 20px;
+`;
+
+const DetailContent = styled.h4`
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 15px;
+`;
+
+const TabWrap = styled.div`
+  width: 100%;
+  gap: 50px;
+  height: 60%;
+  /* height: 70%; */
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-around;
+  margin-top: auto;
+`;
+
+const ModalTab = styled.div`
+  width: 50%;
+  padding: 15px;
+  background-color: #3d3d3d;
+  border-radius: 15px;
+  box-sizing: border-box;
+`;
+
+const ModalTitle = styled.span`
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 20px;
+  background-color: #f76969;
+  margin-bottom: 50px;
 `;
 
 const Transactions = () => {
@@ -95,7 +143,7 @@ const Transactions = () => {
       const response = await fetchTxDatas(selectedAptCode);
       console.log("거래리스트", response.data.data);
       setTxDatas(response.data.data.reverse()); // 응답 데이터에서 실제 데이터를 설정
-
+      console.log(response.data.data);
       const pricesArray = response.data.data.map(
         (houseData) => houseData.dealAmount
       );
@@ -111,6 +159,7 @@ const Transactions = () => {
         (house) => house.aptCode === selectedMarker
       );
       setSelected(selectedHouse);
+      console.log("selected", selectedHouse);
     }
   }, [selectedMarker, houses]);
 
@@ -119,23 +168,59 @@ const Transactions = () => {
       fetchData(selected.aptCode);
     }
   }, [selected]);
-
+  //   {
+  //     "no": 115002108000132,
+  //     "dongCode": "1150010300",
+  //     "dealAmount": "49,500",
+  //     "dealYear": 2021,
+  //     "dealMonth": 8,
+  //     "dealDay": 14,
+  //     "floor": "4",
+  //     "area": "84.85",
+  //     "apartmentName": "웰라이빌",
+  //     "aptCode": "11500000000276",
+  //     "lng": "126.842384319394",
+  //     "lat": "37.5285659999317",
+  //     "date": "2021-8-14"
+  // }
   return (
     <>
-      {selected && (
+      {selected && txDatas.length > 0 && (
         <BlackBg>
           <DetailModal>
-            <h2>{selected.apartmentName}</h2>
-            <p>상세 정보 표시</p>
-            <span
-              onClick={() => {
-                setMarker(null);
-                setSelected(null);
-              }}
-            >
-              close
-            </span>
-            <Chart txDatas={txDatas} />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <DetailName>{selected.apartmentName}</DetailName>
+              <span
+                onClick={() => {
+                  setMarker(null);
+                  setSelected(null);
+                }}
+              >
+                <FontAwesomeIcon icon={faTimesCircle} />
+              </span>
+            </div>
+
+            <div style={{ width: "50%" }}>
+              <p>뭐넣지</p>
+              <p>뭐넣지</p>
+              <p>뭐넣지</p>
+
+              <DetailContent>{`마지막 거래일 : ${
+                txDatas[txDatas.length - 1].dealYear
+              }.${txDatas[txDatas.length - 1].dealMonth}.${
+                txDatas[txDatas.length - 1].dealDay
+              }`}</DetailContent>
+            </div>
+            <TabWrap>
+              {/* <ModalTitle>로드뷰</ModalTitle> */}
+              <ModalTab>
+                <RoadView lat={selected.lat} lng={selected.lng} />
+              </ModalTab>
+              {/* <ModalTitle>최근</ModalTitle> */}
+              <ModalTab>
+                <Chart txDatas={txDatas} />
+              </ModalTab>
+            </TabWrap>
           </DetailModal>
         </BlackBg>
       )}

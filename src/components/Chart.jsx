@@ -26,7 +26,8 @@ const Chart = ({ txDatas }) => {
     },
     chart: {
       type: "line", // 차트 타입을 'line'으로 변경
-      height: 350,
+      height: "100%",
+      width: "100%",
     },
     xaxis: {
       categories: data.map(
@@ -59,12 +60,13 @@ const Chart = ({ txDatas }) => {
   };
 
   return (
-    <div style={{ width: "50%", height: "30%" }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <ReactApexChart
         options={options}
         series={series}
         type="line" // 차트 타입을 'line'으로 설정
-        height={350}
+        height="100%"
+        width="100%"
       />
     </div>
   );

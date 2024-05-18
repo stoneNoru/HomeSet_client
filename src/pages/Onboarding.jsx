@@ -281,7 +281,7 @@ const Onboarding = () => {
         <Stack>
           <StackTitle
             style={{
-              background: "linear-gradient(to right top, #35ac8e, #16018f)",
+              background: "linear-gradient(-45deg, #35ac8e, #1a01a3)",
               color: "transparent",
               WebkitBackgroundClip: "text",
             }}
@@ -290,7 +290,7 @@ const Onboarding = () => {
           </StackTitle>
           <HoveredStack
             style={{
-              background: "linear-gradient(to right top, #35ac8e, #16018f)",
+              background: "linear-gradient(-45deg, #35ac8e, #1a01a3)",
             }}
           ></HoveredStack>
         </Stack>

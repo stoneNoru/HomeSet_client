@@ -38,7 +38,6 @@ const BlackBg = styled.div`
 `;
 const Sidebar = styled.div`
   position: absolute;
-  height: 90%;
   top: 5%;
   left: 20px;
   height: 100%;

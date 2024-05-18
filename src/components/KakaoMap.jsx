@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
-import { useMatch } from "react-router-dom";
+import { useMatch, useLocation } from "react-router-dom";
 import pin from "../assets/icons/pin.png";
 import { useRecoilState } from "recoil";
-import { houseState } from "../state/atoms.js";
+import { houseState, markerState } from "../state/atoms.js";
 
 const KakaoMap = () => {
   const [map, setMapInstance] = useState(null);
@@ -15,25 +15,43 @@ const KakaoMap = () => {
   const [north, setNorth] = useState(0);
   const [houses, setHouses] = useState([]);
   const [housesAtom, setHousesAtom] = useRecoilState(houseState);
+  const [markerAtom, setMarkerAtom] = useRecoilState(markerState);
   const transactionsMatch = useMatch("/home/transactions");
+  const location = useLocation();
   const imageSrc = pin;
   const imageSize = new window.kakao.maps.Size(40, 40);
   const imageOption = { offset: new window.kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-  const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+  const markerImage = new window.kakao.maps.MarkerImage(
+    imageSrc,
+    imageSize,
+    imageOption
+  );
 
   const handleMapCreate = (mapInstance) => {
     setMapInstance(mapInstance);
   };
 
   //현재 화면 동서남북 좌표로 화면 내 부동산 정보 가져오는 함수
+  //강의실 : 192.168.206.66:8080
   const fetchHouses = async () => {
     try {
-      const response = await axios.get(`http://192.168.206.66:8080/home/search?west=${west}&east=${east}&south=${south}&north=${north}`);
-      // console.log(response.data.data);
+      const response = await axios.get(
+        `http://183.107.121.150:8080/home/search`,
+        {
+          params: {
+            west: west,
+            east: east,
+            south: south,
+            north: north,
+          },
+          headers: {
+            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY2Nlc3MtdG9rZW4iLCJpYXQiOjE3MTYwMDM4ODMsImV4cCI6MTcxNzIxMzQ4MywidXNlcklkIjoic3NhZnkifQ.hMyxtoR4Q-t5Q_LrL-B6BY3OoKKHd9GoHpWEYFR4edg`,
+          },
+        }
+      );
       setHouses(response.data.data);
       setHousesAtom(response.data.data);
-      // console.log(housesAtom);
-      // console.log(houses);
+      console.log("houses", houses);
     } catch (error) {
       console.log(error);
     }
@@ -71,15 +89,18 @@ const KakaoMap = () => {
   //현재 url이 /home/transacion이면
   useEffect(() => {
     if (transactionsMatch) {
-      // console.log("East:", east);
-      // console.log("West:", west);
-      // console.log("South:", south);
-      // console.log("North:", north);
       fetchHouses();
     } else {
       setHouses([]);
+      setHousesAtom([]);
     }
-  }, [east, west, south, north]);
+  }, [transactionsMatch, east, west, south, north]);
+
+  // URL 변경을 감지하여 houses 상태를 빈 배열로 설정
+  useEffect(() => {
+    setHouses([]);
+    setHousesAtom([]);
+  }, [location]);
 
   useEffect(() => {
     if (map && houses.length > 0) {
@@ -95,7 +116,10 @@ const KakaoMap = () => {
         marker.setMap(map);
         markers.push(marker);
         window.kakao.maps.event.addListener(marker, "click", function () {
-          alert("marker click!");
+          // alert(house.aptCode);
+          setMarkerAtom(house.aptCode); //클릭한 마커의 집 번호를 전역상태로 저장
+          setCenter({ lat: house.lat, lng: house.lng });
+          console.log("마커번호", house.aptCode);
         });
       });
       return () => {

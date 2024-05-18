@@ -3,9 +3,8 @@ import styled from "styled-components";
 import TxLi from "../components/TxLi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useRecoilValue } from "recoil";
-import { houseState } from "../state/atoms";
-import { Roadview } from "react-kakao-maps-sdk";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { houseState, markerState } from "../state/atoms";
 import { fetchTxDatas } from "../services/api.js";
 import Chart from "../components/Chart.jsx";
 
@@ -88,6 +87,8 @@ const Transactions = () => {
   const [txDatas, setTxDatas] = useState([]);
   const [prices, setPrices] = useState([]);
   const houses = useRecoilValue(houseState);
+  const selectedMarker = useRecoilValue(markerState); //카카오맵에서 클릭한 마커 번호
+  const setMarker = useSetRecoilState(markerState);
 
   const fetchData = async (selectedAptCode) => {
     try {
@@ -103,7 +104,15 @@ const Transactions = () => {
       console.error("데이터를 가져오는 중 오류 발생:", error);
     }
   };
-  console.log(prices);
+
+  useEffect(() => {
+    if (selectedMarker) {
+      const selectedHouse = houses.find(
+        (house) => house.aptCode === selectedMarker
+      );
+      setSelected(selectedHouse);
+    }
+  }, [selectedMarker, houses]);
 
   useEffect(() => {
     if (selected) {
@@ -116,9 +125,16 @@ const Transactions = () => {
       {selected && (
         <BlackBg>
           <DetailModal>
-            <h2>부동산 상세 정보 - {selected.apartmentName}</h2>
+            <h2>{selected.apartmentName}</h2>
             <p>상세 정보 표시</p>
-            <span onClick={() => setSelected(null)}>close</span>
+            <span
+              onClick={() => {
+                setMarker(null);
+                setSelected(null);
+              }}
+            >
+              close
+            </span>
             <Chart txDatas={txDatas} />
           </DetailModal>
         </BlackBg>

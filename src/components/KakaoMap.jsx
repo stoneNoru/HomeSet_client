@@ -31,8 +31,6 @@ const KakaoMap = () => {
     setMapInstance(mapInstance);
   };
 
-  //현재 화면 동서남북 좌표로 화면 내 부동산 정보 가져오는 함수
-  //강의실 : 192.168.206.66:8080
   const fetchHouses = async () => {
     try {
       const response = await axios.get(
@@ -57,7 +55,6 @@ const KakaoMap = () => {
     }
   };
 
-  //마우스 드래그가 끝나 화면이 이동됐으면 동서남북 좌표 설정
   useEffect(() => {
     if (map) {
       map.setMaxLevel(4);
@@ -66,9 +63,6 @@ const KakaoMap = () => {
         const bounds = map.getBounds();
         const swLatLng = bounds.getSouthWest();
         const neLatLng = bounds.getNorthEast();
-
-        // console.log("SouthWest:", swLatLng.toString());
-        // console.log("NorthEast:", neLatLng.toString());
 
         setSouth(swLatLng.getLat());
         setWest(swLatLng.getLng());
@@ -86,7 +80,6 @@ const KakaoMap = () => {
     }
   }, [map]);
 
-  //현재 url이 /home/transacion이면
   useEffect(() => {
     if (transactionsMatch) {
       fetchHouses();
@@ -96,7 +89,6 @@ const KakaoMap = () => {
     }
   }, [transactionsMatch, east, west, south, north]);
 
-  // URL 변경을 감지하여 houses 상태를 빈 배열로 설정
   useEffect(() => {
     setHouses([]);
     setHousesAtom([]);
@@ -116,28 +108,24 @@ const KakaoMap = () => {
         marker.setMap(map);
         markers.push(marker);
         window.kakao.maps.event.addListener(marker, "click", function () {
-          // alert(house.aptCode);
-          setMarkerAtom(house.aptCode); //클릭한 마커의 집 번호를 전역상태로 저장
+          setMarkerAtom(house.aptCode); // 클릭한 마커의 집 번호를 전역상태로 저장
           setCenter({ lat: house.lat, lng: house.lng });
           console.log("마커번호", house.aptCode);
         });
       });
       return () => {
-        // Remove markers when component unmounts or dependencies change
         markers.forEach((marker) => marker.setMap(null));
       };
     }
   }, [map, houses]);
 
   return (
-    <div style={{ overflow: "hidden" }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <Map
         center={center}
         style={{
-          width: "100vw",
-          height: "100vh",
-          position: "absolute",
-          top: "0",
+          width: "100%",
+          height: "100%",
         }}
         level={5}
         onCreate={handleMapCreate}

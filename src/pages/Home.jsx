@@ -1,57 +1,28 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
-import {
-  Link,
-  Outlet,
-  Route,
-  Routes,
-  useMatch,
-  useNavigate,
-} from "react-router-dom";
-import LoginModal from "../components/LoginModal";
-import Transactions from "./Transactions";
-import Subscription from "./Subscription";
-import { fontAwesome } from "fontawesome";
-import { faBell, faNewspaper } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import NewsList from "../components/NewsList";
-import axios from "axios";
+import { Link, Outlet, useMatch, useNavigate } from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
 
 const Page = styled.div`
-  position: relative;
+  display: flex;
   height: 100vh;
   overflow: hidden;
 `;
 
-const BlackBg = styled.div`
-  z-index: 10;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 const Sidebar = styled.div`
-  position: absolute;
-  top: 5%;
-  left: 20px;
-  height: 100%;
-  top: 0%;
-  left: 0px;
   width: 360px;
-  /* border-radius: 14px; */
-  background-color: white;
-  background-color: black; //다크모드
+  background-color: black; // 다크모드
   z-index: 2;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   padding: 30px 20px;
   box-sizing: border-box;
   overflow: auto;
+`;
+
+const Content = styled.div`
+  flex-grow: 1;
+  position: relative;
 `;
 
 const Tabs = styled.div`
@@ -61,9 +32,8 @@ const Tabs = styled.div`
   gap: 20px;
 `;
 
-const HomeItems = styled.div`
-  /* color: black; */
-`;
+const HomeItems = styled.div``;
+
 const Logo = styled.div`
   background-size: cover;
   width: 75px;
@@ -114,9 +84,8 @@ const Tab = styled.span`
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 400;
-  /* background-color: ${(props) => (props.active ? "#e50914" : "#949494")}; */
   background-color: ${(props) =>
-    props.active ? "#e50914" : "#333344"}; //다크모드
+    props.active ? "#e50914" : "#333344"}; // 다크모드
   padding: 10px 0px;
   border-radius: 10px;
   transition: all 0.3s;
@@ -127,11 +96,8 @@ const Tab = styled.span`
     color: inherit;
     text-decoration: none;
   }
-
-  /* &:hover {
-    background-color: #e95656;
-  } */
 `;
+
 const News = styled.div`
   margin-bottom: 20px;
 `;
@@ -144,9 +110,6 @@ const Home = () => {
 
   return (
     <Page>
-      {/* <BlackBg>
-        <LoginModal />
-      </BlackBg> */}
       <Sidebar>
         <HeadWrap>
           <Logo
@@ -164,7 +127,6 @@ const Home = () => {
         </HeadWrap>
         <Tabs>
           <Tab active={!!transactionsMatch}>
-            {/* <Link to="transactions" style={{ color: "black" }}> */}
             <Link to="transactions" style={{ color: "white" }}>
               실거래
             </Link>
@@ -179,7 +141,6 @@ const Home = () => {
           <HomeItems>
             <Notice>
               <h2 style={{ marginBottom: "10px" }}>📌 공지사항</h2>
-
               <NoticeList>axios 코드 작성 완</NoticeList>
             </Notice>
             <News>
@@ -190,7 +151,9 @@ const Home = () => {
         ) : null}
         <Outlet></Outlet>
       </Sidebar>
-      <KakaoMap />
+      <Content>
+        <KakaoMap />
+      </Content>
     </Page>
   );
 };

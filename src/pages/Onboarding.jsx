@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { fontAwesome } from "fontawesome";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 const Wrap = styled.div`
   position: relative;
@@ -188,13 +189,25 @@ const Stack = styled.div`
 const HoveredStack = styled.div`
   position: absolute;
   right: 290px;
-
   width: 300px;
   height: 300px;
   border-radius: 10px;
   z-index: 3;
-
   transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
+  padding: 30px;
+`;
+
+const HoveredTitle = styled.a`
+  font-size: 28px;
+  margin-bottom: 10px;
+  cursor: pointer;
+`;
+
+const HoveredContent = styled.li`
+  font-size: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const StackTitle = styled.h1`
@@ -276,7 +289,22 @@ const Onboarding = () => {
             style={{
               background: "linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100% )",
             }}
-          ></HoveredStack>
+          >
+            <HoveredTitle href="https://github.com/norunaru" target="blank">
+              <FontAwesomeIcon
+                icon={faGithub}
+                style={{ marginRight: "10px" }}
+              />
+              nwy98
+            </HoveredTitle>
+            <ul>
+              <HoveredContent>React</HoveredContent>
+              <HoveredContent>Recoil</HoveredContent>
+              <HoveredContent>Styled components</HoveredContent>
+              <HoveredContent>ApexCharts</HoveredContent>
+              <HoveredContent>Kakao maps SDK</HoveredContent>
+            </ul>
+          </HoveredStack>
         </Stack>
         <Stack>
           <StackTitle
@@ -292,7 +320,18 @@ const Onboarding = () => {
             style={{
               background: "linear-gradient(-45deg, #35ac8e, #1a01a3)",
             }}
-          ></HoveredStack>
+          >
+            <HoveredTitle
+              href="https://github.com/stoneTiger0912"
+              target="blank"
+            >
+              <FontAwesomeIcon
+                icon={faGithub}
+                style={{ marginRight: "10px" }}
+              />
+              SeokBeom Lee
+            </HoveredTitle>
+          </HoveredStack>
         </Stack>
       </StacksContainer>
 

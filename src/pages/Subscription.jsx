@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { CurrentSubscription, NewSubscription } from "../services/api";
+import {
+  CurrentSubscription,
+  NewSubscription,
+  FinishedSubscription,
+} from "../services/api";
 import Card from "../components/Card";
+import Nothing from "../components/Nothing";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const RadioGroup = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 24px;
   margin-top: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 const RadioLabel = styled.label`
@@ -61,12 +68,17 @@ const SubscriptionContainer = styled.div`
   color: white;
 `;
 
+const Info = styled.div`
+  width: 100%;
+  height: 30px;
+  color: #727272;
+`;
+
 const Subscription = () => {
   const [selectedOption, setSelectedOption] = useState("ongoing");
   const [finished, setFinished] = useState([]);
   const [ongoing, setOngoing] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
-  const id = 4;
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -80,6 +92,9 @@ const Subscription = () => {
       } else if (selectedOption === "upcoming") {
         const response = await NewSubscription();
         setUpcoming(response);
+      } else if (selectedOption === "finished") {
+        const response = await FinishedSubscription();
+        setFinished(response);
       }
     };
 
@@ -136,39 +151,95 @@ const Subscription = () => {
       <div>
         {selectedOption === "finished" && (
           <div>
-            <Card id={id} />
+            <Info>한 달 내 종료된 청약 정보만 제공해요</Info>
+            <ul>
+              {finished.length !== 0 ? (
+                finished.map((item) => (
+                  <Card
+                    status={selectedOption}
+                    houseManageNo={item.houseManageNo}
+                    pblancNo={item.pblancNo}
+                    houseNm={item.houseNm}
+                    hssplyAdres={item.hssplyAdres}
+                    bsnsMbyNm={item.bsnsMbyNm}
+                    houseSecdNm={item.houseSecdNm}
+                    totSuplyHshldco={item.totSuplyHshldco}
+                    rceptBgnde={item.rceptBgnde}
+                    rceptEndde={item.rceptEndde}
+                    przwnerPresnatnDe={item.przwnerPresnatnDe}
+                    cntrctCnclsBgnde={item.cntrctCnclsBgnde}
+                    cntrctCnclsEndde={item.cntrctCnclsEndde}
+                    mvnPrearngeYm={item.mvnPrearngeYm}
+                    mdhsTelno={item.mdhsTelno}
+                    hmpgAdres={item.hmpgAdres}
+                    subscrptAreaCodeNm={item.subscrptAreaCodeNm}
+                    pblancUrl={item.pblancUrl}
+                  />
+                ))
+              ) : (
+                <Nothing status={selectedOption} />
+              )}
+            </ul>
           </div>
         )}
         {selectedOption === "ongoing" && (
-          <div>
-            <Card id={id} />
-            <Card id={id} />
-          </div>
+          <ul>
+            {ongoing.length !== 0 ? (
+              ongoing.map((item) => (
+                <Card
+                  status={selectedOption}
+                  houseManageNo={item.houseManageNo}
+                  pblancNo={item.pblancNo}
+                  houseNm={item.houseNm}
+                  hssplyAdres={item.hssplyAdres}
+                  bsnsMbyNm={item.bsnsMbyNm}
+                  houseSecdNm={item.houseSecdNm}
+                  totSuplyHshldco={item.totSuplyHshldco}
+                  rceptBgnde={item.rceptBgnde}
+                  rceptEndde={item.rceptEndde}
+                  przwnerPresnatnDe={item.przwnerPresnatnDe}
+                  cntrctCnclsBgnde={item.cntrctCnclsBgnde}
+                  cntrctCnclsEndde={item.cntrctCnclsEndde}
+                  mvnPrearngeYm={item.mvnPrearngeYm}
+                  mdhsTelno={item.mdhsTelno}
+                  hmpgAdres={item.hmpgAdres}
+                  subscrptAreaCodeNm={item.subscrptAreaCodeNm}
+                  pblancUrl={item.pblancUrl}
+                />
+              ))
+            ) : (
+              <Nothing status={selectedOption} />
+            )}
+          </ul>
         )}
         {selectedOption === "upcoming" && (
           <ul>
-            {upcoming.map((item) => (
-              <Card
-                status={selectedOption}
-                houseManageNo={item.houseManageNo}
-                pblancNo={item.pblancNo}
-                houseNm={item.houseNm}
-                hssplyAdres={item.hssplyAdres}
-                bsnsMbyNm={item.bsnsMbyNm}
-                houseSecdNm={item.houseSecdNm}
-                totSuplyHshldco={item.totSuplyHshldco}
-                rceptBgnde={item.rceptBgnde}
-                rceptEndde={item.rceptEndde}
-                przwnerPresnatnDe={item.przwnerPresnatnDe}
-                cntrctCnclsBgnde={item.cntrctCnclsBgnde}
-                cntrctCnclsEndde={item.cntrctCnclsEndde}
-                mvnPrearngeYm={item.mvnPrearngeYm}
-                mdhsTelno={item.mdhsTelno}
-                hmpgAdres={item.hmpgAdres}
-                subscrptAreaCodeNm={item.subscrptAreaCodeNm}
-                pblancUrl={item.pblancUrl}
-              />
-            ))}
+            {upcoming.length !== 0 ? (
+              upcoming.map((item) => (
+                <Card
+                  status={selectedOption}
+                  houseManageNo={item.houseManageNo}
+                  pblancNo={item.pblancNo}
+                  houseNm={item.houseNm}
+                  hssplyAdres={item.hssplyAdres}
+                  bsnsMbyNm={item.bsnsMbyNm}
+                  houseSecdNm={item.houseSecdNm}
+                  totSuplyHshldco={item.totSuplyHshldco}
+                  rceptBgnde={item.rceptBgnde}
+                  rceptEndde={item.rceptEndde}
+                  przwnerPresnatnDe={item.przwnerPresnatnDe}
+                  cntrctCnclsBgnde={item.cntrctCnclsBgnde}
+                  cntrctCnclsEndde={item.cntrctCnclsEndde}
+                  mvnPrearngeYm={item.mvnPrearngeYm}
+                  mdhsTelno={item.mdhsTelno}
+                  hmpgAdres={item.hmpgAdres}
+                  subscrptAreaCodeNm={item.subscrptAreaCodeNm}
+                  pblancUrl={item.pblancUrl}
+                />
+              ))
+            ) : (
+              <Nothing status={selectedOption} />
+            )}
           </ul>
         )}
       </div>

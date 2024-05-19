@@ -298,7 +298,7 @@ const Onboarding = () => {
               nwy98
             </HoveredTitle>
             <ul>
-              <HoveredContent>React</HoveredContent>
+              <HoveredContent>React.js</HoveredContent>
               <HoveredContent>Recoil</HoveredContent>
               <HoveredContent>Styled components</HoveredContent>
               <HoveredContent>ApexCharts</HoveredContent>

@@ -55,7 +55,8 @@ const SignUp = async (id, password, email, nickname) => {
 const CurrentSubscription = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/applies/current`);
-    console.log(response);
+    console.log("ongoing", response.data.data);
+    return response.data.data;
   } catch (error) {
     console.log(error);
   }
@@ -64,7 +65,8 @@ const CurrentSubscription = async () => {
 const NewSubscription = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/applies/new`);
-    console.log(response);
+    console.log("upcoming", response.data.data);
+    return response.data.data;
   } catch (error) {
     console.log(error);
   }
@@ -80,7 +82,7 @@ const KeywordTxSearch = async (keyword) => {
     });
 
     // console.log(response);
-    return response;
+    return response.data.data;
   } catch (error) {
     console.log(error);
   }

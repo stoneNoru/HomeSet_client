@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { CurrentSubscription, NewSubscription } from "../services/api";
 import Card from "../components/Card";
@@ -63,11 +63,32 @@ const SubscriptionContainer = styled.div`
 
 const Subscription = () => {
   const [selectedOption, setSelectedOption] = useState("ongoing");
+  const [finished, setFinished] = useState([]);
+  const [ongoing, setOngoing] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
   const id = 4;
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (selectedOption === "ongoing") {
+        const response = await CurrentSubscription();
+        setOngoing(response);
+      } else if (selectedOption === "upcoming") {
+        const response = await NewSubscription();
+        setUpcoming(response);
+      }
+    };
+
+    fetchData();
+  }, [selectedOption]);
+
+  if (upcoming.length != 0) {
+    console.log(upcoming);
+  }
 
   return (
     <SubscriptionContainer>
@@ -125,11 +146,30 @@ const Subscription = () => {
           </div>
         )}
         {selectedOption === "upcoming" && (
-          <div>
-            <Card id={id} />
-            <Card id={id} />
-            <Card id={id} />
-          </div>
+          <ul>
+            {upcoming.map((item) => (
+              <Card
+                status={selectedOption}
+                houseManageNo={item.houseManageNo}
+                pblancNo={item.pblancNo}
+                houseNm={item.houseNm}
+                hssplyAdres={item.hssplyAdres}
+                bsnsMbyNm={item.bsnsMbyNm}
+                houseSecdNm={item.houseSecdNm}
+                totSuplyHshldco={item.totSuplyHshldco}
+                rceptBgnde={item.rceptBgnde}
+                rceptEndde={item.rceptEndde}
+                przwnerPresnatnDe={item.przwnerPresnatnDe}
+                cntrctCnclsBgnde={item.cntrctCnclsBgnde}
+                cntrctCnclsEndde={item.cntrctCnclsEndde}
+                mvnPrearngeYm={item.mvnPrearngeYm}
+                mdhsTelno={item.mdhsTelno}
+                hmpgAdres={item.hmpgAdres}
+                subscrptAreaCodeNm={item.subscrptAreaCodeNm}
+                pblancUrl={item.pblancUrl}
+              />
+            ))}
+          </ul>
         )}
       </div>
     </SubscriptionContainer>
@@ -137,3 +177,24 @@ const Subscription = () => {
 };
 
 export default Subscription;
+/*
+{
+  "houseManageNo": "2024000152",
+  "pblancNo": "2024000152",
+  "houseNm": "이천자이 더 레브",
+  "hssplyAdres": "경기도 이천시 송정동 산31번지 일원",
+  "bsnsMbyNm": "교보자산신탁(주)",
+  "houseSecdNm": "APT",
+  "totSuplyHshldco": 635,
+  "rceptBgnde": "2024-05-20",
+  "rceptEndde": "2024-05-22",
+  "przwnerPresnatnDe": "2024-05-28",
+  "cntrctCnclsBgnde": "2024-06-09",
+  "cntrctCnclsEndde": "2024-06-11",
+  "mvnPrearngeYm": "202704",
+  "mdhsTelno": "18334465",
+  "hmpgAdres": "http://xi.co.kr/irv",
+  "subscrptAreaCodeNm": "경기",
+  "pblancUrl": "https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancDetail.do?houseManageNo=2024000152&pblancNo=2024000152"
+}
+ */

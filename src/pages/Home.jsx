@@ -3,6 +3,8 @@ import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
 import { Link, Outlet, useMatch, useNavigate } from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
+import LoginModal from "../components/LoginModal";
+import Notice from "../components/Notice";
 
 const Page = styled.div`
   display: flex;
@@ -48,18 +50,16 @@ const HeadWrap = styled.div`
   align-items: center;
 `;
 
-const Notice = styled.div`
-  margin-bottom: 20px;
-  margin-top: 30px;
+const NoticesWrap = styled.div`
+  width: 100%;
+  overflow: hidden;
 `;
-
 const NoticeList = styled.div`
   width: 100%;
-  height: 50px;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: #333344;
-  box-sizing: border-box;
+  display: flex;
+  /* overflow: hidden; */
+  transition: transform 1s;
+  transform: translateX(${(props) => props.translateX}%);
 `;
 
 const Title = styled.h1`
@@ -109,8 +109,19 @@ const Home = () => {
   const transactionsMatch = useMatch("/home/transactions");
   const subscriptionMatch = useMatch("/home/subscription");
 
+  const [translateX, setTranslateX] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTranslateX((prev) => (prev - 100) % 300);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Page>
+      {/* <LoginModal /> */}
       <Sidebar>
         <HeadWrap>
           <Logo
@@ -140,12 +151,20 @@ const Home = () => {
         </Tabs>
         {exactHomeMatch !== null ? (
           <HomeItems>
-            <Notice>
-              <h2 style={{ marginBottom: "10px" }}>📌 공지사항</h2>
-              <NoticeList>axios 코드 작성 완</NoticeList>
-            </Notice>
+            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
+              📌 공지사항
+            </h2>
+            <NoticesWrap>
+              <NoticeList translateX={translateX}>
+                <Notice version={"0.0.1"} content={"배고프네"} />
+                <Notice version={"0.0.2"} content={"저녁 뭐먹지"} />
+                <Notice version={"0.0.3"} content={"치킨먹을까"} />
+              </NoticeList>
+            </NoticesWrap>
             <News>
-              <h2>✨ 부동산 뉴스</h2>
+              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
+                ✨ 부동산 뉴스
+              </h2>
               <p>여기에 최신 부동산 뉴스들 표시</p>
             </News>
           </HomeItems>

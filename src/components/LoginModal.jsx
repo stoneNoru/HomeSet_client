@@ -30,6 +30,17 @@ const Header = styled.header`
   }
 `;
 
+const BlackBg = styled.div`
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -61,7 +72,7 @@ const Input = styled.input`
   }
 
   &[type="submit"] {
-    background-color: ${(props) => props.theme.accentColor};
+    background-color: #f56157;
     cursor: pointer;
     padding: 20px 0px;
     border-radius: 5px;
@@ -71,20 +82,22 @@ const Input = styled.input`
 
 const LoginModal = () => {
   return (
-    <Container>
-      <Header>
-        <h1>Welcome</h1>
-        <p>Log in or create Account</p>
-      </Header>
-      <LoginForm>
-        <Input type="text" placeholder="Email" />
-        <Input type="password" placeholder="Password" />
+    <BlackBg>
+      <Container>
+        <Header>
+          <h1>Welcome</h1>
+          <p>Log in or create Account</p>
+        </Header>
+        <LoginForm>
+          <Input type="text" placeholder="Email" />
+          <Input type="password" placeholder="Password" />
 
-        <Input type="submit" value="Log In" />
-        <Link to="/signup">Create Account</Link>
-        {/* {error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>} */}
-      </LoginForm>
-    </Container>
+          <Input type="submit" value="Log In" />
+          <Link to="/signup">Create Account</Link>
+          {/* {error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>} */}
+        </LoginForm>
+      </Container>
+    </BlackBg>
   );
 };
 

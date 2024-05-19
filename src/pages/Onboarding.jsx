@@ -69,7 +69,7 @@ const Button = styled.button`
 
   &:hover {
     background-color: #ff3838;
-    box-shadow: -5px -5px 30px 5px orangered, 5px 5px 30px 5px blue;
+    box-shadow: -5px -5px 30px 5px cornflowerblue, 5px 5px 30px 5px red;
   }
 `;
 

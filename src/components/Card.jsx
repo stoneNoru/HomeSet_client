@@ -165,6 +165,10 @@ const Card = ({
               <td>{houseSecdNm}</td>
             </tr>
             <tr>
+              <th>사업 주체</th>
+              <td>{bsnsMbyNm}</td>
+            </tr>
+            <tr>
               <th>공급 세대수</th>
               <td>{totSuplyHshldco}</td>
             </tr>

@@ -86,17 +86,11 @@ const FixUserData = () => {
   const location = useLocation();
   const { myData } = location.state || {}; //이전 페이지에서 전달받은 state
   const navigate = useNavigate();
-  const [id, setId] = useState("");
-  const [email, setEmail] = useState("");
+  const [id, setId] = useState(myData?.id || "");
+  const [email, setEmail] = useState(myData?.email || "");
   const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState(myData?.nickname || "");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    setId(myData.id);
-    setEmail(myData.email);
-    setNickname(myData.nickname);
-  }, []);
 
   const isEmailValid = (userEmail) => {
     // 이메일 형식을 검증하는 정규 표현식
@@ -113,7 +107,7 @@ const FixUserData = () => {
     }
 
     try {
-      const response = await ModifyUserData(id, password, email, nickname);
+      const response = await ModifyUserData(id, email, password, nickname);
       console.log(response.data);
       navigate("/mypage");
     } catch (error) {
@@ -128,18 +122,6 @@ const FixUserData = () => {
 
   return (
     <div>
-      <h1>내 정보 수정</h1>
-      {myData ? (
-        <div>
-          <p>ID: {myData.id}</p>
-          <p>Email: {myData.email}</p>
-          <p>Nickname: {myData.nickname}</p>
-          {/* 여기서 myData를 사용하여 폼을 작성하거나 수정할 수 있습니다 */}
-        </div>
-      ) : (
-        <p>정보를 불러오는 중입니다...</p>
-      )}
-
       <BlackBg>
         <Container>
           <Header>
@@ -147,12 +129,15 @@ const FixUserData = () => {
             <p>Use Email or Google ID to make Account</p>
           </Header>
           <Form onSubmit={handleSignup}>
+            {/* id는 수정불가 */}
             <Input
               type="text"
               placeholder="ID"
               value={id}
               onChange={(e) => setId(e.target.value)}
+              readOnly
             />
+
             <Input
               type="text"
               placeholder="Email"

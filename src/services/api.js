@@ -1,8 +1,9 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // const BASE_URL = "http://localhost:8080";
-// const BASE_URL = "http://192.168.206.66:8080";
-const BASE_URL = "http://183.107.121.150:8080";
+const BASE_URL = "http://192.168.206.66:8080";
+// const BASE_URL = "http://183.107.121.150:8080";
 
 // 183.107.121.150
 // 192.168.206.66
@@ -13,9 +14,26 @@ const LoginPost = async (id, password) => {
       id: id,
       password: password,
     });
-    console.log(response.data);
+    console.log(response.data.data);
+    const accessToken = response.data.data["access-token"];
+    localStorage.setItem("accessToken", accessToken);
+    return response;
   } catch (error) {
     console.log(error);
+  }
+};
+
+const LogOutAPI = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users/logout`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response);
+    localStorage.removeItem("accessToken");
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -23,6 +41,7 @@ const CheckDuplicated = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/users/check?id=ssafy`);
     console.log(response);
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -32,12 +51,13 @@ const GetUserData = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/users`);
     console.log(response);
+    return response;
   } catch (error) {
     console.log(error);
   }
 };
 
-const SignUp = async (id, password, email, nickname) => {
+const SignUpAPI = async (id, password, email, nickname) => {
   try {
     const response = await axios.post(`${BASE_URL}/users`, {
       id: id,
@@ -46,6 +66,7 @@ const SignUp = async (id, password, email, nickname) => {
       nickname: nickname,
     });
     console.log(response);
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -85,14 +106,10 @@ const FinishedSubscription = async () => {
 /*실거래정보*/
 const KeywordTxSearch = async (keyword) => {
   try {
-    const response = await axios.post(`${BASE_URL}/home`, null, {
-      params: {
-        keyword: keyword,
-      },
-    });
+    const response = await axios.get(`${BASE_URL}/home?keyword=${keyword}`);
 
-    // console.log(response);
-    return response.data.data;
+    console.log("검색", response.data.data);
+    // return response.data.data;
   } catch (error) {
     console.log(error);
   }
@@ -109,14 +126,4 @@ const fetchTxDatas = async (aptCode) => {
   }
 };
 
-export {
-  LoginPost,
-  CheckDuplicated,
-  GetUserData,
-  SignUp,
-  CurrentSubscription,
-  NewSubscription,
-  KeywordTxSearch,
-  fetchTxDatas,
-  FinishedSubscription,
-};
+export { LogOutAPI, SignUpAPI, LoginPost, CheckDuplicated, GetUserData, CurrentSubscription, NewSubscription, KeywordTxSearch, fetchTxDatas, FinishedSubscription };

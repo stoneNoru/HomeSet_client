@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TxLi from "../components/TxLi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMagnifyingGlass,
-  faTimesCircle,
-} from "@fortawesome/free-solid-svg-icons";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { houseState, markerState } from "../state/atoms";
+import { faMagnifyingGlass, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { houseState, markerState, typedState } from "../state/atoms";
 import { fetchTxDatas } from "../services/api.js";
 import Chart from "../components/Chart.jsx";
 import { Map } from "react-kakao-maps-sdk";
 import RoadView from "../components/RoadView.jsx";
+import { KeywordTxSearch } from "../services/api.js";
 
 const Form = styled.form`
   width: 100%;
@@ -37,7 +35,7 @@ const Input = styled.input`
   }
 `;
 
-const Submit = styled.button`
+const SubmitButton = styled.button`
   padding: 0.5em 1em;
   background-color: #e50914;
   border: none;
@@ -142,6 +140,7 @@ const Transactions = () => {
   const houses = useRecoilValue(houseState);
   const selectedMarker = useRecoilValue(markerState); //카카오맵에서 클릭한 마커 번호
   const setMarker = useSetRecoilState(markerState);
+  const [typedText, setTypedText] = useRecoilState(typedState);
 
   const fetchData = async (selectedAptCode) => {
     try {
@@ -149,9 +148,7 @@ const Transactions = () => {
       console.log("거래리스트", response.data.data);
       setTxDatas(response.data.data.reverse()); // 응답 데이터에서 실제 데이터를 설정
       console.log(response.data.data);
-      const pricesArray = response.data.data.map(
-        (houseData) => houseData.dealAmount
-      );
+      const pricesArray = response.data.data.map((houseData) => houseData.dealAmount);
       setPrices(pricesArray); // dealAmount 값을 한 번에 설정
     } catch (error) {
       console.error("데이터를 가져오는 중 오류 발생:", error);
@@ -160,9 +157,7 @@ const Transactions = () => {
 
   useEffect(() => {
     if (selectedMarker) {
-      const selectedHouse = houses.find(
-        (house) => house.aptCode === selectedMarker
-      );
+      const selectedHouse = houses.find((house) => house.aptCode === selectedMarker);
       setSelected(selectedHouse);
       console.log("selected", selectedHouse);
     }
@@ -228,11 +223,22 @@ const Transactions = () => {
           </DetailModal>
         </BlackBg>
       )}
-      <Form>
-        <Input placeholder="원하는 지역 입력" />
-        <Submit type="submit">
+      <Form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const input = event.target.elements.keyword.value;
+          setTypedText("");
+          setTypedText(input);
+          KeywordTxSearch(input);
+        }}
+        onChange={(event) => {
+          console.log(event.target.value);
+        }}
+      >
+        <Input name="keyword" placeholder="원하는 지역 입력" />
+        <SubmitButton type="submit">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </Submit>
+        </SubmitButton>
       </Form>
 
       <div style={{ color: "black" }}>

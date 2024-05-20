@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
 import { useMatch, useLocation } from "react-router-dom";
 import pin from "../assets/icons/pin.png";
-import { useRecoilState } from "recoil";
-import { houseState, markerState } from "../state/atoms.js";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { houseState, markerState, typedState } from "../state/atoms.js";
 
 const KakaoMap = () => {
   const [map, setMapInstance] = useState(null);
@@ -16,37 +16,58 @@ const KakaoMap = () => {
   const [houses, setHouses] = useState([]);
   const [housesAtom, setHousesAtom] = useRecoilState(houseState);
   const [markerAtom, setMarkerAtom] = useRecoilState(markerState);
+  const typedText = useRecoilValue(typedState);
   const transactionsMatch = useMatch("/home/transactions");
   const location = useLocation();
   const imageSrc = pin;
   const imageSize = new window.kakao.maps.Size(40, 40);
-  const imageOption = { offset: new window.kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-  const markerImage = new window.kakao.maps.MarkerImage(
-    imageSrc,
-    imageSize,
-    imageOption
-  );
+  const imageOption = { offset: new window.kakao.maps.Point(27, 69) };
+  const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
 
+  // 입력창 텍스트를 위도 경도 데이터로 변환
+  useEffect(() => {
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    if (typedText !== "") {
+      const callback = (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          console.log(result);
+          setLatitude(result[0].y);
+          setLongitude(result[0].x);
+        }
+      };
+      geocoder.addressSearch(`${typedText}`, callback);
+    }
+  }, [typedText]);
+
+  // 지도 중심을 입력한 텍스트의 위도 경도로 변경
+  useEffect(() => {
+    if (latitude !== 0 && longitude !== 0) {
+      setCenter({ lat: latitude, lng: longitude });
+      setHouses([]);
+    }
+  }, [latitude, longitude]);
+
+  // 지도 인스턴스 생성
   const handleMapCreate = (mapInstance) => {
     setMapInstance(mapInstance);
   };
 
+  // 동서남북 보내서 현 화면에 위치한 집들 리스트 얻어옴
   const fetchHouses = async () => {
     try {
-      const response = await axios.get(
-        `http://183.107.121.150:8080/home/search`,
-        {
-          params: {
-            west: west,
-            east: east,
-            south: south,
-            north: north,
-          },
-          headers: {
-            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY2Nlc3MtdG9rZW4iLCJpYXQiOjE3MTYwMDM4ODMsImV4cCI6MTcxNzIxMzQ4MywidXNlcklkIjoic3NhZnkifQ.hMyxtoR4Q-t5Q_LrL-B6BY3OoKKHd9GoHpWEYFR4edg`,
-          },
-        }
-      );
+      const response = await axios.get(`http://183.107.121.150:8080/home/search`, {
+        params: {
+          west: west,
+          east: east,
+          south: south,
+          north: north,
+        },
+        headers: {
+          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY2Nlc3MtdG9rZW4iLCJpYXQiOjE3MTYwMDM4ODMsImV4cCI6MTcxNzIxMzQ4MywidXNlcklkIjoic3NhZnkifQ.hMyxtoR4Q-t5Q_LrL-B6BY3OoKKHd9GoHpWEYFR4edg`,
+        },
+      });
       setHouses(response.data.data);
       setHousesAtom(response.data.data);
       console.log("houses", houses);
@@ -55,6 +76,7 @@ const KakaoMap = () => {
     }
   };
 
+  // 지도 설정, 드래그 끝나면 동서남북 추출
   useEffect(() => {
     if (map) {
       map.setMaxLevel(4);
@@ -80,6 +102,7 @@ const KakaoMap = () => {
     }
   }, [map]);
 
+  // 지도 드래그 끝나서 위치 변경되면 집들 데이터 가져옴
   useEffect(() => {
     if (transactionsMatch) {
       fetchHouses();

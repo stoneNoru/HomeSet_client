@@ -5,6 +5,9 @@ import { Link, Outlet, useMatch, useNavigate } from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
 import LoginModal from "../components/LoginModal";
 import Notice from "../components/Notice";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LogOutAPI } from "../services/api";
 
 const Page = styled.div`
   display: flex;
@@ -65,8 +68,7 @@ const NoticeList = styled.div`
 const Title = styled.h1`
   @font-face {
     font-family: "TTLaundryGothicB";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2")
-      format("woff2");
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
   }
@@ -85,8 +87,7 @@ const Tab = styled.span`
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 400;
-  background-color: ${(props) =>
-    props.active ? "#e50914" : "#333344"}; // 다크모드
+  background-color: ${(props) => (props.active ? "#e50914" : "#333344")}; // 다크모드
   padding: 10px 0px;
   border-radius: 10px;
   transition: all 0.3s;
@@ -101,6 +102,18 @@ const Tab = styled.span`
 
 const News = styled.div`
   margin-bottom: 20px;
+`;
+
+const ToTop = styled.i`
+  padding: 10px;
+  border-radius: 50%;
+  background-color: #e8362c;
+  position: fixed;
+  right: 50px;
+  top: 50px;
+  z-index: 10;
+  color: white;
+  cursor: pointer;
 `;
 
 const Home = () => {
@@ -121,7 +134,13 @@ const Home = () => {
 
   return (
     <Page>
-      {/* <LoginModal /> */}
+      <ToTop
+        onClick={() => {
+          LogOutAPI();
+        }}
+      >
+        Log out
+      </ToTop>
       <Sidebar>
         <HeadWrap>
           <Logo
@@ -134,7 +153,7 @@ const Home = () => {
               navigate("/home");
             }}
           >
-            서비스이름
+            홈셋
           </Title>
         </HeadWrap>
         <Tabs>
@@ -151,9 +170,7 @@ const Home = () => {
         </Tabs>
         {exactHomeMatch !== null ? (
           <HomeItems>
-            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
-              📌 공지사항
-            </h2>
+            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📌 공지사항</h2>
             <NoticesWrap>
               <NoticeList translateX={translateX}>
                 <Notice version={"0.0.1"} content={"배고프네"} />
@@ -162,9 +179,7 @@ const Home = () => {
               </NoticeList>
             </NoticesWrap>
             <News>
-              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
-                ✨ 부동산 뉴스
-              </h2>
+              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📰 부동산 뉴스</h2>
               <p>여기에 최신 부동산 뉴스들 표시</p>
             </News>
           </HomeItems>

@@ -9,3 +9,8 @@ export const markerState = atom({
   key: "markerAtom",
   default: "",
 });
+
+export const typedState = atom({
+  key: "textAtom",
+  default: "",
+});

@@ -8,7 +8,9 @@ import Transactions from "./pages/Transactions";
 import Subscription from "./pages/Subscription";
 import TxDetail from "./components/TxDetail";
 import SubsDetail from "./components/SubsDetail";
+import SignUp from "./pages/SignUp";
 import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -16,13 +18,13 @@ function App() {
       <RecoilRoot>
         <Routes>
           <Route path="/" element={<Onboarding />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/home" element={<Home />}>
             <Route path="transactions" element={<Transactions />} />
-            <Route path="transactions/:id" element={<TxDetail />} />
             <Route path="subscription" element={<Subscription />} />
-            <Route path="transactions/:id" element={<SubsDetail />} />
           </Route>
-          <Route path="/mypage" element={<MyPage />} />
           <Route path="*" element={<Error />} />
         </Routes>
       </RecoilRoot>

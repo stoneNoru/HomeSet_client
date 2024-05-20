@@ -6,19 +6,12 @@ import MyPage from "./pages/MyPage";
 import Error from "./pages/Error";
 import Transactions from "./pages/Transactions";
 import Subscription from "./pages/Subscription";
-import TxDetail from "./components/TxDetail";
-import SubsDetail from "./components/SubsDetail";
 import SignUp from "./pages/SignUp";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
 import Login from "./pages/Login";
 import FindPw from "./pages/FindPw";
 import FixUserData from "./pages/FixUserData";
+import PrivateRoute from "./auth/PrivateRoute";
+import { RecoilRoot } from "recoil";
 
 function App() {
   return (
@@ -29,11 +22,39 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/findpw" element={<FindPw />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/fix" element={<FixUserData />} />
+          <Route
+            path="/mypage"
+            element={
+              <PrivateRoute>
+                <MyPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/fix"
+            element={
+              <PrivateRoute>
+                <FixUserData />
+              </PrivateRoute>
+            }
+          />
           <Route path="/home" element={<Home />}>
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="subscription" element={<Subscription />} />
+            <Route
+              path="transactions"
+              element={
+                <PrivateRoute>
+                  <Transactions />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="subscription"
+              element={
+                <PrivateRoute>
+                  <Subscription />
+                </PrivateRoute>
+              }
+            />
           </Route>
           <Route path="*" element={<Error />} />
         </Routes>

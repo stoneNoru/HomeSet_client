@@ -5,7 +5,7 @@ const Wrap = styled.div`
   flex: 1;
   min-width: 100%; /* Notice가 한 번에 하나만 보이도록 설정 */
   border-radius: 8px;
-  background-color: #141414;
+  background-color: #202020;
   margin-bottom: 20px;
   border: 3px solid black;
   box-sizing: border-box;

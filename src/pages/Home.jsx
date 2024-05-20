@@ -3,11 +3,9 @@ import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
 import { Link, Outlet, useMatch, useNavigate } from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
-import LoginModal from "../components/LoginModal";
 import Notice from "../components/Notice";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LogOutAPI } from "../services/api";
+import { isAuthenticated } from "../utils/checkToken";
 
 const Page = styled.div`
   display: flex;
@@ -32,7 +30,8 @@ const Content = styled.div`
 
 const Tabs = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: ${(props) =>
+    props.isAuthenticated ? "repeat(2, 1fr)" : "1fr"};
   margin: 25px 0px 16px 0px;
   gap: 20px;
 `;
@@ -57,10 +56,10 @@ const NoticesWrap = styled.div`
   width: 100%;
   overflow: hidden;
 `;
+
 const NoticeList = styled.div`
   width: 100%;
   display: flex;
-  /* overflow: hidden; */
   transition: transform 1s;
   transform: translateX(${(props) => props.translateX}%);
 `;
@@ -68,7 +67,8 @@ const NoticeList = styled.div`
 const Title = styled.h1`
   @font-face {
     font-family: "TTLaundryGothicB";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2") format("woff2");
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2")
+      format("woff2");
     font-weight: 700;
     font-style: normal;
   }
@@ -87,7 +87,8 @@ const Tab = styled.span`
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 400;
-  background-color: ${(props) => (props.active ? "#e50914" : "#333344")}; // 다크모드
+  background-color: ${(props) =>
+    props.active ? "#e50914" : "#333344"}; // 다크모드
   padding: 10px 0px;
   border-radius: 10px;
   transition: all 0.3s;
@@ -132,15 +133,23 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleLogout = async () => {
+    await LogOutAPI();
+    navigate("/login");
+  };
+
   return (
     <Page>
-      <ToTop
-        onClick={() => {
-          LogOutAPI();
-        }}
-      >
-        Log out
-      </ToTop>
+      {isAuthenticated() ? (
+        <ToTop
+          onClick={() => {
+            handleLogout();
+            navigate("/home");
+          }}
+        >
+          Log out
+        </ToTop>
+      ) : null}
       <Sidebar>
         <HeadWrap>
           <Logo
@@ -156,21 +165,39 @@ const Home = () => {
             홈셋
           </Title>
         </HeadWrap>
-        <Tabs>
-          <Tab active={!!transactionsMatch}>
-            <Link to="transactions" style={{ color: "white" }}>
-              실거래
-            </Link>
-          </Tab>
-          <Tab active={!!subscriptionMatch}>
-            <Link to="subscription" style={{ color: "white" }}>
-              청약
-            </Link>
-          </Tab>
+        <Tabs isAuthenticated={isAuthenticated()}>
+          {isAuthenticated() ? (
+            <>
+              <Tab active={!!transactionsMatch}>
+                <Link to="transactions" style={{ color: "white" }}>
+                  실거래
+                </Link>
+              </Tab>
+              <Tab active={!!subscriptionMatch}>
+                <Link to="subscription" style={{ color: "white" }}>
+                  청약
+                </Link>
+              </Tab>
+            </>
+          ) : (
+            <Tab>
+              <Link to="/login" style={{ color: "white" }}>
+                로그인
+              </Link>
+            </Tab>
+          )}
         </Tabs>
         {exactHomeMatch !== null ? (
           <HomeItems>
-            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📌 공지사항</h2>
+            <h2
+              style={{
+                marginBottom: "20px",
+                fontSize: "24px",
+                marginTop: "20px",
+              }}
+            >
+              📌 공지사항
+            </h2>
             <NoticesWrap>
               <NoticeList translateX={translateX}>
                 <Notice version={"0.0.1"} content={"배고프네"} />
@@ -179,12 +206,14 @@ const Home = () => {
               </NoticeList>
             </NoticesWrap>
             <News>
-              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📰 부동산 뉴스</h2>
+              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
+                📰 부동산 뉴스
+              </h2>
               <p>여기에 최신 부동산 뉴스들 표시</p>
             </News>
           </HomeItems>
         ) : null}
-        <Outlet></Outlet>
+        <Outlet />
       </Sidebar>
       <Content>
         <KakaoMap />

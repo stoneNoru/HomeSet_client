@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "http://localhost:8080";
-const BASE_URL = "http://192.168.206.66:8080";
-// const BASE_URL = "http://183.107.121.150:8080";
+// const BASE_URL = "http://192.168.206.66:8080";
+const BASE_URL = "http://183.107.121.150:8080";
 
 // 183.107.121.150
 // 192.168.206.66
@@ -57,6 +57,7 @@ const GetMyInfo = async () => {
       },
     });
     console.log(response.data.data);
+    return response.data.data;
   } catch (error) {
     console.log(error);
   }
@@ -104,6 +105,29 @@ const SignUpAPI = async (id, password, email, nickname) => {
       email: email,
       nickname: nickname,
     });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const ModifyUserData = async (id, email, nickname, password) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/users`,
+      {
+        id: id,
+        email: email,
+        pnickname: nickname,
+        password: password,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
     console.log(response);
     return response;
   } catch (error) {
@@ -179,4 +203,5 @@ export {
   KeywordTxSearch,
   fetchTxDatas,
   FinishedSubscription,
+  ModifyUserData,
 };

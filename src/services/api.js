@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // const BASE_URL = "http://localhost:8080";
 const BASE_URL = "http://192.168.206.66:8080";
@@ -23,6 +22,18 @@ const LoginPost = async (id, password) => {
   }
 };
 
+const FindPassword = async (id, email) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/users/find-password`, {
+      id: id,
+      email: email,
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const LogOutAPI = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/users/logout`, {
@@ -34,6 +45,34 @@ const LogOutAPI = async () => {
     localStorage.removeItem("accessToken");
   } catch (error) {
     console.error(error);
+  }
+};
+
+//마이페이지
+const GetMyInfo = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const DeleteAccount = () => {
+  try {
+    const response = axios.delete(`${BASE_URL}/users`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data.message);
+    localStorage.removeItem("accessToken");
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -126,4 +165,18 @@ const fetchTxDatas = async (aptCode) => {
   }
 };
 
-export { LogOutAPI, SignUpAPI, LoginPost, CheckDuplicated, GetUserData, CurrentSubscription, NewSubscription, KeywordTxSearch, fetchTxDatas, FinishedSubscription };
+export {
+  LogOutAPI,
+  SignUpAPI,
+  GetMyInfo,
+  DeleteAccount,
+  LoginPost,
+  CheckDuplicated,
+  FindPassword,
+  GetUserData,
+  CurrentSubscription,
+  NewSubscription,
+  KeywordTxSearch,
+  fetchTxDatas,
+  FinishedSubscription,
+};

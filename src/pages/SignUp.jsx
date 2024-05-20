@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { SignUpAPI } from "../services/api";
 
 const BlackBg = styled.div`
   z-index: 2;
@@ -13,19 +13,6 @@ const BlackBg = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-const Page = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  /* 전체 화면 백그라운드 스타일 설정 */
-  background-size: 100% 100%;
-  background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
-  background-image: radial-gradient(70% 53% at 36% 76%, #000000f5 0%, #073aff00 100%), radial-gradient(42% 53% at 15% 94%, #000000f5 7%, #073aff00 100%),
-    radial-gradient(42% 53% at 34% 72%, #903df4f5 7%, #073aff00 100%), radial-gradient(18% 28% at 35% 87%, #000000f5 7%, #073aff00 100%),
-    radial-gradient(31% 43% at 7% 98%, #0f0f17f5 24%, #073aff00 100%), radial-gradient(35% 56% at 91% 74%, #0e0c55f5 9%, #073aff00 100%),
-    radial-gradient(74% 86% at 67% 38%, #000000f5 24%, #073aff00 100%), linear-gradient(181deg, #085877ff 1%, #4c00fcff 100%);
 `;
 
 const Container = styled.div`
@@ -97,10 +84,10 @@ const Input = styled.input`
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [userEmail, setEmail] = useState("");
-  const [userPassword, setPassword] = useState("");
-  const [userPasswordcheck, setPasswordCheck] = useState("");
-  const [userNickname, setNickname] = useState("");
+  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
 
   const isEmailValid = (userEmail) => {
@@ -112,14 +99,19 @@ const SignUp = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    if (!isEmailValid(userEmail)) {
+    if (!isEmailValid(email)) {
       setError("이메일 형식이 아닙니다.");
       return;
     }
 
-    if (userPassword !== userPasswordcheck) {
-      setError("Password and PasswordCheck should be the same.");
-      return;
+    try {
+      const response = await SignUpAPI(id, password, email, nickname);
+      console.log(response.data);
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+      console.log(error.response);
+      setError(error?.response?.data?.message || "회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -131,13 +123,12 @@ const SignUp = () => {
           <p>Use Email or Google ID to make Account</p>
         </Header>
         <Form onSubmit={handleSignup}>
-          <Input type="text" placeholder="ID" value={userEmail} onChange={(e) => setEmail(e.target.value)} />
-          <Input type="text" placeholder="Email" value={userEmail} onChange={(e) => setEmail(e.target.value)} />
-          <Input type="password" placeholder="Password" value={userPassword} onChange={(e) => setPassword(e.target.value)} />
-          <Input type="password" placeholder="passwordCheck" value={userPasswordcheck} onChange={(e) => setPasswordCheck(e.target.value)} />
-          <Input type="text" placeholder="Nickname" value={userNickname} onChange={(e) => setNickname(e.target.value)} />
+          <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} />
+          <Input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Input type="text" placeholder="Nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} />
           <Input type="submit" value="Sign up" />
-          {error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}
+          <div>{error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}</div>
         </Form>
       </Container>
     </BlackBg>

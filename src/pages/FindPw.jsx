@@ -82,44 +82,34 @@ const Input = styled.input`
   }
 `;
 
-const Login = () => {
+const FindPw = () => {
   const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleLogin = async (event) => {
     event.preventDefault();
     setError(""); // Clear previous errors
-
-    try {
-      const response = await LoginPost(id, password);
-      if (response.data.result) {
-        console.log("Login successful");
-        navigate("/home");
-      } else {
-        setError(response.data.message);
-      }
-    } catch (error) {
-      setError("Login failed. Please try again.");
-      console.error("Login error:", error);
-    }
   };
 
   return (
     <BlackBg>
       <Container>
         <Header>
-          <h1>Welcome</h1>
+          <h1>비밀번호 찾기</h1>
           <p>Log in or create Account</p>
         </Header>
-        <LoginForm onSubmit={handleLogin}>
+        <LoginForm
+          onSubmit={() => {
+            FindPassword(id, email);
+          }}
+        >
           <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} />
-          <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <Input type="submit" value="Log In" />
-          <Link to="/signup">Create Account</Link>
+          <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input type="submit" value="비밀번호 찾기" />
           {error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}
-          <h1 style={{ color: "black" }} onClick={() => navigate("/findpw")}>
-            비밀번호 찾기
+          <h1 style={{ color: "black" }} onClick={() => navigate("/login")}>
+            로그인으로
           </h1>
         </LoginForm>
       </Container>
@@ -127,4 +117,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default FindPw;

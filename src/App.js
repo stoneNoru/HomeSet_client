@@ -11,6 +11,7 @@ import SubsDetail from "./components/SubsDetail";
 import SignUp from "./pages/SignUp";
 import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import Login from "./pages/Login";
+import FindPw from "./pages/FindPw";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<Onboarding />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/findpw" element={<FindPw />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/home" element={<Home />}>
             <Route path="transactions" element={<Transactions />} />

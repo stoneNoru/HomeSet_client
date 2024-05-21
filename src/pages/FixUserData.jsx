@@ -107,16 +107,13 @@ const FixUserData = () => {
     }
 
     try {
-      const response = await ModifyUserData(id, email, password, nickname);
+      const response = await ModifyUserData(id, email, nickname, password);
       console.log(response.data);
       navigate("/mypage");
     } catch (error) {
       console.error(error);
       console.log(error.response);
-      setError(
-        error?.response?.data?.message ||
-          "정보 수정 중 오류가 발생했습니다. 다시 시도해주세요."
-      );
+      setError(error?.response?.data?.message || "정보 수정 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -130,38 +127,12 @@ const FixUserData = () => {
           </Header>
           <Form onSubmit={handleSignup}>
             {/* id는 수정불가 */}
-            <Input
-              type="text"
-              placeholder="ID"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              readOnly
-            />
-
-            <Input
-              type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Input
-              type="text"
-              placeholder="Nickname"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-            />
+            <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} readOnly />
+            <Input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input type="text" placeholder="Nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+            <Input type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <Input type="submit" value="수정 완료" />
-            <div>
-              {error && (
-                <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>
-              )}
-            </div>
+            <div>{error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}</div>
           </Form>
         </Container>
       </BlackBg>

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TxLi from "../components/TxLi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faStar as faStarSolid, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { houseState, markerState, typedState } from "../state/atoms";
-import { fetchTxDatas } from "../services/api.js";
+import { DeleteAPTBookmark, GetPersonAPTBookmark, RegistAPTBookmark, fetchTxDatas } from "../services/api.js";
 import Chart from "../components/Chart.jsx";
-import { Map } from "react-kakao-maps-sdk";
-import RoadView from "../components/RoadView.jsx";
 import { KeywordTxSearch } from "../services/api.js";
+import RoadView from "../components/RoadView.jsx";
 
 const Form = styled.form`
   width: 100%;
@@ -18,6 +18,7 @@ const Form = styled.form`
   margin-bottom: 10px;
   border: none;
 `;
+
 const Input = styled.input`
   flex-grow: 1;
   padding: 0.5em;
@@ -137,6 +138,7 @@ const Transactions = () => {
   const [selected, setSelected] = useState(null); // 선택된 아파트의 상세 정보를 저장
   const [txDatas, setTxDatas] = useState([]);
   const [prices, setPrices] = useState([]);
+  const [star, setStar] = useState(0); // star 상태를 useState로 관리
   const houses = useRecoilValue(houseState);
   const selectedMarker = useRecoilValue(markerState); //카카오맵에서 클릭한 마커 번호
   const setMarker = useSetRecoilState(markerState);
@@ -155,6 +157,12 @@ const Transactions = () => {
     }
   };
 
+  const updateStarStatus = async (aptCode) => {
+    const starStatus = await GetPersonAPTBookmark(aptCode);
+    setStar(starStatus);
+    console.log("star", starStatus);
+  };
+
   useEffect(() => {
     if (selectedMarker) {
       const selectedHouse = houses.find((house) => house.aptCode === selectedMarker);
@@ -166,23 +174,10 @@ const Transactions = () => {
   useEffect(() => {
     if (selected) {
       fetchData(selected.aptCode);
+      updateStarStatus(selected.aptCode);
     }
   }, [selected]);
-  //   {
-  //     "no": 115002108000132,
-  //     "dongCode": "1150010300",
-  //     "dealAmount": "49,500",
-  //     "dealYear": 2021,
-  //     "dealMonth": 8,
-  //     "dealDay": 14,
-  //     "floor": "4",
-  //     "area": "84.85",
-  //     "apartmentName": "웰라이빌",
-  //     "aptCode": "11500000000276",
-  //     "lng": "126.842384319394",
-  //     "lat": "37.5285659999317",
-  //     "date": "2021-8-14"
-  // }
+
   return (
     <>
       {selected && txDatas.length > 0 && (
@@ -190,6 +185,25 @@ const Transactions = () => {
           <DetailModal>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <DetailName>{selected.apartmentName}</DetailName>
+              <div>
+                {star === 0 ? (
+                  <FontAwesomeIcon
+                    icon={faStarRegular}
+                    onClick={async () => {
+                      await RegistAPTBookmark(selected.aptCode);
+                      updateStarStatus(selected.aptCode);
+                    }}
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faStarSolid}
+                    onClick={async () => {
+                      await DeleteAPTBookmark(selected.aptCode);
+                      updateStarStatus(selected.aptCode);
+                    }}
+                  />
+                )}
+              </div>
               <span
                 onClick={() => {
                   setMarker(null);
@@ -201,15 +215,10 @@ const Transactions = () => {
             </div>
 
             <div style={{ width: "50%" }}>
-              <p>뭐넣지</p>
-              <p>뭐넣지</p>
-              <p>뭐넣지</p>
-
-              {/* <DetailContent>{`마지막 거래일 : ${
-                txDatas[txDatas.length - 1].dealYear
-              }.${txDatas[txDatas.length - 1].dealMonth}.${
-                txDatas[txDatas.length - 1].dealDay
-              }`}</DetailContent> */}
+              <p>거래일</p>
+              <p>실거래가</p>
+              <p>평수 층</p>
+              <p>도로명</p>
             </div>
 
             <TabWrap>

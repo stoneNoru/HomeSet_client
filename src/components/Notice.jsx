@@ -40,7 +40,7 @@ const Notice = ({ version, content }) => {
   return (
     <Wrap>
       <Color>
-        <Version>version : {version}</Version>
+        <Version>{version}</Version>
       </Color>
       <ContentWrap>
         <Content>{content}</Content>

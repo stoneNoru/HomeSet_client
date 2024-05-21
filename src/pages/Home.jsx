@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
-import { Link, Outlet, useMatch, useNavigate } from "react-router-dom";
+import { Link, Navigate, Outlet, useMatch, useNavigate } from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
 import Notice from "../components/Notice";
 import { LogOutAPI, GetNotice } from "../services/api";
 import { isAuthenticated } from "../utils/checkToken";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Page = styled.div`
   display: flex;
@@ -102,16 +104,29 @@ const News = styled.div`
   margin-bottom: 20px;
 `;
 
-const ToTop = styled.i`
-  padding: 10px;
-  border-radius: 50%;
+const Menu = styled.div`
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding: 10px; */
+  border-radius: 10px;
   background-color: #e8362c;
   position: fixed;
   right: 50px;
   top: 50px;
+  padding: 10px;
   z-index: 10;
   color: white;
   cursor: pointer;
+
+  transition: all 0.3s;
+`;
+
+const MenuItem = styled.div`
+  justify-self: flex-start;
+  font-size: 16px;
+  margin-bottom: 12px;
 `;
 
 const Home = () => {
@@ -122,6 +137,7 @@ const Home = () => {
 
   const [translateX, setTranslateX] = useState(0);
   const [noticeList, setNoticeList] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -133,7 +149,8 @@ const Home = () => {
 
   const handleLogout = async () => {
     await LogOutAPI();
-    navigate("/login");
+    navigate("/home");
+    alert("로그아웃 완료");
   };
 
   useEffect(() => {
@@ -147,14 +164,36 @@ const Home = () => {
   return (
     <Page>
       {isAuthenticated() ? (
-        <ToTop
+        <Menu
           onClick={() => {
-            handleLogout();
-            navigate("/home");
+            setMenuOpen(!menuOpen);
           }}
         >
-          Log out
-        </ToTop>
+          <div>
+            {/* <FontAwesomeIcon icon={faBars} /> */}
+            Menu
+          </div>
+
+          {menuOpen ? (
+            <div>
+              <MenuItem
+                onClick={() => {
+                  handleLogout();
+                }}
+              >
+                <FontAwesomeIcon icon={faRightToBracket} /> Log out
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate("/mypage");
+                }}
+              >
+                <FontAwesomeIcon icon={faUser} />
+                myPage
+              </MenuItem>
+            </div>
+          ) : null}
+        </Menu>
       ) : null}
       <Sidebar>
         <HeadWrap>

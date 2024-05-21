@@ -2,7 +2,7 @@ import axios from "axios";
 
 // const BASE_URL = "http://localhost:8080";
 const BASE_URL = "http://192.168.206.66:8080";
-// const BASE_URL = "http://183.107.121.150:8080";
+//const BASE_URL = "http://183.107.121.150:8080";
 
 // 183.107.121.150
 // 192.168.206.66
@@ -119,7 +119,7 @@ const ModifyUserData = async (id, email, nickname, password) => {
       {
         id: id,
         email: email,
-        pnickname: nickname,
+        nickname: nickname,
         password: password,
       },
       {
@@ -200,7 +200,208 @@ const GetNotice = async () => {
   }
 };
 
+/* 청약 리뷰 */
+//리뷰 작성
+const RegistReview = async (houseManageNo, content) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/reviews`,
+      {
+        houseManageNo: houseManageNo,
+        content: content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+//리뷰 조회
+const GetReview = async (houseManageNo) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/reviews/${houseManageNo}`);
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+//리뷰 삭제
+const DeleteReview = async (houseManageNo) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/reviews/${houseManageNo}`);
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/* 청약 북마크 */
+//북마크 저장
+const RegistSubBookmark = async (houseManageNo) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/applies/bookmarks`,
+      {
+        houseManageNo: houseManageNo,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//내 북마크 조회
+const GetSubBookmark = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/applies/bookmarks`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+//북마크 삭제
+const DeleteSubBookmark = async (houseManageNo) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/applies/bookmarks/${houseManageNo}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/* 아파트 북마크 */
+
+//실거래가 찜하기
+const RegistAPTBookmark = async (aptCode) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/home/bookmarks`,
+      {
+        aptCode: aptCode,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//찜한 실거래가 리스트 확인
+const GetAPTBookmark = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/home/bookmarks`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//북마크 삭제
+const DeleteAPTBookmark = async (aptCode) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/home/bookmarks/${aptCode}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//특정 아파트 찜했는지 확인
+const GetPersonAPTBookmark = async (aptCode) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/home/bookmarks/${aptCode}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data.data);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const GetPersonSubBookmark = async (houseManageNo) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/applies/bookmarks/${houseManageNo}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
+  GetPersonAPTBookmark,
+  GetPersonSubBookmark,
+  //아파트 북마크
+  RegistAPTBookmark,
+  GetAPTBookmark,
+  DeleteAPTBookmark,
+  //청약 북마크
+  RegistSubBookmark,
+  GetSubBookmark,
+  DeleteSubBookmark,
+  //리뷰
+  RegistReview,
+  GetReview,
+  DeleteReview,
+  GetNotice,
   LogOutAPI,
   SignUpAPI,
   GetMyInfo,
@@ -215,5 +416,4 @@ export {
   fetchTxDatas,
   FinishedSubscription,
   ModifyUserData,
-  GetNotice,
 };

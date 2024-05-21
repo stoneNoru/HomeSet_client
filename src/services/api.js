@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "http://localhost:8080";
-// const BASE_URL = "http://192.168.206.66:8080";
-const BASE_URL = "http://183.107.121.150:8080";
+const BASE_URL = "http://192.168.206.66:8080";
+// const BASE_URL = "http://183.107.121.150:8080";
 
 // 183.107.121.150
 // 192.168.206.66
@@ -189,6 +189,17 @@ const fetchTxDatas = async (aptCode) => {
   }
 };
 
+//공지사항
+const GetNotice = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/notices`);
+    console.log(response.data.data);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   LogOutAPI,
   SignUpAPI,
@@ -204,4 +215,5 @@ export {
   fetchTxDatas,
   FinishedSubscription,
   ModifyUserData,
+  GetNotice,
 };

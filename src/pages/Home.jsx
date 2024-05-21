@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link, Outlet, useMatch, useNavigate } from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
 import Notice from "../components/Notice";
-import { LogOutAPI } from "../services/api";
+import { LogOutAPI, GetNotice } from "../services/api";
 import { isAuthenticated } from "../utils/checkToken";
 
 const Page = styled.div`
@@ -30,8 +30,7 @@ const Content = styled.div`
 
 const Tabs = styled.div`
   display: grid;
-  grid-template-columns: ${(props) =>
-    props.isAuthenticated ? "repeat(2, 1fr)" : "1fr"};
+  grid-template-columns: ${(props) => (props.isAuthenticated ? "repeat(2, 1fr)" : "1fr")};
   margin: 25px 0px 16px 0px;
   gap: 20px;
 `;
@@ -67,8 +66,7 @@ const NoticeList = styled.div`
 const Title = styled.h1`
   @font-face {
     font-family: "TTLaundryGothicB";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2")
-      format("woff2");
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
   }
@@ -87,8 +85,7 @@ const Tab = styled.span`
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 400;
-  background-color: ${(props) =>
-    props.active ? "#e50914" : "#333344"}; // 다크모드
+  background-color: ${(props) => (props.active ? "#e50914" : "#333344")}; // 다크모드
   padding: 10px 0px;
   border-radius: 10px;
   transition: all 0.3s;
@@ -124,6 +121,7 @@ const Home = () => {
   const subscriptionMatch = useMatch("/home/subscription");
 
   const [translateX, setTranslateX] = useState(0);
+  const [noticeList, setNoticeList] = useState([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -137,6 +135,14 @@ const Home = () => {
     await LogOutAPI();
     navigate("/login");
   };
+
+  useEffect(() => {
+    const getNotice = async () => {
+      const response = await GetNotice();
+      setNoticeList(response);
+    };
+    getNotice();
+  }, []);
 
   return (
     <Page>
@@ -200,15 +206,13 @@ const Home = () => {
             </h2>
             <NoticesWrap>
               <NoticeList translateX={translateX}>
-                <Notice version={"0.0.1"} content={"배고프네"} />
-                <Notice version={"0.0.2"} content={"저녁 뭐먹지"} />
-                <Notice version={"0.0.3"} content={"치킨먹을까"} />
+                {noticeList.map((notice, index) => (
+                  <Notice key={index} version={notice.title} content={notice.content} />
+                ))}
               </NoticeList>
             </NoticesWrap>
             <News>
-              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
-                📰 부동산 뉴스
-              </h2>
+              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📰 부동산 뉴스</h2>
               <p>여기에 최신 부동산 뉴스들 표시</p>
             </News>
           </HomeItems>

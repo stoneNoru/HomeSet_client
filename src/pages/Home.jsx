@@ -169,6 +169,24 @@ const MenuItem = styled.div`
   margin-bottom: 12px;
 `;
 
+const Blur = styled.div`
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+`;
+
+const RedText = styled.h1`
+  font-size: 14px;
+  color: red;
+`;
+
 const Home = () => {
   const navigate = useNavigate();
   const exactHomeMatch = useMatch("/home");
@@ -265,65 +283,71 @@ const Home = () => {
             홈셋
           </Title>
         </HeadWrap>
-        <Tabs isAuthenticated={isAuthenticated()}>
-          {isAuthenticated() ? (
-            <>
-              <Tab active={!!transactionsMatch}>
-                <Link to="transactions" style={{ color: "white" }}>
-                  실거래
-                </Link>
-              </Tab>
-              <Tab active={!!subscriptionMatch}>
-                <Link to="subscription" style={{ color: "white" }}>
-                  청약
-                </Link>
-              </Tab>
-            </>
-          ) : (
-            <Tab>
-              <Link to="/login" style={{ color: "white" }}>
-                로그인
-              </Link>
-            </Tab>
-          )}
-        </Tabs>
-        {exactHomeMatch !== null ? (
-          <HomeItems>
-            <h2
-              style={{
-                marginBottom: "20px",
-                fontSize: "24px",
-                marginTop: "20px",
-              }}
-            >
-              📌 공지사항
-            </h2>
-            <NoticesWrap>
-              <NoticeList translateX={translateX}>
-                {noticeList.map((notice, index) => (
-                  <Notice
-                    key={index}
-                    version={notice.title}
-                    content={notice.content}
-                  />
-                ))}
-              </NoticeList>
-            </NoticesWrap>
+        <div style={{ position: "relative" }}>
+          {/* <Blur></Blur> */}
+          <Tabs isAuthenticated={isAuthenticated()}>
+            {isAuthenticated() ? (
+              <>
+                <Tab active={!!transactionsMatch}>
+                  <Link to="transactions" style={{ color: "white" }}>
+                    실거래
+                  </Link>
+                </Tab>
+                <Tab active={!!subscriptionMatch}>
+                  <Link to="subscription" style={{ color: "white" }}>
+                    청약
+                  </Link>
+                </Tab>
+              </>
+            ) : (
+              <>
+                <RedText>서비스를 사용하려면 로그인이 필요합니다</RedText>
+                <Tab>
+                  <Link to="/login" style={{ color: "white" }}>
+                    로그인
+                  </Link>
+                </Tab>
+              </>
+            )}
+          </Tabs>
+          {exactHomeMatch !== null ? (
+            <HomeItems>
+              <h2
+                style={{
+                  marginBottom: "20px",
+                  fontSize: "24px",
+                  marginTop: "20px",
+                }}
+              >
+                📌 공지사항
+              </h2>
+              <NoticesWrap>
+                <NoticeList translateX={translateX}>
+                  {noticeList.map((notice, index) => (
+                    <Notice
+                      key={index}
+                      version={notice.title}
+                      content={notice.content}
+                    />
+                  ))}
+                </NoticeList>
+              </NoticesWrap>
 
-            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
-              📰 부동산 뉴스
-            </h2>
-            <p>여기에 최신 부동산 뉴스들 표시</p>
-            <NewsWrap>
-              <News>
-                <NewsTitle></NewsTitle>
-                <NewsContent></NewsContent>
-                <NewsDate></NewsDate>
-              </News>
-            </NewsWrap>
-          </HomeItems>
-        ) : null}
-        <Outlet />
+              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
+                📰 부동산 뉴스
+              </h2>
+              <p>여기에 최신 부동산 뉴스들 표시</p>
+              <NewsWrap>
+                <News>
+                  <NewsTitle></NewsTitle>
+                  <NewsContent></NewsContent>
+                  <NewsDate></NewsDate>
+                </News>
+              </NewsWrap>
+            </HomeItems>
+          ) : null}
+          <Outlet />
+        </div>
       </Sidebar>
       <Content>
         <KakaoMap />

@@ -4,83 +4,127 @@ import styled from "styled-components";
 import * as api from "../services/api"; // api.js의 모든 함수를 임포트합니다.
 import { isAuthenticated } from "../utils/checkToken";
 
-const Container = styled.div`
-  padding: 20px 20px;
-  border-radius: 15px;
-  background-color: white;
-  min-height: 620px;
-  width: 440px;
-`;
-
-const Header = styled.header`
-  margin: 90px 0px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  h1 {
-    color: black;
-    margin-bottom: 20px;
-    font-size: 30px;
-    font-weight: 600;
-  }
-  p {
-    font-size: 16px;
-    color: black;
-    width: 60%;
-    opacity: 0.5;
-  }
-`;
-
 const BlackBg = styled.div`
   z-index: 2;
   position: fixed;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #212121;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const LoginForm = styled.form`
+const Container = styled.div`
+  padding: 20px 30px;
+  border-radius: 25px;
+  background-color: #171717;
+  height: 600px;
+  width: 500px;
+  transition: 0.4s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+`;
+
+const Header = styled.header`
+  margin-bottom: 20px;
+  margin-top: 50px;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  margin: 0px 30px;
-  a {
-    font-size: 18px;
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    padding: 10px 0px;
-    background-color: #ff3838;
+  align-items: center;
+
+  h1 {
+    color: #dd4950;
+    margin-bottom: 20px;
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 16px;
     color: white;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    width: 60%;
+    opacity: 0.5;
   }
 `;
 
-const Input = styled.input`
-  border: none;
-  padding: 15px 0px;
-  font-size: 18px;
-  margin-bottom: 25px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-  color: rgba(0, 0, 0, 0.6);
-  transition: border-color 0.3s ease-in-out;
-  padding-left: 10px;
+const LoginForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 0.4em;
+  background-color: #171717;
+  border-radius: 25px;
+  transition: 0.4s ease-in-out;
+  color: #9e9d9d;
+  margin-top: 50px;
+`;
 
-  &:hover {
-    border-color: #d62f2f;
-  }
+const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border-radius: 25px;
+  padding: 0.6em;
+  border: none;
+  outline: none;
+  color: white;
+  background-color: #171717;
+  box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+  margin-bottom: 15px;
+`;
+
+const Input = styled.input`
+  background: none;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: #d3d3d3;
+  font-size: 18px;
 
   &[type="submit"] {
-    background-color: #f56157;
+    background-color: #252525;
     cursor: pointer;
-    padding: 20px 0px;
+    padding: 0.5em;
     border-radius: 5px;
     color: white;
+    transition: 0.4s ease-in-out;
+
+    &:hover {
+      background-color: #ac373d;
+    }
+  }
+`;
+
+const LinkButton = styled(Link)`
+  font-size: 18px;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 0px;
+  background-color: #252525;
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: background-color 0.4s ease-in-out;
+
+  &:hover {
+    background-color: #ac373d;
+  }
+`;
+
+const FindPwButton = styled.h1`
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  /* margin-top: 20px; */
+
+  &:hover {
+    color: #ac373d;
   }
 `;
 
@@ -124,27 +168,28 @@ const Login = () => {
           <p>Log in or create Account</p>
         </Header>
         <LoginForm onSubmit={handleLogin}>
-          <Input
-            type="text"
-            placeholder="ID"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Input type="submit" value="Log In" />
-          <Link to="/signup">Create Account</Link>
+          <InputContainer>
+            <Input
+              type="text"
+              placeholder="ID"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </InputContainer>
+          <Input type="submit" value="Log In" style={{ marginTop: "100px" }} />
+          <LinkButton to="/signup">Create Account</LinkButton>
           {error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}
-          <h1
-            style={{ color: "black", cursor: "pointer" }}
-            onClick={() => navigate("/findpw")}
-          >
+          <FindPwButton onClick={() => navigate("/findpw")}>
             비밀번호 찾기
-          </h1>
+          </FindPwButton>
         </LoginForm>
       </Container>
     </BlackBg>

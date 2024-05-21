@@ -239,10 +239,11 @@ const Transactions = () => {
                 최근 거래일 : {selected.date}
               </p>
               <p style={{ marginBottom: "10px", color: "#acacac" }}>
-                실거래 금액 : {selected.dealAmount}
+                실거래 금액 :{" "}
+                {Number(selected.dealAmount.replace(",", "")) / 10000}억
               </p>
               <p style={{ marginBottom: "10px", color: "#acacac" }}>
-                {selected.area}평 {selected.floor}층
+                {parseInt(selected.area / 3.3)}평 {selected.floor}층
               </p>
               <p style={{ marginBottom: "10px", color: "#acacac" }}>도로명</p>
             </div>

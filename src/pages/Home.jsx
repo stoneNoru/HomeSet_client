@@ -133,22 +133,38 @@ const Menu = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding: 10px; */
-  border-radius: 50%;
+  justify-content: center;
+  border-radius: 15px;
   background-color: #e8362c;
   position: fixed;
   right: 50px;
   top: 50px;
-  padding: 10px;
+  width: ${(props) => (props.menuOpen ? "150px" : "50px")};
+  height: ${(props) => (props.menuOpen ? "150px" : "50px")};
+  transition: all 0.3s;
   z-index: 2;
   color: white;
   cursor: pointer;
+  overflow: hidden;
 
+  &:hover {
+    background-color: #bf2d23;
+  }
+`;
+
+const MenuItems = styled.div`
+  opacity: ${(props) => (props.menuOpen ? 1 : 0)};
+  visibility: ${(props) => (props.menuOpen ? "visible" : "hidden")};
+  transform: ${(props) =>
+    props.menuOpen ? "translateY(0)" : "translateY(-10px)"};
   transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
 `;
 
 const MenuItem = styled.div`
-  justify-self: flex-start;
   font-size: 16px;
   margin-bottom: 12px;
 `;
@@ -167,7 +183,7 @@ const Home = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setTranslateX((prev) => (prev - 100) % 300);
-    }, 3000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
@@ -200,30 +216,37 @@ const Home = () => {
           onClick={() => {
             setMenuOpen(!menuOpen);
           }}
+          menuOpen={menuOpen}
         >
           <div>
             <FontAwesomeIcon icon={faBars} />
-            {/* <FontAwesomeIcon icon={faCaretDown} /> */}
           </div>
-
           {menuOpen ? (
-            <div>
+            <MenuItems menuOpen={menuOpen}>
               <MenuItem
                 onClick={() => {
                   handleLogout();
                 }}
+                style={{ marginBottom: "20px" }}
               >
-                <FontAwesomeIcon icon={faRightToBracket} /> Log out
+                <FontAwesomeIcon
+                  icon={faRightToBracket}
+                  style={{ marginRight: "10px" }}
+                />{" "}
+                Log out
               </MenuItem>
               <MenuItem
                 onClick={() => {
                   navigate("/mypage");
                 }}
               >
-                <FontAwesomeIcon icon={faUser} />
+                <FontAwesomeIcon
+                  icon={faUser}
+                  style={{ marginRight: "10px" }}
+                />
                 myPage
               </MenuItem>
-            </div>
+            </MenuItems>
           ) : null}
         </Menu>
       ) : null}

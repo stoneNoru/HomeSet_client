@@ -1,66 +1,103 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { GetMyInfo, DeleteAccount, GetAPTBookmark, GetSubBookmark } from "../services/api";
+import {
+  GetMyInfo,
+  DeleteAccount,
+  GetAPTBookmark,
+  GetSubBookmark,
+} from "../services/api";
 import styled from "styled-components";
-import { useAsync } from "react-use";
+
+const Page = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
 
 const Container = styled.div`
-  max-width: 1200px;
+  width: 1500px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px;
+  background-color: #121212;
+  color: #ffffff;
+  box-sizing: border-box;
+  border-radius: 20px;
 `;
 
 const Section = styled.section`
   margin-bottom: 40px;
 `;
 
+const Bookmark = styled.section`
+  margin-bottom: 40px;
+  width: 50%;
+`;
+
 const Title = styled.h1`
-  font-size: 30px;
+  font-size: 26px;
   margin-bottom: 20px;
+  color: #dd4950;
+  border-bottom: 2px solid #2b2121;
+  padding-bottom: 10px;
 `;
 
 const InfoContainer = styled.div`
-  background-color: darkgray;
+  background-color: #1e1e1e;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
 `;
 
 const InfoItem = styled.p`
   font-size: 18px;
   margin-bottom: 10px;
+  color: #c2c2c2;
 `;
 
-const ListContainer = styled.div`
-  background-color: darkgray;
+const TableContainer = styled.div`
+  background-color: #1e1e1e;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  overflow-x: auto;
 `;
 
-const ListItem = styled.div`
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  align-items: center;
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+const TableRow = styled.tr`
+  border-bottom: 1px solid #333;
   &:last-child {
     border-bottom: none;
   }
 `;
 
-const Thumbnail = styled.img`
-  width: 80px;
-  height: 80px;
-  margin-right: 20px;
-  border-radius: 10px;
-  object-fit: cover;
+const TableHeader = styled.th`
+  padding: 10px;
+  background-color: #333;
+  color: #ffffff;
+  font-weight: bold;
+`;
+
+const TableCell = styled.td`
+  padding: 10px;
+  color: #ffffff;
+  text-align: center;
+  min-width: 100px; /* Added minimum width */
 `;
 
 const ListTitle = styled.h2`
   font-size: 22px;
   margin-bottom: 20px;
+  color: #dd4950;
 `;
 
 const Button = styled.button`
-  background-color: #e50914;
+  background-color: #333;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -68,20 +105,32 @@ const Button = styled.button`
   cursor: pointer;
   border-radius: 5px;
   margin-right: 10px;
+  transition: background-color 0.3s;
   &:hover {
-    background-color: #d40813;
+    background-color: #b1252c;
   }
 `;
 
-const fetchMetaData = async (url) => {
-  const response = await fetch(`https://api.urlmeta.org/?url=${url}`, {
-    headers: {
-      Authorization: "YOUR_API_KEY", // URL Meta API 키 필요
-    },
-  });
-  const data = await response.json();
-  return data;
-};
+const LinkButton = styled.a`
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+  display: inline-block;
+  transition: background-color 0.3s;
+  white-space: nowrap; /* Prevent text wrapping */
+  &:hover {
+    background-color: #b1252c;
+  }
+`;
+const SectionsWrap = styled.div`
+  display: flex;
+  gap: 30px;
+`;
 
 const MyPage = () => {
   const [myData, setMyData] = useState({});
@@ -104,7 +153,7 @@ const MyPage = () => {
       try {
         const response = await GetAPTBookmark();
         setAptList(response);
-        console.log("찜 아파트 리스트", response);
+        console.log("관심 아파트 리스트", response);
       } catch (error) {
         console.log(error);
       }
@@ -114,7 +163,7 @@ const MyPage = () => {
       try {
         const response = await GetSubBookmark();
         setSubList(response);
-        console.log("찜 청약 리스트 ", response);
+        console.log("관심 청약 리스트 ", response);
       } catch (error) {
         console.log(error);
       }
@@ -125,72 +174,115 @@ const MyPage = () => {
     fetchSubLists();
   }, []);
 
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm("정말 탈퇴하시겠습니까?");
+    if (confirmDelete) {
+      try {
+        await DeleteAccount();
+        navigate("/"); // 탈퇴 후 홈 페이지로 이동
+      } catch (error) {
+        console.error("Failed to delete account:", error);
+      }
+    }
+  };
+
   return (
-    <Container>
-      <Section>
-        <Title>내 정보</Title>
-        <InfoContainer>
-          <InfoItem>ID: {myData.id}</InfoItem>
-          <InfoItem>Email: {myData.email}</InfoItem>
-          <InfoItem>Nickname: {myData.nickname}</InfoItem>
-        </InfoContainer>
-        <div>
-          <Button
-            onClick={() => {
-              navigate("/fix", { state: { myData } });
-            }}
-          >
-            내 정보 수정
-          </Button>
-          <Button
-            onClick={() => {
-              DeleteAccount();
-            }}
-          >
-            회원 탈퇴
-          </Button>
-        </div>
-      </Section>
+    <Page>
+      <Container>
+        <Section>
+          <Title>마이페이지</Title>
+          <InfoContainer>
+            {/* <InfoItem>ID: {myData.id}</InfoItem> */}
+            <InfoItem>Email: {myData.email}</InfoItem>
+            <InfoItem>닉네임 : {myData.nickname}</InfoItem>
+          </InfoContainer>
+          <div>
+            <Button
+              onClick={() => {
+                navigate("/fix", { state: { myData } });
+              }}
+            >
+              정보 수정
+            </Button>
+            <Button onClick={handleDeleteAccount}>회원 탈퇴</Button>
+          </div>
+        </Section>
 
-      <Section>
-        <Title>찜 아파트 목록</Title>
-        <ListContainer>
-          {aptList.map((apt) => (
-            <ListItem key={apt.aptCode}>
-              <div>
-                <p>아파트 이름: {apt.apartmentName}</p>
-                <p>거래 금액: {apt.dealAmount}</p>
-                <p>거래 날짜: {apt.dealDate}</p>
-                <p>도로명: {apt.road}</p>
-              </div>
-            </ListItem>
-          ))}
-        </ListContainer>
-      </Section>
+        <SectionsWrap>
+          <Bookmark>
+            <ListTitle>관심 아파트 목록</ListTitle>
+            <TableContainer>
+              <Table>
+                <thead>
+                  <TableRow>
+                    <TableHeader>아파트 이름</TableHeader>
+                    <TableHeader>거래 금액</TableHeader>
+                    <TableHeader>거래 날짜</TableHeader>
+                    <TableHeader>도로명</TableHeader>
+                  </TableRow>
+                </thead>
+                <tbody>
+                  {aptList.map((apt) => (
+                    <TableRow key={apt.aptCode}>
+                      <TableCell>{apt.apartmentName}</TableCell>
+                      <TableCell>
+                        {Number(apt.dealAmount.replace(",", "") / 10000)}억
+                      </TableCell>
+                      <TableCell>
+                        {apt.dealDate.replace(/-/gi, ".").slice(2)}
+                      </TableCell>
+                      <TableCell>{apt.road}</TableCell>
+                    </TableRow>
+                  ))}
+                </tbody>
+              </Table>
+            </TableContainer>
+          </Bookmark>
 
-      <Section>
-        <Title>찜 청약 목록</Title>
-        <ListContainer>
-          {subList.map((sub) => (
-            <ListItem key={sub.houseManageNo}>
-              <div>
-                <p>아파트 이름: {sub.houseNm}</p>
-                <p>공급 주소: {sub.hssplyAdres}</p>
-                <p>접수 시작일: {sub.rceptBgnde}</p>
-                <p>접수 종료일: {sub.rceptEndde}</p>
-                <p>
-                  <a href={sub.hmpgAdres} target="_blank" rel="noopener noreferrer">
-                    자세히 보기
-                  </a>
-                </p>
-              </div>
-            </ListItem>
-          ))}
-        </ListContainer>
-      </Section>
+          <Bookmark>
+            <ListTitle>관심 청약 목록</ListTitle>
+            <TableContainer>
+              <Table>
+                <thead>
+                  <TableRow>
+                    <TableHeader>아파트 이름</TableHeader>
+                    <TableHeader>공급 주소</TableHeader>
+                    <TableHeader>접수 시작일</TableHeader>
+                    <TableHeader>접수 종료일</TableHeader>
+                    <TableHeader>링크</TableHeader>
+                  </TableRow>
+                </thead>
+                <tbody>
+                  {subList.map((sub) => (
+                    <TableRow key={sub.houseManageNo}>
+                      <TableCell>{sub.houseNm}</TableCell>
+                      <TableCell>{sub.hssplyAdres}</TableCell>
+                      <TableCell>
+                        {sub.rceptBgnde.replace(/-/gi, ".").slice(2)}
+                      </TableCell>
+                      <TableCell>
+                        {sub.rceptEndde.replace(/-/gi, ".").slice(2)}
+                      </TableCell>
+                      <TableCell>
+                        <LinkButton
+                          href={sub.hmpgAdres}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          상세 정보
+                        </LinkButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </tbody>
+              </Table>
+            </TableContainer>
+          </Bookmark>
+        </SectionsWrap>
 
-      <Outlet />
-    </Container>
+        <Outlet />
+      </Container>
+    </Page>
   );
 };
 

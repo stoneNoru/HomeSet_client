@@ -9,7 +9,7 @@ const BlackBg = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #212121;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,28 +17,32 @@ const BlackBg = styled.div`
 
 const Container = styled.div`
   padding: 20px 30px;
-  border-radius: 15px;
-  background-color: white;
+  border-radius: 25px;
+  background-color: #171717;
   height: 600px;
   width: 500px;
+  transition: 0.4s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 `;
 
 const Header = styled.header`
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   margin-top: 50px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   h1 {
-    color: black;
+    color: #dd4950;
     margin-bottom: 20px;
     font-size: 30px;
     font-weight: 600;
   }
+
   p {
     font-size: 16px;
-    color: black;
+    color: white;
     width: 60%;
     opacity: 0.5;
   }
@@ -47,38 +51,50 @@ const Header = styled.header`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  margin: 0px 30px;
-  a {
-    font-size: 18px;
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    padding: 10px 0px;
-    background-color: #9b75f3;
-    color: white;
-    border-radius: 5px;
-  }
+  gap: 20px;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 0.4em;
+  background-color: #171717;
+  border-radius: 25px;
+  transition: 0.4s ease-in-out;
+  color: #9e9d9d;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border-radius: 25px;
+  padding: 0.6em;
+  border: none;
+  outline: none;
+  color: white;
+  background-color: #171717;
+  box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+  margin-bottom: 15px;
 `;
 
 const Input = styled.input`
+  background: none;
   border: none;
-  padding: 15px 0px;
+  outline: none;
+  width: 100%;
+  color: #d3d3d3;
   font-size: 18px;
-  margin-bottom: 25px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-  color: rgba(0, 0, 0, 0.4);
-  transition: border-color 0.3s ease-in-out;
-
-  &:hover {
-    border-color: ${(props) => props.theme.accentColor};
-  }
 
   &[type="submit"] {
-    background-color: ${(props) => props.theme.accentColor};
+    background-color: #252525;
     cursor: pointer;
-    padding: 20px 0px;
+    padding: 0.5em;
     border-radius: 5px;
     color: white;
+    transition: 0.4s ease-in-out;
+    margin-top: 60px;
+    &:hover {
+      background-color: #ac373d;
+    }
   }
 `;
 
@@ -111,7 +127,10 @@ const SignUp = () => {
     } catch (error) {
       console.error(error);
       console.log(error.response);
-      setError(error?.response?.data?.message || "회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setError(
+        error?.response?.data?.message ||
+          "회원가입 중 오류가 발생했습니다. 다시 시도해주세요."
+      );
     }
   };
 
@@ -120,15 +139,46 @@ const SignUp = () => {
       <Container>
         <Header>
           <h1>Sign up</h1>
-          <p>Use Email or Google ID to make Account</p>
         </Header>
         <Form onSubmit={handleSignup}>
-          <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} />
-          <Input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <Input type="text" placeholder="Nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+          <InputContainer>
+            <Input
+              type="text"
+              placeholder="ID"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              type="text"
+              placeholder="Nickname"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+            />
+          </InputContainer>
           <Input type="submit" value="Sign up" />
-          <div>{error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}</div>
+          <div>
+            {error && (
+              <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>
+            )}
+          </div>
         </Form>
       </Container>
     </BlackBg>

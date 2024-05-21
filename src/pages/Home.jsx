@@ -283,71 +283,68 @@ const Home = () => {
             홈셋
           </Title>
         </HeadWrap>
-        <div style={{ position: "relative" }}>
-          {/* <Blur></Blur> */}
-          <Tabs isAuthenticated={isAuthenticated()}>
-            {isAuthenticated() ? (
-              <>
-                <Tab active={!!transactionsMatch}>
-                  <Link to="transactions" style={{ color: "white" }}>
-                    실거래
-                  </Link>
-                </Tab>
-                <Tab active={!!subscriptionMatch}>
-                  <Link to="subscription" style={{ color: "white" }}>
-                    청약
-                  </Link>
-                </Tab>
-              </>
-            ) : (
-              <>
-                <RedText>서비스를 사용하려면 로그인이 필요합니다</RedText>
-                <Tab>
-                  <Link to="/login" style={{ color: "white" }}>
-                    로그인
-                  </Link>
-                </Tab>
-              </>
-            )}
-          </Tabs>
-          {exactHomeMatch !== null ? (
-            <HomeItems>
-              <h2
-                style={{
-                  marginBottom: "20px",
-                  fontSize: "24px",
-                  marginTop: "20px",
-                }}
-              >
-                📌 공지사항
-              </h2>
-              <NoticesWrap>
-                <NoticeList translateX={translateX}>
-                  {noticeList.map((notice, index) => (
-                    <Notice
-                      key={index}
-                      version={notice.title}
-                      content={notice.content}
-                    />
-                  ))}
-                </NoticeList>
-              </NoticesWrap>
+        <Tabs isAuthenticated={isAuthenticated()}>
+          {isAuthenticated() ? (
+            <>
+              <Tab active={!!transactionsMatch}>
+                <Link to="transactions" style={{ color: "white" }}>
+                  실거래
+                </Link>
+              </Tab>
+              <Tab active={!!subscriptionMatch}>
+                <Link to="subscription" style={{ color: "white" }}>
+                  청약
+                </Link>
+              </Tab>
+            </>
+          ) : (
+            <>
+              <RedText>서비스를 사용하려면 로그인이 필요합니다</RedText>
+              <Tab>
+                <Link to="/login" style={{ color: "white" }}>
+                  로그인
+                </Link>
+              </Tab>
+            </>
+          )}
+        </Tabs>
+        {exactHomeMatch !== null ? (
+          <HomeItems>
+            <h2
+              style={{
+                marginBottom: "20px",
+                fontSize: "24px",
+                marginTop: "20px",
+              }}
+            >
+              📌 공지사항
+            </h2>
+            <NoticesWrap>
+              <NoticeList translateX={translateX}>
+                {noticeList.map((notice, index) => (
+                  <Notice
+                    key={index}
+                    version={notice.title}
+                    content={notice.content}
+                  />
+                ))}
+              </NoticeList>
+            </NoticesWrap>
 
-              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
-                📰 부동산 뉴스
-              </h2>
-              <p>여기에 최신 부동산 뉴스들 표시</p>
-              <NewsWrap>
-                <News>
-                  <NewsTitle></NewsTitle>
-                  <NewsContent></NewsContent>
-                  <NewsDate></NewsDate>
-                </News>
-              </NewsWrap>
-            </HomeItems>
-          ) : null}
-          <Outlet />
-        </div>
+            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
+              📰 부동산 뉴스
+            </h2>
+            <p>여기에 최신 부동산 뉴스들 표시</p>
+            <NewsWrap>
+              <News>
+                <NewsTitle></NewsTitle>
+                <NewsContent></NewsContent>
+                <NewsDate></NewsDate>
+              </News>
+            </NewsWrap>
+          </HomeItems>
+        ) : null}
+        <Outlet />
       </Sidebar>
       <Content>
         <KakaoMap />

@@ -102,6 +102,8 @@ const FindPw = () => {
         <LoginForm
           onSubmit={() => {
             FindPassword(id, email);
+            alert("이메일로 임시 비밀번호가 전송되었습니다.");
+            navigate("/login");
           }}
         >
           <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} />

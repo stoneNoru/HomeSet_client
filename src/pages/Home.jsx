@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link, Navigate, Outlet, useMatch, useNavigate } from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
 import Notice from "../components/Notice";
-import { LogOutAPI, GetNotice } from "../services/api";
+import { LogOutAPI, GetNotice, GetNews } from "../services/api";
 import { isAuthenticated } from "../utils/checkToken";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -100,8 +100,18 @@ const Tab = styled.span`
   }
 `;
 
-const News = styled.div`
+const NewsWrap = styled.div`
   margin-bottom: 20px;
+`;
+
+const News = styled.div``;
+
+const NewsTitle = styled.h4``;
+
+const NewsContent = styled.p``;
+
+const NewsDate = styled.h4`
+  font-weight: 200;
 `;
 
 const Menu = styled.div`
@@ -138,6 +148,7 @@ const Home = () => {
   const [translateX, setTranslateX] = useState(0);
   const [noticeList, setNoticeList] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [newsList, setNewsList] = useState([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -159,6 +170,13 @@ const Home = () => {
       setNoticeList(response);
     };
     getNotice();
+
+    const getNews = async () => {
+      const response = await GetNews();
+      setNewsList(response);
+    };
+
+    getNews();
   }, []);
 
   return (
@@ -250,10 +268,16 @@ const Home = () => {
                 ))}
               </NoticeList>
             </NoticesWrap>
-            <News>
-              <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📰 부동산 뉴스</h2>
-              <p>여기에 최신 부동산 뉴스들 표시</p>
-            </News>
+
+            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📰 부동산 뉴스</h2>
+            <p>여기에 최신 부동산 뉴스들 표시</p>
+            <NewsWrap>
+              <News>
+                <NewsTitle></NewsTitle>
+                <NewsContent></NewsContent>
+                <NewsDate></NewsDate>
+              </News>
+            </NewsWrap>
           </HomeItems>
         ) : null}
         <Outlet />

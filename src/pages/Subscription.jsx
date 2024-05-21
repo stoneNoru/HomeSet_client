@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  CurrentSubscription,
-  NewSubscription,
-  FinishedSubscription,
-} from "../services/api";
+import { CurrentSubscription, NewSubscription, FinishedSubscription } from "../services/api";
 import Card from "../components/Card";
 import Nothing from "../components/Nothing";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
@@ -109,39 +105,21 @@ const Subscription = () => {
     <SubscriptionContainer>
       <RadioGroup>
         <div>
-          <RadioInput
-            type="radio"
-            id="finished"
-            value="finished"
-            checked={selectedOption === "finished"}
-            onChange={handleOptionChange}
-          />
+          <RadioInput type="radio" id="finished" value="finished" checked={selectedOption === "finished"} onChange={handleOptionChange} />
           <RadioLabel htmlFor="finished">
             종료
             <CustomRadio className="custom-radio" />
           </RadioLabel>
         </div>
         <div>
-          <RadioInput
-            type="radio"
-            id="ongoing"
-            value="ongoing"
-            checked={selectedOption === "ongoing"}
-            onChange={handleOptionChange}
-          />
+          <RadioInput type="radio" id="ongoing" value="ongoing" checked={selectedOption === "ongoing"} onChange={handleOptionChange} />
           <RadioLabel htmlFor="ongoing">
             진행 중
             <CustomRadio className="custom-radio" />
           </RadioLabel>
         </div>
         <div>
-          <RadioInput
-            type="radio"
-            id="upcoming"
-            value="upcoming"
-            checked={selectedOption === "upcoming"}
-            onChange={handleOptionChange}
-          />
+          <RadioInput type="radio" id="upcoming" value="upcoming" checked={selectedOption === "upcoming"} onChange={handleOptionChange} />
           <RadioLabel htmlFor="upcoming">
             진행 예정
             <CustomRadio className="custom-radio" />
@@ -157,7 +135,7 @@ const Subscription = () => {
                 finished.map((item) => (
                   <Card
                     status={selectedOption}
-                    houseManageNo={item.houseManageNo}
+                    houseManageNo={item.houseManageNo} //
                     pblancNo={item.pblancNo}
                     houseNm={item.houseNm}
                     hssplyAdres={item.hssplyAdres}
@@ -174,6 +152,7 @@ const Subscription = () => {
                     hmpgAdres={item.hmpgAdres}
                     subscrptAreaCodeNm={item.subscrptAreaCodeNm}
                     pblancUrl={item.pblancUrl}
+                    bookmark={item.bookmark}
                   />
                 ))
               ) : (
@@ -205,6 +184,7 @@ const Subscription = () => {
                   hmpgAdres={item.hmpgAdres}
                   subscrptAreaCodeNm={item.subscrptAreaCodeNm}
                   pblancUrl={item.pblancUrl}
+                  bookmark={item.bookmark}
                 />
               ))
             ) : (
@@ -235,6 +215,7 @@ const Subscription = () => {
                   hmpgAdres={item.hmpgAdres}
                   subscrptAreaCodeNm={item.subscrptAreaCodeNm}
                   pblancUrl={item.pblancUrl}
+                  bookmark={item.bookmark}
                 />
               ))
             ) : (

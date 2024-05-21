@@ -5,7 +5,7 @@ import { isAuthenticated } from "../utils/checkToken";
 const PrivateRoute = ({ children }) => {
   const location = useLocation();
 
-  return isAuthenticated() ? childeren : <Navigate to={"/login"} />;
+  return isAuthenticated() ? children : <Navigate to={"/login"} />;
 };
 
 export default PrivateRoute;

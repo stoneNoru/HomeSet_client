@@ -2,6 +2,9 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
+import { DeleteSubBookmark, RegistSubBookmark } from "../services/api";
 
 const Tab = styled.li`
   position: relative;
@@ -100,7 +103,7 @@ const Table = styled.table`
 
 const Card = ({
   status,
-  houseManageNo,
+  houseManageNo, //
   pblancNo,
   houseNm,
   hssplyAdres,
@@ -117,23 +120,30 @@ const Card = ({
   hmpgAdres,
   subscrptAreaCodeNm,
   pblancUrl,
+  bookmark,
 }) => {
   if (status === "upcoming") {
-    status = rceptBgnde
-      ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작"
-      : "정보 없음";
+    status = rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작" : "정보 없음";
   } else if (status === "ongoing") {
-    status = rceptEndde
-      ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료"
-      : "정보 없음";
+    status = rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료" : "정보 없음";
   } else if (status === "finished") {
     status = "종료";
   }
 
   const [clicked, setClicked] = useState(false);
+  const [star, setStar] = useState();
   const detailRef = useRef(null);
 
+  // const updateStarStatus = async (aptCode) => {
+  //   const starStatus = await GetPersonAPTBookmark(aptCode);
+  //   setStar(starStatus);
+  //   console.log("star", starStatus);
+  // };
+
   useEffect(() => {
+    setStar(bookmark);
+    console.log("bookmark", bookmark);
+
     if (clicked) {
       detailRef.current.style.height = `${detailRef.current.scrollHeight}px`;
     } else {
@@ -175,33 +185,17 @@ const Card = ({
             <tr>
               <th>접수일</th>
               <td>
-                {rceptBgnde
-                  ? rceptBgnde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}{" "}
-                ~{" "}
-                {rceptEndde
-                  ? rceptEndde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
+                {rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
               </td>
             </tr>
             <tr>
               <th>당첨자 발표일</th>
-              <td>
-                {przwnerPresnatnDe
-                  ? przwnerPresnatnDe.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
-              </td>
+              <td>{przwnerPresnatnDe ? przwnerPresnatnDe.replace(/-/g, ".").slice(2) : "정보 없음"}</td>
             </tr>
             <tr>
               <th>계약일</th>
               <td>
-                {cntrctCnclsBgnde
-                  ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}{" "}
-                ~{" "}
-                {cntrctCnclsEndde
-                  ? cntrctCnclsEndde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
+                {cntrctCnclsBgnde ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {cntrctCnclsEndde ? cntrctCnclsEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
               </td>
             </tr>
             <tr>
@@ -217,13 +211,28 @@ const Card = ({
           <ToInfo href={pblancUrl} target="_blank" rel="noopener noreferrer">
             공고
           </ToInfo>
+
+          {star === 0 ? (
+            <FontAwesomeIcon
+              icon={faStarRegular}
+              onClick={async () => {
+                await RegistSubBookmark(houseManageNo);
+                setStar(1);
+              }}
+            />
+          ) : (
+            <FontAwesomeIcon
+              icon={faStarSolid}
+              onClick={async () => {
+                await DeleteSubBookmark(houseManageNo);
+                setStar(0);
+              }}
+            />
+          )}
         </ToWrap>
       </DetailWrap>
       <Chevron>
-        <FontAwesomeIcon
-          icon={clicked ? faChevronUp : faChevronDown}
-          onClick={() => setClicked(!clicked)}
-        />
+        <FontAwesomeIcon icon={clicked ? faChevronUp : faChevronDown} onClick={() => setClicked(!clicked)} />
       </Chevron>
     </Tab>
   );

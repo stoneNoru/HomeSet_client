@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "http://localhost:8080";
-const BASE_URL = "http://192.168.206.66:8080";
-//const BASE_URL = "http://183.107.121.150:8080";
+// const BASE_URL = "http://192.168.206.66:8080";
+const BASE_URL = "http://183.107.121.150:8080";
 
 // 183.107.121.150
 // 192.168.206.66
@@ -29,6 +29,7 @@ const FindPassword = async (id, email) => {
       email: email,
     });
     console.log(response.data);
+    alert("이메일로 임시 비밀번호가 전송되었습니다.");
   } catch (error) {
     console.log(error);
   }
@@ -138,7 +139,11 @@ const ModifyUserData = async (id, email, nickname, password) => {
 //청약정보
 const CurrentSubscription = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/applies/current`);
+    const response = await axios.get(`${BASE_URL}/applies/current`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
     console.log("ongoing", response.data.data);
     return response.data.data;
   } catch (error) {
@@ -148,7 +153,11 @@ const CurrentSubscription = async () => {
 
 const NewSubscription = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/applies/new`);
+    const response = await axios.get(`${BASE_URL}/applies/new`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
     console.log("upcoming", response.data.data);
     return response.data.data;
   } catch (error) {
@@ -158,7 +167,11 @@ const NewSubscription = async () => {
 
 const FinishedSubscription = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/applies/end`);
+    const response = await axios.get(`${BASE_URL}/applies/end`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
     console.log("finished", response);
     return response.data.data;
   } catch (error) {
@@ -247,7 +260,7 @@ const DeleteReview = async (houseManageNo) => {
 };
 
 /* 청약 북마크 */
-//북마크 저장
+//특정 청약 북마크 추가
 const RegistSubBookmark = async (houseManageNo) => {
   try {
     const response = await axios.post(
@@ -269,7 +282,7 @@ const RegistSubBookmark = async (houseManageNo) => {
   }
 };
 
-//내 북마크 조회
+//전체 청약 북마크 리스트 조회
 const GetSubBookmark = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/applies/bookmarks`, {
@@ -284,7 +297,8 @@ const GetSubBookmark = async () => {
     console.log(error);
   }
 };
-//북마크 삭제
+
+//특정 청약 북마크 삭제
 const DeleteSubBookmark = async (houseManageNo) => {
   try {
     const response = await axios.delete(`${BASE_URL}/applies/bookmarks/${houseManageNo}`, {
@@ -340,7 +354,7 @@ const GetAPTBookmark = async () => {
   }
 };
 
-//북마크 삭제
+//실거래 북마크 삭제
 const DeleteAPTBookmark = async (aptCode) => {
   try {
     const response = await axios.delete(`${BASE_URL}/home/bookmarks/${aptCode}`, {
@@ -371,15 +385,11 @@ const GetPersonAPTBookmark = async (aptCode) => {
   }
 };
 
-const GetPersonSubBookmark = async (houseManageNo) => {
+//뉴스 작성
+const GetNews = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/applies/bookmarks/${houseManageNo}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
+    const response = await axios.get(`${BASE_URL}/notices/news`);
     console.log(response.data.data);
-
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -388,9 +398,10 @@ const GetPersonSubBookmark = async (houseManageNo) => {
 
 export {
   GetPersonAPTBookmark,
-  GetPersonSubBookmark,
+
   //아파트 북마크
   RegistAPTBookmark,
+  GetNews,
   GetAPTBookmark,
   DeleteAPTBookmark,
   //청약 북마크

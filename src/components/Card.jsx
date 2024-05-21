@@ -74,8 +74,9 @@ const ToInfo = styled.a`
 const ToWrap = styled.div`
   width: 100%;
   display: flex;
-  gap: 20px;
+  gap: 16px;
   margin-top: 10px;
+  align-items: center;
 `;
 
 const Table = styled.table`
@@ -123,9 +124,13 @@ const Card = ({
   bookmark,
 }) => {
   if (status === "upcoming") {
-    status = rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작" : "정보 없음";
+    status = rceptBgnde
+      ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작"
+      : "정보 없음";
   } else if (status === "ongoing") {
-    status = rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료" : "정보 없음";
+    status = rceptEndde
+      ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료"
+      : "정보 없음";
   } else if (status === "finished") {
     status = "종료";
   }
@@ -185,17 +190,33 @@ const Card = ({
             <tr>
               <th>접수일</th>
               <td>
-                {rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
+                {rceptBgnde
+                  ? rceptBgnde.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}{" "}
+                ~{" "}
+                {rceptEndde
+                  ? rceptEndde.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}
               </td>
             </tr>
             <tr>
               <th>당첨자 발표일</th>
-              <td>{przwnerPresnatnDe ? przwnerPresnatnDe.replace(/-/g, ".").slice(2) : "정보 없음"}</td>
+              <td>
+                {przwnerPresnatnDe
+                  ? przwnerPresnatnDe.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}
+              </td>
             </tr>
             <tr>
               <th>계약일</th>
               <td>
-                {cntrctCnclsBgnde ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {cntrctCnclsEndde ? cntrctCnclsEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
+                {cntrctCnclsBgnde
+                  ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}{" "}
+                ~{" "}
+                {cntrctCnclsEndde
+                  ? cntrctCnclsEndde.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}
               </td>
             </tr>
             <tr>
@@ -222,6 +243,7 @@ const Card = ({
             />
           ) : (
             <FontAwesomeIcon
+              style={{ color: "yellow" }}
               icon={faStarSolid}
               onClick={async () => {
                 await DeleteSubBookmark(houseManageNo);
@@ -232,7 +254,10 @@ const Card = ({
         </ToWrap>
       </DetailWrap>
       <Chevron>
-        <FontAwesomeIcon icon={clicked ? faChevronUp : faChevronDown} onClick={() => setClicked(!clicked)} />
+        <FontAwesomeIcon
+          icon={clicked ? faChevronUp : faChevronDown}
+          onClick={() => setClicked(!clicked)}
+        />
       </Chevron>
     </Tab>
   );

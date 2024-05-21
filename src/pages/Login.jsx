@@ -124,12 +124,25 @@ const Login = () => {
           <p>Log in or create Account</p>
         </Header>
         <LoginForm onSubmit={handleLogin}>
-          <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} />
-          <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Input
+            type="text"
+            placeholder="ID"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <Input type="submit" value="Log In" />
           <Link to="/signup">Create Account</Link>
           {error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}
-          <h1 style={{ color: "black", cursor: "pointer" }} onClick={() => navigate("/findpw")}>
+          <h1
+            style={{ color: "black", cursor: "pointer" }}
+            onClick={() => navigate("/findpw")}
+          >
             비밀번호 찾기
           </h1>
         </LoginForm>

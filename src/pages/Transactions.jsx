@@ -2,11 +2,20 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TxLi from "../components/TxLi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faStar as faStarSolid, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faStar as faStarSolid,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { houseState, markerState, typedState } from "../state/atoms";
-import { DeleteAPTBookmark, GetPersonAPTBookmark, RegistAPTBookmark, fetchTxDatas } from "../services/api.js";
+import {
+  DeleteAPTBookmark,
+  GetPersonAPTBookmark,
+  RegistAPTBookmark,
+  fetchTxDatas,
+} from "../services/api.js";
 import Chart from "../components/Chart.jsx";
 import { KeywordTxSearch } from "../services/api.js";
 import RoadView from "../components/RoadView.jsx";
@@ -61,7 +70,7 @@ const DetailModal = styled.div`
   box-sizing: border-box;
   padding: 30px;
   width: 1300px;
-  height: 90%;
+  height: 80%;
   top: 5%;
   left: 50%;
   transform: translateX(-50%);
@@ -93,7 +102,6 @@ const BlackBg = styled.div`
 
 const DetailName = styled.h1`
   font-size: 50px;
-  margin-bottom: 20px;
 `;
 
 const DetailContent = styled.h4`
@@ -150,7 +158,9 @@ const Transactions = () => {
       console.log("거래리스트", response.data.data);
       setTxDatas(response.data.data.reverse()); // 응답 데이터에서 실제 데이터를 설정
       console.log(response.data.data);
-      const pricesArray = response.data.data.map((houseData) => houseData.dealAmount);
+      const pricesArray = response.data.data.map(
+        (houseData) => houseData.dealAmount
+      );
       setPrices(pricesArray); // dealAmount 값을 한 번에 설정
     } catch (error) {
       console.error("데이터를 가져오는 중 오류 발생:", error);
@@ -165,7 +175,9 @@ const Transactions = () => {
 
   useEffect(() => {
     if (selectedMarker) {
-      const selectedHouse = houses.find((house) => house.aptCode === selectedMarker);
+      const selectedHouse = houses.find(
+        (house) => house.aptCode === selectedMarker
+      );
       setSelected(selectedHouse);
       console.log("selected", selectedHouse);
     }
@@ -184,8 +196,16 @@ const Transactions = () => {
         <BlackBg>
           <DetailModal>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <DetailName>{selected.apartmentName}</DetailName>
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center", // 중앙 정렬 추가
+                  justifyContent: "center",
+                  gap: "20px",
+                  marginBottom: "20px",
+                }}
+              >
+                <DetailName>{selected.apartmentName}</DetailName>
                 {star === 0 ? (
                   <FontAwesomeIcon
                     icon={faStarRegular}
@@ -215,10 +235,16 @@ const Transactions = () => {
             </div>
 
             <div style={{ width: "50%" }}>
-              <p>거래일</p>
-              <p>실거래가</p>
-              <p>평수 층</p>
-              <p>도로명</p>
+              <p style={{ marginBottom: "10px", color: "#acacac" }}>
+                최근 거래일 : {selected.date}
+              </p>
+              <p style={{ marginBottom: "10px", color: "#acacac" }}>
+                실거래 금액 : {selected.dealAmount}
+              </p>
+              <p style={{ marginBottom: "10px", color: "#acacac" }}>
+                {selected.area}평 {selected.floor}층
+              </p>
+              <p style={{ marginBottom: "10px", color: "#acacac" }}>도로명</p>
             </div>
 
             <TabWrap>

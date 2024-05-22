@@ -145,18 +145,19 @@ const Login = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     setError("");
-
     try {
       const response = await api.LoginPost(id, password); // api 객체를 사용해 LoginPost 함수 호출
       if (response.data.status === 200) {
         console.log("Login successful");
         navigate("/home");
-      } else {
-        setError(response.data.message);
-      }
+      } //else {
+      //   setError(error.response.data.message);
+      // }
     } catch (error) {
-      setError("Login failed. Please try again.");
       console.error("Login error:", error);
+      if (error) {
+        setError(error?.response?.data?.message || "로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
     }
   };
 
@@ -169,27 +170,15 @@ const Login = () => {
         </Header>
         <LoginForm onSubmit={handleLogin}>
           <InputContainer>
-            <Input
-              type="text"
-              placeholder="ID"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-            />
+            <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} />
           </InputContainer>
           <InputContainer>
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </InputContainer>
           <Input type="submit" value="Log In" style={{ marginTop: "100px" }} />
           <LinkButton to="/signup">Create Account</LinkButton>
           {error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}
-          <FindPwButton onClick={() => navigate("/findpw")}>
-            비밀번호 찾기
-          </FindPwButton>
+          <FindPwButton onClick={() => navigate("/findpw")}>비밀번호 찾기</FindPwButton>
         </LoginForm>
       </Container>
     </BlackBg>

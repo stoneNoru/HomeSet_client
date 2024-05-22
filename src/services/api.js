@@ -19,6 +19,7 @@ const LoginPost = async (id, password) => {
     return response;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -64,15 +65,15 @@ const GetMyInfo = async () => {
   }
 };
 
-const DeleteAccount = () => {
+const DeleteAccount = async () => {
   try {
-    const response = axios.delete(`${BASE_URL}/users`, {
+    const response = await axios.delete(`${BASE_URL}/users`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-    console.log(response.data.message);
     localStorage.removeItem("accessToken");
+    console.log(response.data.message);
   } catch (error) {
     console.log(error);
   }
@@ -134,6 +135,7 @@ const ModifyUserData = async (id, email, nickname, password) => {
     return response;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -240,8 +242,12 @@ const RegistReview = async (houseManageNo, content) => {
 //리뷰 조회
 const GetReview = async (houseManageNo) => {
   try {
-    const response = await axios.get(`${BASE_URL}/reviews/${houseManageNo}`);
-    console.log(response.data.data);
+    const response = await axios.get(`${BASE_URL}/reviews/${houseManageNo}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    // console.log(response.data.data);
 
     return response.data.data;
   } catch (error) {

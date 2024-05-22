@@ -1,10 +1,9 @@
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronUp, faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
-import { DeleteSubBookmark, RegistSubBookmark } from "../services/api";
+import { DeleteReview, DeleteSubBookmark, GetReview, RegistSubBookmark } from "../services/api";
 
 const Tab = styled.li`
   position: relative;
@@ -102,9 +101,52 @@ const Table = styled.table`
   }
 `;
 
+const ReviewLists = styled.div`
+  width: 100%;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  padding: 16px;
+  box-sizing: border-box;
+`;
+
+const Review = styled.div`
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+`;
+
+const ReviewWriter = styled.h4`
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 10px;
+  color: #c2c2c2;
+`;
+
+const ReviewContent = styled.p`
+  font-size: 14px;
+`;
+
+const ReviewDelete = styled.button`
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+  display: inline-block;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+  &:hover {
+    background-color: #b1252c;
+  }
+`;
+
 const Card = ({
   status,
-  houseManageNo, //
+  houseManageNo,
   pblancNo,
   houseNm,
   hssplyAdres,
@@ -124,37 +166,48 @@ const Card = ({
   bookmark,
 }) => {
   if (status === "upcoming") {
-    status = rceptBgnde
-      ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작"
-      : "정보 없음";
+    status = rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작" : "정보 없음";
   } else if (status === "ongoing") {
-    status = rceptEndde
-      ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료"
-      : "정보 없음";
+    status = rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료" : "정보 없음";
   } else if (status === "finished") {
     status = "종료";
   }
 
   const [clicked, setClicked] = useState(false);
-  const [star, setStar] = useState();
+  const [star, setStar] = useState(bookmark);
+  const [reviews, setReviews] = useState([]);
+  const [reviewClicked, setReviewClicked] = useState(false);
+
   const detailRef = useRef(null);
 
-  // const updateStarStatus = async (aptCode) => {
-  //   const starStatus = await GetPersonAPTBookmark(aptCode);
-  //   setStar(starStatus);
-  //   console.log("star", starStatus);
-  // };
-
   useEffect(() => {
-    setStar(bookmark);
-    console.log("bookmark", bookmark);
-
     if (clicked) {
-      detailRef.current.style.height = `${detailRef.current.scrollHeight}px`;
-    } else {
-      detailRef.current.style.height = "0";
+      fetchReviews();
     }
   }, [clicked]);
+
+  //To Do : scrollHeight조정
+  // useEffect(() => {
+  //   if (clicked) {
+  //     detailRef.current.style.height = `${detailRef.current.scrollHeight}px`;
+  //   } else {
+  //     detailRef.current.style.height = "0";
+  //   }
+  // }, [clicked]);
+
+  const fetchReviews = async () => {
+    try {
+      const response = await GetReview(houseManageNo);
+      console.log("리뷰 목록:", response);
+      setReviews(response);
+    } catch (error) {
+      console.log("리뷰 리스트 가져오는 중 에러", error);
+    }
+  };
+
+  const handleToggleClick = () => {
+    setClicked(!clicked);
+  };
 
   return (
     <Tab>
@@ -163,13 +216,7 @@ const Card = ({
         <Status>{status}</Status>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          textAlign: "center",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", textAlign: "center" }}>
         <Address>{hssplyAdres}</Address>
       </div>
       <DetailWrap ref={detailRef} clicked={clicked}>
@@ -190,33 +237,17 @@ const Card = ({
             <tr>
               <th>접수일</th>
               <td>
-                {rceptBgnde
-                  ? rceptBgnde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}{" "}
-                ~{" "}
-                {rceptEndde
-                  ? rceptEndde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
+                {rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
               </td>
             </tr>
             <tr>
               <th>당첨자 발표일</th>
-              <td>
-                {przwnerPresnatnDe
-                  ? przwnerPresnatnDe.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
-              </td>
+              <td>{przwnerPresnatnDe ? przwnerPresnatnDe.replace(/-/g, ".").slice(2) : "정보 없음"}</td>
             </tr>
             <tr>
               <th>계약일</th>
               <td>
-                {cntrctCnclsBgnde
-                  ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}{" "}
-                ~{" "}
-                {cntrctCnclsEndde
-                  ? cntrctCnclsEndde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
+                {cntrctCnclsBgnde ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {cntrctCnclsEndde ? cntrctCnclsEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
               </td>
             </tr>
             <tr>
@@ -232,6 +263,13 @@ const Card = ({
           <ToInfo href={pblancUrl} target="_blank" rel="noopener noreferrer">
             공고
           </ToInfo>
+          <p
+            onClick={() => {
+              setReviewClicked(!reviewClicked);
+            }}
+          >
+            댓글 ({reviews.length})
+          </p>
 
           {star === 0 ? (
             <FontAwesomeIcon
@@ -252,54 +290,23 @@ const Card = ({
             />
           )}
         </ToWrap>
+        {reviewClicked ? (
+          <ReviewLists>
+            {reviews.map((review, i) => (
+              <Review key={i}>
+                <ReviewWriter>{review.nickname}</ReviewWriter>
+                <ReviewContent>{review.content}</ReviewContent>
+                {review.isMyReview ? <ReviewDelete onClick={() => DeleteReview(review.id)}>삭제</ReviewDelete> : null}
+              </Review>
+            ))}
+          </ReviewLists>
+        ) : null}
       </DetailWrap>
       <Chevron>
-        <FontAwesomeIcon
-          icon={clicked ? faChevronUp : faChevronDown}
-          onClick={() => setClicked(!clicked)}
-        />
+        <FontAwesomeIcon icon={clicked ? faChevronUp : faChevronDown} onClick={handleToggleClick} />
       </Chevron>
     </Tab>
   );
 };
 
 export default Card;
-/*
-{
-  "houseManageNo": "2024000152",
-  "pblancNo": "2024000152",
-  "houseNm": "이천자이 더 레브",
-  "hssplyAdres": "경기도 이천시 송정동 산31번지 일원",
-  "bsnsMbyNm": "교보자산신탁(주)",
-  "houseSecdNm": "APT",
-  "totSuplyHshldco": 635,
-  "rceptBgnde": "2024-05-20",
-  "rceptEndde": "2024-05-22",
-  "przwnerPresnatnDe": "2024-05-28",
-  "cntrctCnclsBgnde": "2024-06-09",
-  "cntrctCnclsEndde": "2024-06-11",
-  "mvnPrearngeYm": "202704",
-  "mdhsTelno": "18334465",
-  "hmpgAdres": "http://xi.co.kr/irv",
-  "subscrptAreaCodeNm": "경기",
-  "pblancUrl": "https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancDetail.do?houseManageNo=2024000152&pblancNo=2024000152"
-}
- */
-
-// houseManageNo: 주택 관리 번호
-// pblancNo: 공고 번호
-// houseNm: 주택 이름
-// hssplyAdres: 공급 주소
-// bsnsMbyNm: 사업 주체 이름
-// houseSecdNm: 주택 종류 (예: 아파트)
-// totSuplyHshldco: 총 공급 세대 수
-// rceptBgnde: 접수 시작일
-// rceptEndde: 접수 종료일
-// przwnerPresnatnDe: 당첨자 발표일
-// cntrctCnclsBgnde: 계약 시작일
-// cntrctCnclsEndde: 계약 종료일
-// mvnPrearngeYm: 입주 예정 년월
-// mdhsTelno: 모델하우스 전화번호
-// hmpgAdres: 홈페이지 주소
-// subscrptAreaCodeNm: 청약 지역 코드 이름
-// pblancUrl: 공고 URL

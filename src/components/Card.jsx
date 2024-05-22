@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp, faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
-import { DeleteReview, DeleteSubBookmark, GetReview, RegistSubBookmark } from "../services/api";
+import { DeleteReview, DeleteSubBookmark, GetReview, RegistReview, RegistSubBookmark } from "../services/api";
 
 const Tab = styled.li`
   position: relative;
@@ -177,6 +177,7 @@ const Card = ({
   const [star, setStar] = useState(bookmark);
   const [reviews, setReviews] = useState([]);
   const [reviewClicked, setReviewClicked] = useState(false);
+  const [typedText, setTypedText] = useState("");
 
   const detailRef = useRef(null);
 
@@ -202,6 +203,17 @@ const Card = ({
       setReviews(response);
     } catch (error) {
       console.log("리뷰 리스트 가져오는 중 에러", error);
+    }
+  };
+
+  const SubmitComment = async () => {
+    try {
+      const response = await RegistReview(houseManageNo, typedText);
+      setTypedText("");
+      console.log("댓글 작성 응답:", response);
+      fetchReviews();
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -296,9 +308,35 @@ const Card = ({
               <Review key={i}>
                 <ReviewWriter>{review.nickname}</ReviewWriter>
                 <ReviewContent>{review.content}</ReviewContent>
-                {review.isMyReview ? <ReviewDelete onClick={() => DeleteReview(review.id)}>삭제</ReviewDelete> : null}
+                {review.isMyReview ? (
+                  <ReviewDelete
+                    onClick={async () => {
+                      await DeleteReview(review.id);
+                      await fetchReviews();
+                    }}
+                  >
+                    삭제
+                  </ReviewDelete>
+                ) : null}
               </Review>
             ))}
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                SubmitComment();
+              }}
+            >
+              <input
+                type="text"
+                value={typedText}
+                placeholder="댓글 작성"
+                onChange={(event) => {
+                  setTypedText(event.target.value);
+                }}
+              ></input>
+              <input type="submit"></input>
+            </form>
           </ReviewLists>
         ) : null}
       </DetailWrap>

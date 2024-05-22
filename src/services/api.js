@@ -257,7 +257,11 @@ const GetReview = async (houseManageNo) => {
 //리뷰 삭제
 const DeleteReview = async (houseManageNo) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/reviews/${houseManageNo}`);
+    const response = await axios.delete(`${BASE_URL}/reviews/${houseManageNo}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
     console.log(response.data.data);
 
     return response.data.data;

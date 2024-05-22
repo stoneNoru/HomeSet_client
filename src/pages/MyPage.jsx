@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { GetMyInfo, DeleteAccount, GetAPTBookmark, GetSubBookmark } from "../services/api";
+import { GetMyInfo, DeleteAccount, GetAPTBookmark, GetSubBookmark, LogOutAPI } from "../services/api";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faHouse, faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -178,6 +178,12 @@ const MyPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    await LogOutAPI();
+    navigate("/home");
+    alert("로그아웃 완료");
+  };
+
   useEffect(() => {
     const fetchMyInfo = async () => {
       try {
@@ -239,7 +245,12 @@ const MyPage = () => {
         </div>
         {menuOpen ? (
           <MenuItems menuOpen={menuOpen}>
-            <MenuItem onClick={() => {}} style={{ marginBottom: "20px" }}>
+            <MenuItem
+              onClick={() => {
+                handleLogout();
+              }}
+              style={{ marginBottom: "20px" }}
+            >
               <FontAwesomeIcon icon={faRightToBracket} style={{ marginRight: "10px" }} /> Log out
             </MenuItem>
             <MenuItem

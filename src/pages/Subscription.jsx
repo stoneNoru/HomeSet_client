@@ -164,8 +164,9 @@ const Subscription = () => {
         {selectedOption === "ongoing" && (
           <ul>
             {ongoing.length !== 0 ? (
-              ongoing.map((item) => (
+              ongoing.map((item, i) => (
                 <Card
+                  key={i}
                   status={selectedOption}
                   houseManageNo={item.houseManageNo}
                   pblancNo={item.pblancNo}

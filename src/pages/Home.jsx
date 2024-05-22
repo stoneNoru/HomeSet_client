@@ -46,7 +46,7 @@ const Content = styled.div`
 const Tabs = styled.div`
   display: grid;
   grid-template-columns: ${(props) =>
-    props.isAuthenticated ? "repeat(2, 1fr)" : "1fr"};
+    props.isAuthenticated ? "repeat(3, 1fr)" : "1fr"};
   margin: 25px 0px 16px 0px;
   gap: 20px;
 `;
@@ -242,7 +242,7 @@ const RedText = styled.h1`
 
 const Home = () => {
   const navigate = useNavigate();
-  const exactHomeMatch = useMatch("/home");
+  const homeMatch = useMatch("/home");
   const transactionsMatch = useMatch("/home/transactions");
   const subscriptionMatch = useMatch("/home/subscription");
 
@@ -349,6 +349,11 @@ const Home = () => {
           </Title>
         </HeadWrap>
         <Tabs isAuthenticated={isAuthenticated()}>
+          <Tab active={!!homeMatch}>
+            <Link to="/home" style={{ color: "white" }}>
+              홈
+            </Link>
+          </Tab>
           {isAuthenticated() ? (
             <>
               <Tab active={!!transactionsMatch}>
@@ -373,7 +378,7 @@ const Home = () => {
             </>
           )}
         </Tabs>
-        {exactHomeMatch !== null ? (
+        {homeMatch !== null ? (
           <HomeItems>
             <h2
               style={{

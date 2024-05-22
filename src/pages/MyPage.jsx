@@ -20,6 +20,8 @@ const Container = styled.div`
   color: #ffffff;
   box-sizing: border-box;
   border-radius: 20px;
+  overflow: hidden;
+  /* max-height: 90vh; */
 `;
 
 const Section = styled.section`

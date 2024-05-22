@@ -2,20 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TxLi from "../components/TxLi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMagnifyingGlass,
-  faStar as faStarSolid,
-  faTimesCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faStar as faStarSolid, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { houseState, markerState, typedState } from "../state/atoms";
-import {
-  DeleteAPTBookmark,
-  GetPersonAPTBookmark,
-  RegistAPTBookmark,
-  fetchTxDatas,
-} from "../services/api.js";
+import { DeleteAPTBookmark, GetPersonAPTBookmark, RegistAPTBookmark, fetchTxDatas } from "../services/api.js";
 import Chart from "../components/Chart.jsx";
 import { KeywordTxSearch } from "../services/api.js";
 import RoadView from "../components/RoadView.jsx";
@@ -143,7 +134,7 @@ const ModalTitle = styled.span`
 `;
 
 const Transactions = () => {
-  const [selected, setSelected] = useState(null); // 선택된 아파트의 상세 정보를 저장
+  const [selected, setSelected] = useState(null); // 선택된 아파트의 상세 정보를 저장 {}
   const [txDatas, setTxDatas] = useState([]);
   const [prices, setPrices] = useState([]);
   const [star, setStar] = useState(0); // star 상태를 useState로 관리
@@ -152,15 +143,14 @@ const Transactions = () => {
   const setMarker = useSetRecoilState(markerState);
   const [typedText, setTypedText] = useRecoilState(typedState);
 
+  //선택한 아파트의 실거래가 리스트를 가져옴
   const fetchData = async (selectedAptCode) => {
     try {
       const response = await fetchTxDatas(selectedAptCode);
       console.log("거래리스트", response.data.data);
       setTxDatas(response.data.data.reverse()); // 응답 데이터에서 실제 데이터를 설정
-      console.log(response.data.data);
-      const pricesArray = response.data.data.map(
-        (houseData) => houseData.dealAmount
-      );
+      // console.log(response.data.data);
+      const pricesArray = response.data.data.map((houseData) => houseData.dealAmount);
       setPrices(pricesArray); // dealAmount 값을 한 번에 설정
     } catch (error) {
       console.error("데이터를 가져오는 중 오류 발생:", error);
@@ -170,19 +160,18 @@ const Transactions = () => {
   const updateStarStatus = async (aptCode) => {
     const starStatus = await GetPersonAPTBookmark(aptCode);
     setStar(starStatus);
-    console.log("star", starStatus);
   };
 
+  //선택한 마커가 있으면 집[]에서 선택 마커랑 코드가 같은 특정한 집 찾아 selected로 설정. selected는 선택한 '특정' 집
   useEffect(() => {
     if (selectedMarker) {
-      const selectedHouse = houses.find(
-        (house) => house.aptCode === selectedMarker
-      );
+      const selectedHouse = houses.find((house) => house.aptCode === selectedMarker);
       setSelected(selectedHouse);
       console.log("selected", selectedHouse);
     }
   }, [selectedMarker, houses]);
 
+  //특정 집이 선택되면 그 집에 대한 정보 가져옴
   useEffect(() => {
     if (selected) {
       fetchData(selected.aptCode);
@@ -235,17 +224,12 @@ const Transactions = () => {
             </div>
 
             <div style={{ width: "50%" }}>
-              <p style={{ marginBottom: "10px", color: "#acacac" }}>
-                최근 거래일 : {selected.date}
-              </p>
-              <p style={{ marginBottom: "10px", color: "#acacac" }}>
-                실거래 금액 :{" "}
-                {Number(selected.dealAmount.replace(",", "")) / 10000}억
-              </p>
+              <p style={{ marginBottom: "10px", color: "#acacac" }}>최근 거래일 : {selected.date}</p>
+              <p style={{ marginBottom: "10px", color: "#acacac" }}>실거래 금액 : {Number(selected.dealAmount.replace(",", "")) / 10000}억</p>
               <p style={{ marginBottom: "10px", color: "#acacac" }}>
                 {parseInt(selected.area / 3.3)}평 {selected.floor}층
               </p>
-              <p style={{ marginBottom: "10px", color: "#acacac" }}>도로명</p>
+              <p style={{ marginBottom: "10px", color: "#acacac" }}>도로명 : {txDatas[0].road}</p>
             </div>
 
             <TabWrap>
@@ -301,6 +285,7 @@ const Transactions = () => {
                 lng={house.lng}
                 lat={house.lat}
                 date={house.date}
+                road={house.road}
               />
             </div>
           ))}

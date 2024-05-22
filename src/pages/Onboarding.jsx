@@ -8,6 +8,12 @@ import { fontAwesome } from "fontawesome";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import chart from "../assets/chart.png";
+import subInfo from "../assets/subInfo.png";
+import subInfo2 from "../assets/subInfo2.png";
+import bookmark from "../assets/bookmark.png";
+import bookmark2 from "../assets/bookmark2.png";
+import bookmark3 from "../assets/bookmark3.png";
 
 const Wrap = styled.div`
   position: relative;
@@ -103,12 +109,16 @@ const InfoTitle = styled.h1`
 `;
 
 const InfoDesc = styled.p`
-  color: whitesmoke;
+  color: #b8b6b6;
   font-size: 30px;
   line-height: 36px;
 `;
 
 const InfoPic = styled.div`
+  background-image: url(${(props) => props.bgImage});
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   box-sizing: border-box;
   background-color: gray;
   width: 400px;
@@ -235,25 +245,25 @@ const Onboarding = () => {
       <InfoWrap>
         <TextContainer>
           <InfoTitle>아파트 실거래가를 확인하세요</InfoTitle>
-          <InfoDesc>원하는 지역을 검색하여 해당 지역의 아파트 실거래가를 확인할 수 있습니다.</InfoDesc>
+          <InfoDesc>원하는 지역을 검색하여 해당 지역의 아파트 실거래가를 확인할 수 있어요.</InfoDesc>
         </TextContainer>
-        <InfoPic>사진</InfoPic>
+        <InfoPic bgImage={chart}></InfoPic>
       </InfoWrap>
       <Break />
       <InfoWrap>
-        <InfoPic>사진</InfoPic>
+        <InfoPic bgImage={subInfo}></InfoPic>
         <TextContainer>
           <InfoTitle>청약 정보를 확인하세요</InfoTitle>
-          <InfoDesc>오늘 날짜를 기준으로 종료된 청약, 진행 중인 청약, 그리고 진행 예정인 청약 정보를 확인할 수 있습니다.</InfoDesc>
+          <InfoDesc>오늘 날짜를 기준으로 종료된 청약, 진행 중인 청약, 그리고 진행 예정인 청약 정보를 확인할 수 있어요.</InfoDesc>
         </TextContainer>
       </InfoWrap>
       <Break />
       <InfoWrap>
         <TextContainer>
-          <InfoTitle>원하는 매물을 찜할 수 있어요</InfoTitle>
-          <InfoDesc>관심 있는 아파트나 청약 정보를 찜 기능을 통해 손쉽게 저장할 수 있습니다.</InfoDesc>
+          <InfoTitle>원하는 매물을 북마크할 수 있어요</InfoTitle>
+          <InfoDesc>관심 있는 아파트나 청약 정보를 북마크 기능을 통해 손쉽게 저장할 수 있어요.</InfoDesc>
         </TextContainer>
-        <InfoPic>사진</InfoPic>
+        <InfoPic bgImage={bookmark3}></InfoPic>
       </InfoWrap>
       <Break />
       <Offer style={{ marginBottom: "50px" }}>What we used</Offer>

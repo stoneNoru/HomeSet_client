@@ -168,7 +168,7 @@ const Blur = styled.div`
 `;
 
 const RedText = styled.h1`
-  font-size: 14px;
+  font-size: 18px;
   color: red;
 `;
 
@@ -193,8 +193,7 @@ const Home = () => {
 
   const handleLogout = async () => {
     await LogOutAPI();
-    navigate("/home");
-    alert("로그아웃 완료");
+    navigate("/");
   };
 
   useEffect(() => {

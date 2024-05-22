@@ -140,14 +140,6 @@ const Offer = styled.h1`
   /* margin-left: 10%; */
 `;
 
-const Footer = styled.div`
-  color: whitesmoke;
-  margin-top: 30px;
-  width: 100%;
-  height: 300px;
-  background-color: #242424;
-`;
-
 const ToTop = styled.i`
   padding: 10px;
   border-radius: 50%;
@@ -165,6 +157,7 @@ const StacksContainer = styled.div`
   width: 80%;
   justify-content: space-evenly;
   align-items: center;
+  margin-bottom: 50px;
 
   @media (max-width: 850px) {
     flex-direction: column;
@@ -220,6 +213,22 @@ const StackTitle = styled.h1`
   font-size: 30px;
 
   transition: all 0.3s ease-in-out;
+`;
+const Footer = styled.footer`
+  color: whitesmoke;
+  margin-top: 30px;
+  width: 100%;
+  background-color: #131313;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Copyright = styled.div`
+  text-align: center;
+  font-size: 14px;
+  color: #b8b6b6;
 `;
 
 const Onboarding = () => {
@@ -316,7 +325,10 @@ const Onboarding = () => {
               SeokBeom Lee
             </HoveredTitle>
             <ul>
-              <HoveredContent>SpringBoot</HoveredContent>
+              <HoveredContent>Spring Boot</HoveredContent>
+              <HoveredContent>Spring Boot Mail</HoveredContent>
+              <HoveredContent>Spring Boot Security</HoveredContent>
+              <HoveredContent>Naver Open API</HoveredContent>
               <HoveredContent>MyBatis</HoveredContent>
               <HoveredContent>MySQL</HoveredContent>
             </ul>
@@ -324,7 +336,9 @@ const Onboarding = () => {
         </Stack>
       </StacksContainer>
 
-      <Footer>Footer</Footer>
+      <Footer>
+        <Copyright>© 2024 SSAFY team StoneNoru. All rights reserved.</Copyright>
+      </Footer>
     </Wrap>
   );
 };

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import {
-  GetMyInfo,
-  DeleteAccount,
-  GetAPTBookmark,
-  GetSubBookmark,
-} from "../services/api";
+import { GetMyInfo, DeleteAccount, GetAPTBookmark, GetSubBookmark } from "../services/api";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faHouse, faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Page = styled.div`
   display: flex;
@@ -132,10 +129,51 @@ const SectionsWrap = styled.div`
   gap: 30px;
 `;
 
+const Menu = styled.div`
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background-color: #e8362c;
+  position: fixed;
+  right: 50px;
+  top: 50px;
+  width: ${(props) => (props.menuOpen ? "150px" : "50px")};
+  height: ${(props) => (props.menuOpen ? "150px" : "50px")};
+  transition: all 0.3s;
+  z-index: 2;
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover {
+    background-color: #bf2d23;
+  }
+`;
+
+const MenuItems = styled.div`
+  opacity: ${(props) => (props.menuOpen ? 1 : 0)};
+  visibility: ${(props) => (props.menuOpen ? "visible" : "hidden")};
+  transform: ${(props) => (props.menuOpen ? "translateY(0)" : "translateY(-10px)")};
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const MenuItem = styled.div`
+  font-size: 16px;
+  margin-bottom: 12px;
+`;
+
 const MyPage = () => {
   const [myData, setMyData] = useState({});
   const [aptList, setAptList] = useState([]);
   const [subList, setSubList] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -188,6 +226,32 @@ const MyPage = () => {
 
   return (
     <Page>
+      <Menu
+        onClick={() => {
+          setMenuOpen(!menuOpen);
+        }}
+        menuOpen={menuOpen}
+      >
+        <div>
+          <FontAwesomeIcon icon={faBars} />
+        </div>
+        {menuOpen ? (
+          <MenuItems menuOpen={menuOpen}>
+            <MenuItem onClick={() => {}} style={{ marginBottom: "20px" }}>
+              <FontAwesomeIcon icon={faRightToBracket} style={{ marginRight: "10px" }} /> Log out
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate("/home");
+              }}
+            >
+              <FontAwesomeIcon icon={faHouse} style={{ marginRight: "10px" }} />
+              Home
+            </MenuItem>
+          </MenuItems>
+        ) : null}
+      </Menu>
+
       <Container>
         <Section>
           <Title>마이페이지</Title>
@@ -222,18 +286,16 @@ const MyPage = () => {
                   </TableRow>
                 </thead>
                 <tbody>
-                  {aptList.map((apt) => (
-                    <TableRow key={apt.aptCode}>
-                      <TableCell>{apt.apartmentName}</TableCell>
-                      <TableCell>
-                        {Number(apt.dealAmount.replace(",", "") / 10000)}억
-                      </TableCell>
-                      <TableCell>
-                        {apt.dealDate.replace(/-/gi, ".").slice(2)}
-                      </TableCell>
-                      <TableCell>{apt.road}</TableCell>
-                    </TableRow>
-                  ))}
+                  {aptList
+                    ? aptList.map((apt) => (
+                        <TableRow key={apt.aptCode}>
+                          <TableCell>{apt.apartmentName}</TableCell>
+                          <TableCell>{Number(apt.dealAmount.replace(",", "") / 10000)}억</TableCell>
+                          <TableCell>{apt.date.replace(/-/gi, ".").slice(2)}</TableCell>
+                          <TableCell>{apt.road}</TableCell>
+                        </TableRow>
+                      ))
+                    : null}
                 </tbody>
               </Table>
             </TableContainer>
@@ -257,18 +319,10 @@ const MyPage = () => {
                     <TableRow key={sub.houseManageNo}>
                       <TableCell>{sub.houseNm}</TableCell>
                       <TableCell>{sub.hssplyAdres}</TableCell>
+                      <TableCell>{sub.rceptBgnde.replace(/-/gi, ".").slice(2)}</TableCell>
+                      <TableCell>{sub.rceptEndde.replace(/-/gi, ".").slice(2)}</TableCell>
                       <TableCell>
-                        {sub.rceptBgnde.replace(/-/gi, ".").slice(2)}
-                      </TableCell>
-                      <TableCell>
-                        {sub.rceptEndde.replace(/-/gi, ".").slice(2)}
-                      </TableCell>
-                      <TableCell>
-                        <LinkButton
-                          href={sub.hmpgAdres}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <LinkButton href={sub.hmpgAdres} target="_blank" rel="noopener noreferrer">
                           상세 정보
                         </LinkButton>
                       </TableCell>

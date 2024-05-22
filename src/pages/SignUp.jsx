@@ -126,11 +126,10 @@ const SignUp = () => {
       navigate("/login");
     } catch (error) {
       console.error(error);
-      console.log(error.response);
-      setError(
-        error?.response?.data?.message ||
-          "회원가입 중 오류가 발생했습니다. 다시 시도해주세요."
-      );
+
+      if (error) {
+        setError(error?.response?.data?.message || "회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
     }
   };
 
@@ -142,43 +141,19 @@ const SignUp = () => {
         </Header>
         <Form onSubmit={handleSignup}>
           <InputContainer>
-            <Input
-              type="text"
-              placeholder="ID"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-            />
+            <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} />
           </InputContainer>
           <InputContainer>
-            <Input
-              type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <Input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </InputContainer>
           <InputContainer>
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </InputContainer>
           <InputContainer>
-            <Input
-              type="text"
-              placeholder="Nickname"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-            />
+            <Input type="text" placeholder="Nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} />
           </InputContainer>
           <Input type="submit" value="Sign up" />
-          <div>
-            {error && (
-              <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>
-            )}
-          </div>
+          <div>{error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}</div>
         </Form>
       </Container>
     </BlackBg>

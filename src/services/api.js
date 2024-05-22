@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "http://localhost:8080";
-// const BASE_URL = "http://192.168.206.66:8080";
-const BASE_URL = "http://183.107.121.150:8080";
+const BASE_URL = "http://192.168.206.66:8080";
+// const BASE_URL = "http://183.107.121.150:8080";
 
 // 183.107.121.150
 // 192.168.206.66
@@ -110,6 +110,7 @@ const SignUpAPI = async (id, password, email, nickname) => {
     return response;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 

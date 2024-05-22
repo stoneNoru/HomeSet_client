@@ -1,9 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp, faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronDown,
+  faChevronUp,
+  faStar as faStarSolid,
+} from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
-import { DeleteReview, DeleteSubBookmark, GetReview, RegistReview, RegistSubBookmark } from "../services/api";
+import {
+  DeleteReview,
+  DeleteSubBookmark,
+  GetReview,
+  RegistReview,
+  RegistSubBookmark,
+} from "../services/api";
 
 const Tab = styled.li`
   position: relative;
@@ -78,6 +88,18 @@ const ToWrap = styled.div`
   align-items: center;
 `;
 
+const CommentToggle = styled.p`
+  color: ${(props) => (props.open ? "#e74747" : "white")};
+  padding: 5px;
+  background-color: #5f5f5f;
+  border-radius: 5px;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #cf2d2d;
+  }
+`;
+
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -103,17 +125,22 @@ const Table = styled.table`
 
 const ReviewLists = styled.div`
   width: 100%;
-  background-color: #1e1e1e;
+  /* background-color: #121212; */
   border-radius: 10px;
-  padding: 16px;
+  /* padding: 10px; */
   box-sizing: border-box;
+  margin-top: 16px;
+  padding-bottom: 30px;
 `;
 
 const Review = styled.div`
-  padding: 20px;
+  position: relative;
+  padding: 14px;
+  padding-bottom: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   margin-bottom: 20px;
+  background-color: #28292e;
 `;
 
 const ReviewWriter = styled.h4`
@@ -128,10 +155,11 @@ const ReviewContent = styled.p`
 `;
 
 const ReviewDelete = styled.button`
-  background-color: #333;
+  background-color: #555555;
+  border: none;
   color: white;
   text-decoration: none;
-  padding: 10px;
+  padding: 3px 5px;
   font-size: 14px;
   cursor: pointer;
   border-radius: 5px;
@@ -139,8 +167,37 @@ const ReviewDelete = styled.button`
   display: inline-block;
   transition: background-color 0.3s;
   white-space: nowrap;
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
   &:hover {
     background-color: #b1252c;
+  }
+`;
+
+const CommentInput = styled.input`
+  background: #464646;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding-left: 10px;
+  border: none;
+  outline: none;
+  width: 80%;
+  color: #d3d3d3;
+  font-size: 16px;
+
+  &[type="submit"] {
+    background-color: #252525;
+    width: 20%;
+    cursor: pointer;
+    padding: 0.5em;
+    border-radius: 5px;
+    color: white;
+    transition: 0.4s ease-in-out;
+
+    &:hover {
+      background-color: #ac373d;
+    }
   }
 `;
 
@@ -166,9 +223,13 @@ const Card = ({
   bookmark,
 }) => {
   if (status === "upcoming") {
-    status = rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작" : "정보 없음";
+    status = rceptBgnde
+      ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작"
+      : "정보 없음";
   } else if (status === "ongoing") {
-    status = rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료" : "정보 없음";
+    status = rceptEndde
+      ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료"
+      : "정보 없음";
   } else if (status === "finished") {
     status = "종료";
   }
@@ -186,15 +247,6 @@ const Card = ({
       fetchReviews();
     }
   }, [clicked]);
-
-  //To Do : scrollHeight조정
-  // useEffect(() => {
-  //   if (clicked) {
-  //     detailRef.current.style.height = `${detailRef.current.scrollHeight}px`;
-  //   } else {
-  //     detailRef.current.style.height = "0";
-  //   }
-  // }, [clicked]);
 
   const fetchReviews = async () => {
     try {
@@ -228,7 +280,13 @@ const Card = ({
         <Status>{status}</Status>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", textAlign: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          textAlign: "center",
+        }}
+      >
         <Address>{hssplyAdres}</Address>
       </div>
       <DetailWrap ref={detailRef} clicked={clicked}>
@@ -249,17 +307,33 @@ const Card = ({
             <tr>
               <th>접수일</th>
               <td>
-                {rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
+                {rceptBgnde
+                  ? rceptBgnde.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}{" "}
+                ~{" "}
+                {rceptEndde
+                  ? rceptEndde.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}
               </td>
             </tr>
             <tr>
               <th>당첨자 발표일</th>
-              <td>{przwnerPresnatnDe ? przwnerPresnatnDe.replace(/-/g, ".").slice(2) : "정보 없음"}</td>
+              <td>
+                {przwnerPresnatnDe
+                  ? przwnerPresnatnDe.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}
+              </td>
             </tr>
             <tr>
               <th>계약일</th>
               <td>
-                {cntrctCnclsBgnde ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {cntrctCnclsEndde ? cntrctCnclsEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
+                {cntrctCnclsBgnde
+                  ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}{" "}
+                ~{" "}
+                {cntrctCnclsEndde
+                  ? cntrctCnclsEndde.replace(/-/g, ".").slice(2)
+                  : "정보 없음"}
               </td>
             </tr>
             <tr>
@@ -275,13 +349,14 @@ const Card = ({
           <ToInfo href={pblancUrl} target="_blank" rel="noopener noreferrer">
             공고
           </ToInfo>
-          <p
+          <CommentToggle
             onClick={() => {
               setReviewClicked(!reviewClicked);
             }}
+            open={reviewClicked}
           >
             댓글 ({reviews.length})
-          </p>
+          </CommentToggle>
 
           {star === 0 ? (
             <FontAwesomeIcon
@@ -307,41 +382,49 @@ const Card = ({
             {reviews.map((review, i) => (
               <Review key={i}>
                 <ReviewWriter>{review.nickname}</ReviewWriter>
-                <ReviewContent>{review.content}</ReviewContent>
-                {review.isMyReview ? (
-                  <ReviewDelete
-                    onClick={async () => {
-                      await DeleteReview(review.id);
-                      await fetchReviews();
-                    }}
-                  >
-                    삭제
-                  </ReviewDelete>
-                ) : null}
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <ReviewContent>{review.content}</ReviewContent>
+                  {review.isMyReview ? (
+                    <ReviewDelete
+                      onClick={async () => {
+                        await DeleteReview(review.id);
+                        await fetchReviews();
+                      }}
+                    >
+                      삭제
+                    </ReviewDelete>
+                  ) : null}
+                </div>
               </Review>
             ))}
 
             <form
+              style={{ display: "flex" }}
               onSubmit={(event) => {
                 event.preventDefault();
                 SubmitComment();
               }}
             >
-              <input
+              <CommentInput
                 type="text"
                 value={typedText}
                 placeholder="댓글 작성"
                 onChange={(event) => {
                   setTypedText(event.target.value);
                 }}
-              ></input>
-              <input type="submit"></input>
+              ></CommentInput>
+              <CommentInput type="submit"></CommentInput>
             </form>
           </ReviewLists>
         ) : null}
       </DetailWrap>
       <Chevron>
-        <FontAwesomeIcon icon={clicked ? faChevronUp : faChevronDown} onClick={handleToggleClick} />
+        <FontAwesomeIcon
+          icon={clicked ? faChevronUp : faChevronDown}
+          onClick={handleToggleClick}
+        />
       </Chevron>
     </Tab>
   );

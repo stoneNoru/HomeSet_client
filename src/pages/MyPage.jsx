@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { GetMyInfo, DeleteAccount, GetAPTBookmark, GetSubBookmark, LogOutAPI } from "../services/api";
+import {
+  GetMyInfo,
+  DeleteAccount,
+  GetAPTBookmark,
+  GetSubBookmark,
+  LogOutAPI,
+} from "../services/api";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faHouse, faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faHouse,
+  faRightToBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Page = styled.div`
   display: flex;
@@ -14,6 +25,7 @@ const Page = styled.div`
 
 const Container = styled.div`
   width: 1500px;
+  height: 800px;
   margin: 0 auto;
   padding: 30px;
   background-color: #121212;
@@ -21,7 +33,6 @@ const Container = styled.div`
   box-sizing: border-box;
   border-radius: 20px;
   overflow: hidden;
-  /* max-height: 90vh; */
 `;
 
 const Section = styled.section`
@@ -132,6 +143,7 @@ const SectionsWrap = styled.div`
 `;
 
 const Menu = styled.div`
+  padding: 10px 20px;
   font-size: 20px;
   display: flex;
   flex-direction: column;
@@ -140,7 +152,7 @@ const Menu = styled.div`
   border-radius: 15px;
   background-color: #e8362c;
   position: fixed;
-  right: 50px;
+  left: 50px;
   top: 50px;
   width: ${(props) => (props.menuOpen ? "150px" : "50px")};
   height: ${(props) => (props.menuOpen ? "150px" : "50px")};
@@ -148,7 +160,6 @@ const Menu = styled.div`
   z-index: 2;
   color: white;
   cursor: pointer;
-  overflow: hidden;
 
   &:hover {
     background-color: #bf2d23;
@@ -156,9 +167,14 @@ const Menu = styled.div`
 `;
 
 const MenuItems = styled.div`
-  opacity: ${(props) => (props.menuOpen ? 1 : 0)};
-  visibility: ${(props) => (props.menuOpen ? "visible" : "hidden")};
-  transform: ${(props) => (props.menuOpen ? "translateY(0)" : "translateY(-10px)")};
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
   transition: all 0.3s;
   display: flex;
   flex-direction: column;
@@ -167,15 +183,25 @@ const MenuItems = styled.div`
 `;
 
 const MenuItem = styled.div`
+  cursor: pointer;
+  width: 100px;
+  border-radius: 10px;
+  padding: 10px 20px;
+  background-color: #333;
   font-size: 16px;
   margin-bottom: 12px;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #bf2d23;
+  }
 `;
 
 const MyPage = () => {
   const [myData, setMyData] = useState({});
   const [aptList, setAptList] = useState([]);
   const [subList, setSubList] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(true);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -234,36 +260,30 @@ const MyPage = () => {
 
   return (
     <Page>
-      <Menu
-        onClick={() => {
-          setMenuOpen(!menuOpen);
-        }}
-        menuOpen={menuOpen}
-      >
-        <div>
-          <FontAwesomeIcon icon={faBars} />
-        </div>
-        {menuOpen ? (
-          <MenuItems menuOpen={menuOpen}>
-            <MenuItem
-              onClick={() => {
-                handleLogout();
-              }}
-              style={{ marginBottom: "20px" }}
-            >
-              <FontAwesomeIcon icon={faRightToBracket} style={{ marginRight: "10px" }} /> Log out
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                navigate("/home");
-              }}
-            >
-              <FontAwesomeIcon icon={faHouse} style={{ marginRight: "10px" }} />
-              Home
-            </MenuItem>
-          </MenuItems>
-        ) : null}
-      </Menu>
+      {/* <Menu> */}
+      <MenuItems>
+        <MenuItem
+          onClick={() => {
+            handleLogout();
+          }}
+          style={{ marginBottom: "20px" }}
+        >
+          <FontAwesomeIcon
+            icon={faRightToBracket}
+            style={{ marginRight: "10px" }}
+          />{" "}
+          Log out
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate("/home");
+          }}
+        >
+          <FontAwesomeIcon icon={faHouse} style={{ marginRight: "10px" }} />
+          Home
+        </MenuItem>
+      </MenuItems>
+      {/* </Menu> */}
 
       <Container>
         <Section>
@@ -303,8 +323,12 @@ const MyPage = () => {
                     ? aptList.map((apt) => (
                         <TableRow key={apt.aptCode}>
                           <TableCell>{apt.apartmentName}</TableCell>
-                          <TableCell>{Number(apt.dealAmount.replace(",", "") / 10000)}억</TableCell>
-                          <TableCell>{apt.date.replace(/-/gi, ".").slice(2)}</TableCell>
+                          <TableCell>
+                            {Number(apt.dealAmount.replace(",", "") / 10000)}억
+                          </TableCell>
+                          <TableCell>
+                            {apt.date.replace(/-/gi, ".").slice(2)}
+                          </TableCell>
                           <TableCell>{apt.road}</TableCell>
                         </TableRow>
                       ))
@@ -332,10 +356,18 @@ const MyPage = () => {
                     <TableRow key={sub.houseManageNo}>
                       <TableCell>{sub.houseNm}</TableCell>
                       <TableCell>{sub.hssplyAdres}</TableCell>
-                      <TableCell>{sub.rceptBgnde.replace(/-/gi, ".").slice(2)}</TableCell>
-                      <TableCell>{sub.rceptEndde.replace(/-/gi, ".").slice(2)}</TableCell>
                       <TableCell>
-                        <LinkButton href={sub.hmpgAdres} target="_blank" rel="noopener noreferrer">
+                        {sub.rceptBgnde.replace(/-/gi, ".").slice(2)}
+                      </TableCell>
+                      <TableCell>
+                        {sub.rceptEndde.replace(/-/gi, ".").slice(2)}
+                      </TableCell>
+                      <TableCell>
+                        <LinkButton
+                          href={sub.hmpgAdres}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           상세 정보
                         </LinkButton>
                       </TableCell>

@@ -113,6 +113,10 @@ const Tab = styled.span`
     color: inherit;
     text-decoration: none;
   }
+
+  &:hover {
+    background-color: #e63b2f;
+  }
 `;
 
 const NewsWrap = styled.div`
@@ -141,7 +145,6 @@ const News = styled.div`
 const NewsDate = styled.h4`
   color: #e50914;
   font-size: 14px;
-  margin-bottom: 10px;
   padding: 0 0 10px 0;
 `;
 

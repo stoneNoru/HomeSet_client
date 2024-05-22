@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
-import { Link, Navigate, Outlet, useMatch, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  Outlet,
+  useMatch,
+  useNavigate,
+} from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
 import Notice from "../components/Notice";
 import { LogOutAPI, GetNotice, GetNews } from "../services/api";
 import { isAuthenticated } from "../utils/checkToken";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCaretDown, faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faCaretDown,
+  faRightToBracket,
+  faUser,
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Page = styled.div`
   display: flex;
@@ -17,7 +30,7 @@ const Page = styled.div`
 
 const Sidebar = styled.div`
   width: 360px;
-  background-color: black; // 다크모드
+  background-color: black;
   z-index: 2;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   padding: 30px 20px;
@@ -32,7 +45,8 @@ const Content = styled.div`
 
 const Tabs = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => (props.isAuthenticated ? "repeat(2, 1fr)" : "1fr")};
+  grid-template-columns: ${(props) =>
+    props.isAuthenticated ? "repeat(2, 1fr)" : "1fr"};
   margin: 25px 0px 16px 0px;
   gap: 20px;
 `;
@@ -68,7 +82,8 @@ const NoticeList = styled.div`
 const Title = styled.h1`
   @font-face {
     font-family: "TTLaundryGothicB";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2") format("woff2");
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2")
+      format("woff2");
     font-weight: 700;
     font-style: normal;
   }
@@ -87,7 +102,7 @@ const Tab = styled.span`
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 400;
-  background-color: ${(props) => (props.active ? "#e50914" : "#333344")}; // 다크모드
+  background-color: ${(props) => (props.active ? "#e50914" : "#333344")};
   padding: 10px 0px;
   border-radius: 10px;
   transition: all 0.3s;
@@ -102,16 +117,65 @@ const Tab = styled.span`
 
 const NewsWrap = styled.div`
   margin-bottom: 20px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
 `;
 
-const News = styled.div``;
+const NewsContainer = styled.div`
+  display: flex;
+  transition: transform 0.5s ease;
+  transform: translateX(${(props) => props.translateX}%);
+  width: 100%;
+`;
 
-const NewsTitle = styled.h4``;
-
-const NewsContent = styled.p``;
+const News = styled.div`
+  min-width: 100%;
+  background-color: #121212;
+  padding: 16px;
+  border: 3px solid black;
+  border-radius: 10px;
+  box-sizing: border-box;
+`;
 
 const NewsDate = styled.h4`
-  font-weight: 200;
+  color: #e50914;
+  font-size: 14px;
+  margin-bottom: 10px;
+  padding: 0 0 10px 0;
+`;
+
+const NewsTitle = styled.h4`
+  font-size: 20px;
+  line-height: 28px;
+`;
+
+const NewsContent = styled.p`
+  margin-bottom: 20px;
+  padding: 5px 0;
+`;
+
+const NewsLink = styled.a`
+  padding: 5px;
+  background-color: #e50914;
+  border-radius: 3px;
+  font-size: 16px;
+`;
+
+const CarouselButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 2;
+  ${(props) => (props.right ? "right: 10px;" : "left: 10px;")}
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
 `;
 
 const Menu = styled.div`
@@ -141,7 +205,8 @@ const Menu = styled.div`
 const MenuItems = styled.div`
   opacity: ${(props) => (props.menuOpen ? 1 : 0)};
   visibility: ${(props) => (props.menuOpen ? "visible" : "hidden")};
-  transform: ${(props) => (props.menuOpen ? "translateY(0)" : "translateY(-10px)")};
+  transform: ${(props) =>
+    props.menuOpen ? "translateY(0)" : "translateY(-10px)"};
   transition: all 0.3s;
   display: flex;
   flex-direction: column;
@@ -169,7 +234,7 @@ const Blur = styled.div`
 
 const RedText = styled.h1`
   font-size: 18px;
-  color: red;
+  color: #e50914;
 `;
 
 const Home = () => {
@@ -182,14 +247,15 @@ const Home = () => {
   const [noticeList, setNoticeList] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [newsList, setNewsList] = useState([]);
+  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTranslateX((prev) => (prev - 100) % 300);
+      setTranslateX((prev) => (prev - 100) % (noticeList.length * 100));
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [noticeList]);
 
   const handleLogout = async () => {
     await LogOutAPI();
@@ -211,6 +277,18 @@ const Home = () => {
     getNews();
   }, []);
 
+  const handlePrevNews = () => {
+    setCurrentNewsIndex((prev) =>
+      prev === 0 ? newsList.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextNews = () => {
+    setCurrentNewsIndex((prev) =>
+      prev === newsList.length - 1 ? 0 : prev + 1
+    );
+  };
+
   return (
     <Page>
       {isAuthenticated() ? (
@@ -231,14 +309,21 @@ const Home = () => {
                 }}
                 style={{ marginBottom: "20px" }}
               >
-                <FontAwesomeIcon icon={faRightToBracket} style={{ marginRight: "10px" }} /> Log out
+                <FontAwesomeIcon
+                  icon={faRightToBracket}
+                  style={{ marginRight: "10px" }}
+                />{" "}
+                Log out
               </MenuItem>
               <MenuItem
                 onClick={() => {
                   navigate("/mypage");
                 }}
               >
-                <FontAwesomeIcon icon={faUser} style={{ marginRight: "10px" }} />
+                <FontAwesomeIcon
+                  icon={faUser}
+                  style={{ marginRight: "10px" }}
+                />
                 myPage
               </MenuItem>
             </MenuItems>
@@ -299,19 +384,37 @@ const Home = () => {
             <NoticesWrap>
               <NoticeList translateX={translateX}>
                 {noticeList.map((notice, index) => (
-                  <Notice key={index} version={notice.title} content={notice.content} />
+                  <Notice
+                    key={index}
+                    version={notice.title}
+                    content={notice.content}
+                  />
                 ))}
               </NoticeList>
             </NoticesWrap>
 
-            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📰 부동산 뉴스</h2>
-            <p>여기에 최신 부동산 뉴스들 표시</p>
+            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
+              📰 부동산 뉴스
+            </h2>
             <NewsWrap>
-              <News>
-                <NewsTitle></NewsTitle>
-                <NewsContent></NewsContent>
-                <NewsDate></NewsDate>
-              </News>
+              <CarouselButton onClick={handlePrevNews}>
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </CarouselButton>
+              <NewsContainer translateX={-currentNewsIndex * 100}>
+                {newsList.map((item, i) => (
+                  <News key={i}>
+                    <NewsDate>{item.pubDate}</NewsDate>
+                    <NewsTitle>{item.title}</NewsTitle>
+                    <NewsContent>{item.content}</NewsContent>
+                    <NewsLink href={`${item.link}`} target="_blank">
+                      원문
+                    </NewsLink>
+                  </News>
+                ))}
+              </NewsContainer>
+              <CarouselButton onClick={handleNextNews} right>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </CarouselButton>
             </NewsWrap>
           </HomeItems>
         ) : null}

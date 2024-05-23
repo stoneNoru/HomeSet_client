@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Tab from "../components/Tab";
-import styled from "styled-components";
-import city from "../assets/city.jpg";
-import bridge from "../assets/bridge.jpg";
 import { Link } from "react-router-dom";
-import { fontAwesome } from "fontawesome";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import bridge from "../assets/bridge.jpg";
 import chart from "../assets/chart.png";
 import subInfo from "../assets/subInfo.png";
-import subInfo2 from "../assets/subInfo2.png";
-import bookmark from "../assets/bookmark.png";
-import bookmark2 from "../assets/bookmark2.png";
 import bookmark3 from "../assets/bookmark3.png";
 
 const Wrap = styled.div`
@@ -32,11 +26,7 @@ const HeadContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 720px;
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0) 10%,
-      rgba(0, 0, 0, 1) 100%
-    ),
-    url(${bridge});
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 10%, rgba(0, 0, 0, 1) 100%), url(${bridge});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -50,9 +40,6 @@ const Title = styled.h1`
   font-weight: 800;
   padding: 24px;
   color: whitesmoke;
-  /* background: linear-gradient(to right top, #7885f5, #7d0b94);
-  color: transparent;
-  -webkit-background-clip: text; */
   letter-spacing: 0.2px;
 `;
 
@@ -70,9 +57,7 @@ const Button = styled.button`
   font-size: 24px;
   margin-top: 50px;
   background-color: #9c2929;
-
   transition: all 0.3s ease-in-out;
-
   &:hover {
     background-color: #ff3838;
     box-shadow: -5px -5px 30px 5px cornflowerblue, 5px 5px 30px 5px red;
@@ -119,7 +104,7 @@ const InfoDesc = styled.p`
 `;
 
 const InfoPic = styled.div`
-  background-image: url(${(props) => props.bgImage});
+  background-image: url(${(props) => props.bgimage});
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -140,8 +125,6 @@ const Offer = styled.h1`
   background: linear-gradient(to right top, #7885f5, #db591d);
   color: transparent;
   -webkit-background-clip: text;
-  /* align-self: flex-start; */
-  /* margin-left: 10%; */
 `;
 
 const ToTop = styled.i`
@@ -162,14 +145,12 @@ const StacksContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
   margin-bottom: 50px;
-
   @media (max-width: 850px) {
     flex-direction: column;
   }
 `;
 
 const Stack = styled.div`
-  /* position: fixed; */
   position: relative;
   overflow: hidden;
   display: flex;
@@ -180,7 +161,6 @@ const Stack = styled.div`
   height: 300px;
   border-radius: 10px;
   z-index: 2;
-
   &:hover div {
     right: 0px;
   }
@@ -215,9 +195,9 @@ const HoveredContent = styled.li`
 
 const StackTitle = styled.h1`
   font-size: 30px;
-
   transition: all 0.3s ease-in-out;
 `;
+
 const Footer = styled.footer`
   color: whitesmoke;
   margin-top: 30px;
@@ -247,12 +227,8 @@ const Onboarding = () => {
       </ToTop>
       <HeadContainer>
         <Title>부동산 정보를 한눈에</Title>
-        <HeaderDesc>
-          청약에서 실거래 내역까지, 전국 부동산의 모든 것을 편하게 확인하세요.
-        </HeaderDesc>
-        <HeaderDesc>
-          당신의 부동산 투자, 우리의 데이터로 한층 더 명확하게
-        </HeaderDesc>
+        <HeaderDesc>청약에서 실거래 내역까지, 전국 부동산의 모든 것을 편하게 확인하세요.</HeaderDesc>
+        <HeaderDesc>당신의 부동산 투자, 우리의 데이터로 한층 더 명확하게</HeaderDesc>
 
         <Link to={"/home"}>
           <Button>서비스 사용하기</Button>
@@ -262,34 +238,25 @@ const Onboarding = () => {
       <InfoWrap>
         <TextContainer>
           <InfoTitle>아파트 실거래가를 확인하세요</InfoTitle>
-          <InfoDesc>
-            원하는 지역을 검색하여 해당 지역의 아파트 실거래가를 확인할 수
-            있어요.
-          </InfoDesc>
+          <InfoDesc>원하는 지역을 검색하여 해당 지역의 아파트 실거래가를 확인할 수 있어요.</InfoDesc>
         </TextContainer>
-        <InfoPic bgImage={chart}></InfoPic>
+        <InfoPic bgimage={chart} />
       </InfoWrap>
       <Break />
       <InfoWrap>
-        <InfoPic bgImage={subInfo}></InfoPic>
+        <InfoPic bgimage={subInfo} />
         <TextContainer>
           <InfoTitle>청약 정보를 확인하세요</InfoTitle>
-          <InfoDesc>
-            오늘 날짜를 기준으로 종료된 청약, 진행 중인 청약, 그리고 진행 예정인
-            청약 정보를 확인할 수 있어요.
-          </InfoDesc>
+          <InfoDesc>오늘 날짜를 기준으로 종료된 청약, 진행 중인 청약, 그리고 진행 예정인 청약 정보를 확인할 수 있어요.</InfoDesc>
         </TextContainer>
       </InfoWrap>
       <Break />
       <InfoWrap>
         <TextContainer>
           <InfoTitle>원하는 매물을 북마크할 수 있어요</InfoTitle>
-          <InfoDesc>
-            관심 있는 아파트나 청약 정보를 북마크 기능을 통해 손쉽게 저장할 수
-            있어요.
-          </InfoDesc>
+          <InfoDesc>관심 있는 아파트나 청약 정보를 북마크 기능을 통해 손쉽게 저장할 수 있어요.</InfoDesc>
         </TextContainer>
-        <InfoPic bgImage={bookmark3}></InfoPic>
+        <InfoPic bgimage={bookmark3} />
       </InfoWrap>
       <Break />
       <Offer style={{ marginBottom: "50px" }}>What we used</Offer>
@@ -310,10 +277,7 @@ const Onboarding = () => {
             }}
           >
             <HoveredTitle href="https://github.com/norunaru" target="blank">
-              <FontAwesomeIcon
-                icon={faGithub}
-                style={{ marginRight: "10px" }}
-              />
+              <FontAwesomeIcon icon={faGithub} style={{ marginRight: "10px" }} />
               nwy98
             </HoveredTitle>
             <ul>
@@ -340,14 +304,8 @@ const Onboarding = () => {
               background: "linear-gradient(-45deg, #35ac8e, #1a01a3)",
             }}
           >
-            <HoveredTitle
-              href="https://github.com/stoneTiger0912"
-              target="blank"
-            >
-              <FontAwesomeIcon
-                icon={faGithub}
-                style={{ marginRight: "10px" }}
-              />
+            <HoveredTitle href="https://github.com/stoneTiger0912" target="blank">
+              <FontAwesomeIcon icon={faGithub} style={{ marginRight: "10px" }} />
               SeokBeom Lee
             </HoveredTitle>
             <ul>

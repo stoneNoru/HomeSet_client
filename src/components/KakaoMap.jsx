@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Map } from "react-kakao-maps-sdk";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useMatch, useLocation } from "react-router-dom";
 import pin from "../assets/icons/pin.png";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { houseState, markerState, typedState } from "../state/atoms.js";
+import { houseState, markerState, subsState, typedState } from "../state/atoms.js";
 
 const KakaoMap = () => {
   const [map, setMapInstance] = useState(null);
@@ -16,15 +16,52 @@ const KakaoMap = () => {
   const [houses, setHouses] = useState([]);
   const [housesAtom, setHousesAtom] = useRecoilState(houseState);
   const [markerAtom, setMarkerAtom] = useRecoilState(markerState);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
   const typedText = useRecoilValue(typedState);
+  const clickedSubs = useRecoilValue(subsState); //전역상태 변수
   const transactionsMatch = useMatch("/home/transactions");
+  const subscriptionMatch = useMatch("/home/subscription");
   const location = useLocation();
   const imageSrc = pin;
   const imageSize = new window.kakao.maps.Size(40, 40);
   const imageOption = { offset: new window.kakao.maps.Point(27, 69) };
   const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
+
+  //====================================
+  const [info, setInfo] = useState();
+  const [markers, setMarkers] = useState([]);
+
+  useEffect(() => {
+    if (!map) return;
+    const ps = new window.kakao.maps.services.Places();
+
+    ps.keywordSearch(clickedSubs, (data, status, _pagination) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        const bounds = new window.kakao.maps.LatLngBounds();
+        let markers = [];
+
+        for (var i = 0; i < data.length; i++) {
+          // @ts-ignore
+          markers.push({
+            position: {
+              lat: data[i].y,
+              lng: data[i].x,
+            },
+            content: data[i].place_name,
+          });
+          // @ts-ignore
+          bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
+        }
+        setMarkers(markers);
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+        map.setBounds(bounds);
+      }
+    });
+  }, [map, clickedSubs]);
 
   // 입력창 텍스트를 위도 경도 데이터로 변환
   useEffect(() => {
@@ -118,6 +155,18 @@ const KakaoMap = () => {
   }, [location]);
 
   useEffect(() => {
+    if (subscriptionMatch) {
+      setMarkers([]);
+    }
+  }, [subscriptionMatch]);
+
+  useEffect(() => {
+    if (!subscriptionMatch) {
+      setMarkers([]);
+    }
+  }, [location]);
+
+  useEffect(() => {
     if (map && houses.length > 0) {
       const kakao = window.kakao;
       const markers = [];
@@ -152,7 +201,13 @@ const KakaoMap = () => {
         }}
         level={5}
         onCreate={handleMapCreate}
-      ></Map>
+      >
+        {markers.map((marker) => (
+          <MapMarker key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`} position={marker.position} onClick={() => setInfo(marker)}>
+            {info && info.content === marker.content && <div style={{ color: "#000" }}>{marker.content}</div>}
+          </MapMarker>
+        ))}
+      </Map>
     </div>
   );
 };

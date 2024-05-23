@@ -1,26 +1,13 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import styled from "styled-components";
-import {
-  Link,
-  Navigate,
-  Outlet,
-  useMatch,
-  useNavigate,
-} from "react-router-dom";
+import { Link, Navigate, Outlet, useMatch, useNavigate } from "react-router-dom";
 import cityLogo from "../assets/icons/cityLogo.png";
 import Notice from "../components/Notice";
 import { LogOutAPI, GetNotice, GetNews } from "../services/api";
 import { isAuthenticated } from "../utils/checkToken";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBars,
-  faCaretDown,
-  faRightToBracket,
-  faUser,
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCaretDown, faRightToBracket, faUser, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const Page = styled.div`
   display: flex;
@@ -45,8 +32,7 @@ const Content = styled.div`
 
 const Tabs = styled.div`
   display: grid;
-  grid-template-columns: ${(props) =>
-    props.isAuthenticated ? "repeat(3, 1fr)" : "1fr"};
+  grid-template-columns: ${(props) => (props.isauthenticated ? "repeat(3, 1fr)" : "1fr")};
   margin: 25px 0px 16px 0px;
   gap: 20px;
 `;
@@ -76,14 +62,13 @@ const NoticeList = styled.div`
   width: 100%;
   display: flex;
   transition: transform 1s;
-  transform: translateX(${(props) => props.translateX}%);
+  transform: translateX(${(props) => props.translatex}%);
 `;
 
 const Title = styled.h1`
   @font-face {
     font-family: "TTLaundryGothicB";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2")
-      format("woff2");
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
   }
@@ -129,7 +114,7 @@ const NewsWrap = styled.div`
 const NewsContainer = styled.div`
   display: flex;
   transition: transform 0.5s ease;
-  transform: translateX(${(props) => props.translateX}%);
+  transform: translateX(${(props) => props.translatex}%);
   width: 100%;
 `;
 
@@ -156,6 +141,7 @@ const NewsTitle = styled.h4`
 const NewsContent = styled.p`
   margin-bottom: 20px;
   padding: 5px 0;
+  line-height: 18px;
 `;
 
 const NewsLink = styled.a`
@@ -192,8 +178,8 @@ const Menu = styled.div`
   position: fixed;
   right: 50px;
   top: 50px;
-  width: ${(props) => (props.menuOpen ? "150px" : "50px")};
-  height: ${(props) => (props.menuOpen ? "150px" : "50px")};
+  width: ${(props) => (props.menuopen ? "150px" : "50px")};
+  height: ${(props) => (props.menuopen ? "150px" : "50px")};
   transition: all 0.3s;
   z-index: 2;
   color: white;
@@ -206,10 +192,9 @@ const Menu = styled.div`
 `;
 
 const MenuItems = styled.div`
-  opacity: ${(props) => (props.menuOpen ? 1 : 0)};
-  visibility: ${(props) => (props.menuOpen ? "visible" : "hidden")};
-  transform: ${(props) =>
-    props.menuOpen ? "translateY(0)" : "translateY(-10px)"};
+  opacity: ${(props) => (props.menuopen ? 1 : 0)};
+  visibility: ${(props) => (props.menuopen ? "visible" : "hidden")};
+  transform: ${(props) => (props.menuopen ? "translateY(0)" : "translateY(-10px)")};
   transition: all 0.3s;
   display: flex;
   flex-direction: column;
@@ -248,7 +233,7 @@ const Home = () => {
 
   const [translateX, setTranslateX] = useState(0);
   const [noticeList, setNoticeList] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuopen, setmenuopen] = useState(false);
   const [newsList, setNewsList] = useState([]);
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
 
@@ -281,15 +266,11 @@ const Home = () => {
   }, []);
 
   const handlePrevNews = () => {
-    setCurrentNewsIndex((prev) =>
-      prev === 0 ? newsList.length - 1 : prev - 1
-    );
+    setCurrentNewsIndex((prev) => (prev === 0 ? newsList.length - 1 : prev - 1));
   };
 
   const handleNextNews = () => {
-    setCurrentNewsIndex((prev) =>
-      prev === newsList.length - 1 ? 0 : prev + 1
-    );
+    setCurrentNewsIndex((prev) => (prev === newsList.length - 1 ? 0 : prev + 1));
   };
 
   const formatDate = (dateStr) => {
@@ -305,36 +286,29 @@ const Home = () => {
       {isAuthenticated() ? (
         <Menu
           onClick={() => {
-            setMenuOpen(!menuOpen);
+            setmenuopen(!menuopen);
           }}
-          menuOpen={menuOpen}
+          menuopen={menuopen}
         >
           <div>
             <FontAwesomeIcon icon={faBars} />
           </div>
-          {menuOpen ? (
-            <MenuItems menuOpen={menuOpen}>
+          {menuopen ? (
+            <MenuItems menuopen={menuopen}>
               <MenuItem
                 onClick={() => {
                   handleLogout();
                 }}
                 style={{ marginBottom: "20px" }}
               >
-                <FontAwesomeIcon
-                  icon={faRightToBracket}
-                  style={{ marginRight: "10px" }}
-                />{" "}
-                Log out
+                <FontAwesomeIcon icon={faRightToBracket} style={{ marginRight: "10px" }} /> Log out
               </MenuItem>
               <MenuItem
                 onClick={() => {
                   navigate("/mypage");
                 }}
               >
-                <FontAwesomeIcon
-                  icon={faUser}
-                  style={{ marginRight: "10px" }}
-                />
+                <FontAwesomeIcon icon={faUser} style={{ marginRight: "10px" }} />
                 myPage
               </MenuItem>
             </MenuItems>
@@ -356,7 +330,7 @@ const Home = () => {
             홈셋
           </Title>
         </HeadWrap>
-        <Tabs isAuthenticated={isAuthenticated()}>
+        <Tabs isauthenticated={isAuthenticated()}>
           {isAuthenticated() ? (
             <>
               <Tab active={!!homeMatch}>
@@ -398,30 +372,24 @@ const Home = () => {
               📌 공지사항
             </h2>
             <NoticesWrap>
-              <NoticeList translateX={translateX}>
+              <NoticeList translatex={translateX}>
                 {noticeList.map((notice, index) => (
-                  <Notice
-                    key={index}
-                    version={notice.title}
-                    content={notice.content}
-                  />
+                  <Notice key={index} version={notice.title} content={notice.content} />
                 ))}
               </NoticeList>
             </NoticesWrap>
 
-            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>
-              📰 부동산 뉴스
-            </h2>
+            <h2 style={{ marginBottom: "20px", fontSize: "24px" }}>📰 부동산 뉴스</h2>
             <NewsWrap>
               <CarouselButton onClick={handlePrevNews}>
                 <FontAwesomeIcon icon={faChevronLeft} />
               </CarouselButton>
-              <NewsContainer translateX={-currentNewsIndex * 100}>
+              <NewsContainer translatex={-currentNewsIndex * 100}>
                 {newsList.map((item, i) => (
                   <News key={i}>
                     <NewsDate>{formatDate(item.pubDate)}</NewsDate>
                     <NewsTitle>{item.title}</NewsTitle>
-                    <NewsContent>{item.content}</NewsContent>
+                    <NewsContent>{item.description}</NewsContent>
                     <NewsLink href={`${item.link}`} target="_blank">
                       원문
                     </NewsLink>

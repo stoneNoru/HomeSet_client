@@ -14,3 +14,8 @@ export const typedState = atom({
   key: "textAtom",
   default: "",
 });
+
+export const subsState = atom({
+  key: "subsAtom",
+  default: "",
+});

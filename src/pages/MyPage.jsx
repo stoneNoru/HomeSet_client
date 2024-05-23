@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import {
-  GetMyInfo,
-  DeleteAccount,
-  GetAPTBookmark,
-  GetSubBookmark,
-  LogOutAPI,
-} from "../services/api";
+import { GetMyInfo, DeleteAccount, GetAPTBookmark, GetSubBookmark, LogOutAPI } from "../services/api";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBars,
-  faHouse,
-  faRightToBracket,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faHouse, faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Page = styled.div`
   display: flex;
@@ -67,11 +56,13 @@ const InfoItem = styled.p`
 `;
 
 const TableContainer = styled.div`
+  overflow: auto;
   background-color: #1e1e1e;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   overflow-x: auto;
+  max-height: 400px; /* Set a maximum height for the container */
 `;
 
 const Table = styled.table`
@@ -106,6 +97,19 @@ const ListTitle = styled.h2`
   color: #dd4950;
 `;
 
+const Footer = styled.footer`
+  position: fixed;
+  bottom: 0;
+  color: whitesmoke;
+  margin-top: 30px;
+  width: 100%;
+  background-color: #0a0a0a;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const Button = styled.button`
   background-color: #333;
   color: white;
@@ -119,6 +123,11 @@ const Button = styled.button`
   &:hover {
     background-color: #b1252c;
   }
+`;
+const Copyright = styled.div`
+  text-align: center;
+  font-size: 14px;
+  color: #b8b6b6;
 `;
 
 const LinkButton = styled.a`
@@ -268,11 +277,7 @@ const MyPage = () => {
           }}
           style={{ marginBottom: "20px" }}
         >
-          <FontAwesomeIcon
-            icon={faRightToBracket}
-            style={{ marginRight: "10px" }}
-          />{" "}
-          Log out
+          <FontAwesomeIcon icon={faRightToBracket} style={{ marginRight: "10px" }} /> Log out
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -323,12 +328,8 @@ const MyPage = () => {
                     ? aptList.map((apt) => (
                         <TableRow key={apt.aptCode}>
                           <TableCell>{apt.apartmentName}</TableCell>
-                          <TableCell>
-                            {Number(apt.dealAmount.replace(",", "") / 10000)}억
-                          </TableCell>
-                          <TableCell>
-                            {apt.date.replace(/-/gi, ".").slice(2)}
-                          </TableCell>
+                          <TableCell>{Number(apt.dealAmount.replace(",", "") / 10000)}억</TableCell>
+                          <TableCell>{apt.date.replace(/-/gi, ".").slice(2)}</TableCell>
                           <TableCell>{apt.road}</TableCell>
                         </TableRow>
                       ))
@@ -356,18 +357,10 @@ const MyPage = () => {
                     <TableRow key={sub.houseManageNo}>
                       <TableCell>{sub.houseNm}</TableCell>
                       <TableCell>{sub.hssplyAdres}</TableCell>
+                      <TableCell>{sub.rceptBgnde.replace(/-/gi, ".").slice(2)}</TableCell>
+                      <TableCell>{sub.rceptEndde.replace(/-/gi, ".").slice(2)}</TableCell>
                       <TableCell>
-                        {sub.rceptBgnde.replace(/-/gi, ".").slice(2)}
-                      </TableCell>
-                      <TableCell>
-                        {sub.rceptEndde.replace(/-/gi, ".").slice(2)}
-                      </TableCell>
-                      <TableCell>
-                        <LinkButton
-                          href={sub.hmpgAdres}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <LinkButton href={sub.hmpgAdres} target="_blank" rel="noopener noreferrer">
                           상세 정보
                         </LinkButton>
                       </TableCell>
@@ -381,6 +374,9 @@ const MyPage = () => {
 
         <Outlet />
       </Container>
+      <Footer>
+        <Copyright>© 2024 SSAFY team StoneNoru. All rights reserved.</Copyright>
+      </Footer>
     </Page>
   );
 };

@@ -1,19 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronDown,
-  faChevronUp,
-  faStar as faStarSolid,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronUp, faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
-import {
-  DeleteReview,
-  DeleteSubBookmark,
-  GetReview,
-  RegistReview,
-  RegistSubBookmark,
-} from "../services/api";
+import { DeleteReview, DeleteSubBookmark, GetReview, RegistReview, RegistSubBookmark } from "../services/api";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { subsState } from "../state/atoms";
 
 const Tab = styled.li`
   position: relative;
@@ -223,13 +215,9 @@ const Card = ({
   bookmark,
 }) => {
   if (status === "upcoming") {
-    status = rceptBgnde
-      ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작"
-      : "정보 없음";
+    status = rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) + " 시작" : "정보 없음";
   } else if (status === "ongoing") {
-    status = rceptEndde
-      ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료"
-      : "정보 없음";
+    status = rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) + " 종료" : "정보 없음";
   } else if (status === "finished") {
     status = "종료";
   }
@@ -239,6 +227,8 @@ const Card = ({
   const [reviews, setReviews] = useState([]);
   const [reviewClicked, setReviewClicked] = useState(false);
   const [typedText, setTypedText] = useState("");
+
+  const [subsAtom, setSubsAtom] = useRecoilState(subsState);
 
   const detailRef = useRef(null);
 
@@ -274,7 +264,11 @@ const Card = ({
   };
 
   return (
-    <Tab>
+    <Tab
+      onClick={() => {
+        setSubsAtom(houseNm);
+      }}
+    >
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Name>{houseNm}</Name>
         <Status>{status}</Status>
@@ -307,33 +301,17 @@ const Card = ({
             <tr>
               <th>접수일</th>
               <td>
-                {rceptBgnde
-                  ? rceptBgnde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}{" "}
-                ~{" "}
-                {rceptEndde
-                  ? rceptEndde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
+                {rceptBgnde ? rceptBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {rceptEndde ? rceptEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
               </td>
             </tr>
             <tr>
               <th>당첨자 발표일</th>
-              <td>
-                {przwnerPresnatnDe
-                  ? przwnerPresnatnDe.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
-              </td>
+              <td>{przwnerPresnatnDe ? przwnerPresnatnDe.replace(/-/g, ".").slice(2) : "정보 없음"}</td>
             </tr>
             <tr>
               <th>계약일</th>
               <td>
-                {cntrctCnclsBgnde
-                  ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}{" "}
-                ~{" "}
-                {cntrctCnclsEndde
-                  ? cntrctCnclsEndde.replace(/-/g, ".").slice(2)
-                  : "정보 없음"}
+                {cntrctCnclsBgnde ? cntrctCnclsBgnde.replace(/-/g, ".").slice(2) : "정보 없음"} ~ {cntrctCnclsEndde ? cntrctCnclsEndde.replace(/-/g, ".").slice(2) : "정보 없음"}
               </td>
             </tr>
             <tr>
@@ -382,9 +360,7 @@ const Card = ({
             {reviews.map((review, i) => (
               <Review key={i}>
                 <ReviewWriter>{review.nickname}</ReviewWriter>
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <ReviewContent>{review.content}</ReviewContent>
                   {review.isMyReview ? (
                     <ReviewDelete
@@ -421,10 +397,7 @@ const Card = ({
         ) : null}
       </DetailWrap>
       <Chevron>
-        <FontAwesomeIcon
-          icon={clicked ? faChevronUp : faChevronDown}
-          onClick={handleToggleClick}
-        />
+        <FontAwesomeIcon icon={clicked ? faChevronUp : faChevronDown} onClick={handleToggleClick} />
       </Chevron>
     </Tab>
   );

@@ -147,9 +147,9 @@ const Transactions = () => {
   const fetchData = async (selectedAptCode) => {
     try {
       const response = await fetchTxDatas(selectedAptCode);
-      console.log("거래리스트", response.data.data);
+      // console.log("거래리스트", response.data.data);
       setTxDatas(response.data.data.reverse()); // 응답 데이터에서 실제 데이터를 설정
-      // console.log(response.data.data);
+      console.log(response.data.data);
       const pricesArray = response.data.data.map((houseData) => houseData.dealAmount);
       setPrices(pricesArray); // dealAmount 값을 한 번에 설정
     } catch (error) {
@@ -167,7 +167,7 @@ const Transactions = () => {
     if (selectedMarker) {
       const selectedHouse = houses.find((house) => house.aptCode === selectedMarker);
       setSelected(selectedHouse);
-      console.log("selected", selectedHouse);
+      // console.log("selected", selectedHouse);
     }
   }, [selectedMarker, houses]);
 
@@ -252,7 +252,7 @@ const Transactions = () => {
           KeywordTxSearch(input);
         }}
         onChange={(event) => {
-          console.log(event.target.value);
+          // console.log(event.target.value);
         }}
       >
         <Input name="keyword" placeholder="원하는 지역 입력" />

@@ -148,7 +148,7 @@ const Login = () => {
     try {
       const response = await api.LoginPost(id, password); // api 객체를 사용해 LoginPost 함수 호출
       if (response.data.status === 200) {
-        console.log("Login successful");
+        // console.log("Login successful");
         navigate("/home");
       } //else {
       //   setError(error.response.data.message);

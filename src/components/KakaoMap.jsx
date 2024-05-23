@@ -78,7 +78,7 @@ const KakaoMap = () => {
     if (typedText !== "") {
       const callback = (result, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
-          console.log(result);
+          // console.log(result);
           setLatitude(result[0].y);
           setLongitude(result[0].x);
         }
@@ -116,9 +116,9 @@ const KakaoMap = () => {
       });
       setHouses(response.data.data);
       setHousesAtom(response.data.data);
-      console.log("houses", houses);
+      // console.log("houses", houses);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -151,8 +151,19 @@ const KakaoMap = () => {
   // 지도 드래그 끝나서 위치 변경되면 집들 데이터 가져옴
   useEffect(() => {
     if (transactionsMatch) {
+      const bounds = map.getBounds();
+      const swLatLng = bounds.getSouthWest();
+      const neLatLng = bounds.getNorthEast();
+
+      // console.log("sw", swLatLng);
+      // console.log("ne", neLatLng);
+
+      setSouth(swLatLng.getLat());
+      setWest(swLatLng.getLng());
+      setNorth(neLatLng.getLat());
+      setEast(neLatLng.getLng());
+      // console.log(east, west, south, north);
       fetchHouses();
-      console.log(east, west, south, north);
     } else {
       setHouses([]);
       setHousesAtom([]);
@@ -192,7 +203,7 @@ const KakaoMap = () => {
         window.kakao.maps.event.addListener(marker, "click", function () {
           setMarkerAtom(house.aptCode); // 클릭한 마커의 집 번호를 전역상태로 저장
           setCenter({ lat: house.lat, lng: house.lng });
-          console.log("마커번호", house.aptCode);
+          // console.log("마커번호", house.aptCode);
         });
       });
       return () => {

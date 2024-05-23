@@ -224,7 +224,7 @@ const MyPage = () => {
       try {
         const response = await GetMyInfo();
         setMyData(response);
-        console.log("myData", response);
+        // console.log("myData", response);
       } catch (error) {
         console.error("Failed to fetch my info:", error);
       }
@@ -234,9 +234,9 @@ const MyPage = () => {
       try {
         const response = await GetAPTBookmark();
         setAptList(response);
-        console.log("관심 아파트 리스트", response);
+        // console.log("관심 아파트 리스트", response);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
 
@@ -244,9 +244,9 @@ const MyPage = () => {
       try {
         const response = await GetSubBookmark();
         setSubList(response);
-        console.log("관심 청약 리스트 ", response);
+        // console.log("관심 청약 리스트 ", response);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
 

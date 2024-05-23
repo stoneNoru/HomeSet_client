@@ -98,7 +98,7 @@ const Subscription = () => {
   }, [selectedOption]);
 
   if (upcoming.length != 0) {
-    console.log(upcoming);
+    // console.log(upcoming);
   }
 
   return (

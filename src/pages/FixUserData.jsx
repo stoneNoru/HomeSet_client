@@ -175,15 +175,12 @@ const FixUserData = () => {
 
     try {
       const response = await ModifyUserData(id, email, nickname, password);
-      console.log(response.data);
+      // console.log(response.data);
       navigate("/mypage");
     } catch (error) {
       console.error(error);
-      console.log(error.response);
-      setError(
-        error?.response?.data?.message ||
-          "정보 수정 중 오류가 발생했습니다. 다시 시도해주세요."
-      );
+      // console.log(error.response);
+      setError(error?.response?.data?.message || "정보 수정 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -199,53 +196,22 @@ const FixUserData = () => {
             {/* id는 수정불가 */}
             ID
             <InputContainer>
-              <Input
-                type="text"
-                placeholder="ID"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                readOnly
-                style={{ color: "#333" }}
-              />
+              <Input type="text" placeholder="ID" value={id} onChange={(e) => setId(e.target.value)} readOnly style={{ color: "#333" }} />
             </InputContainer>
             Email
             <InputContainer>
-              <Input
-                type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <Input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </InputContainer>
             Nickname
             <InputContainer>
-              <Input
-                type="text"
-                placeholder="Nickname"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-              />
+              <Input type="text" placeholder="Nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} />
             </InputContainer>
             Password
             <InputContainer>
-              <Input
-                type="password"
-                required
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <Input type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </InputContainer>
-            <Input
-              type="submit"
-              value="수정 완료"
-              style={{ marginTop: "20px" }}
-            />
-            <div>
-              {error && (
-                <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>
-              )}
-            </div>
+            <Input type="submit" value="수정 완료" style={{ marginTop: "20px" }} />
+            <div>{error && <p style={{ color: "red", marginLeft: "1rem" }}>{error}</p>}</div>
           </Form>
         </Container>
       </BlackBg>

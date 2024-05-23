@@ -241,10 +241,10 @@ const Card = ({
   const fetchReviews = async () => {
     try {
       const response = await GetReview(houseManageNo);
-      console.log("리뷰 목록:", response);
+      // console.log("리뷰 목록:", response);
       setReviews(response);
     } catch (error) {
-      console.log("리뷰 리스트 가져오는 중 에러", error);
+      // console.log("리뷰 리스트 가져오는 중 에러", error);
     }
   };
 
@@ -252,10 +252,10 @@ const Card = ({
     try {
       const response = await RegistReview(houseManageNo, typedText);
       setTypedText("");
-      console.log("댓글 작성 응답:", response);
+      // console.log("댓글 작성 응답:", response);
       fetchReviews();
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

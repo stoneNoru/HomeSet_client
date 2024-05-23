@@ -122,7 +122,7 @@ const SignUp = () => {
 
     try {
       const response = await SignUpAPI(id, password, email, nickname);
-      console.log(response.data);
+      // console.log(response.data);
       navigate("/login");
     } catch (error) {
       console.error(error);

@@ -55,10 +55,19 @@ const KakaoMap = () => {
           // @ts-ignore
           bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
         }
+
+        const swLatLng = bounds.getSouthWest();
+        const neLatLng = bounds.getNorthEast();
+
+        setSouth(swLatLng.getLat());
+        setWest(swLatLng.getLng());
+        setNorth(neLatLng.getLat());
+        setEast(neLatLng.getLng());
         setMarkers(markers);
 
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
         map.setBounds(bounds);
+        map.setLevel(5);
       }
     });
   }, [map, clickedSubs]);
@@ -94,7 +103,7 @@ const KakaoMap = () => {
   // 동서남북 보내서 현 화면에 위치한 집들 리스트 얻어옴
   const fetchHouses = async () => {
     try {
-      const response = await axios.get(`http://183.107.121.150:8080/home/search`, {
+      const response = await axios.get(`http://192.168.206.66:8080/home/search`, {
         params: {
           west: west,
           east: east,
@@ -143,6 +152,7 @@ const KakaoMap = () => {
   useEffect(() => {
     if (transactionsMatch) {
       fetchHouses();
+      console.log(east, west, south, north);
     } else {
       setHouses([]);
       setHousesAtom([]);
